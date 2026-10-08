@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizador de Espíritus Fortnite — Intercambios de Sala</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Encabezado Principal -->
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-icon">✨</span>
+      <div>
+        <h1 class="brand-title">Espíritus Fortnite</h1>
+        <div class="brand-subtitle">Organizador de Intercambios en Cadena · Cap. 7 Temp. 4</div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary btn-sm" id="btnShareRoom">🔗 Compartir Sala Online</button>
+      <button class="btn btn-secondary btn-sm" id="btnResetDemo">🔄 Restablecer Demo</button>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- Panel de Sala / Jugadores -->
+    <section class="panel">
+      <div class="panel-header">
+        <div>
+          <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
+          <p class="panel-desc">Pega el link de Sprite Locker (#vs= o #c=) de cada miembro del escuadrón. Se ordenan y analizan automáticamente.</p>
+        </div>
+        <div>
+          <button class="btn btn-primary btn-sm" id="btnAddPlayer">➕ Añadir Jugador</button>
+        </div>
+      </div>
+
+      <!-- Grid donde se renderizan las tarjetas de cada jugador -->
+      <div class="lobby-grid" id="lobbyGrid"></div>
+    </section>
+
+    <!-- Navegación por Pestañas -->
+    <nav class="tabs-nav" aria-label="Modos de análisis">
+      <button class="tab-btn is-active" data-tab="chain">🤝 Fila de Compartir (Recomendado)</button>
+      <button class="tab-btn" data-tab="matrix">📋 Matriz Completa</button>
+      <button class="tab-btn" data-tab="versus">⚔️ 1 vs 1 Detallado</button>
+      <button class="tab-btn" data-tab="missing">🔍 Faltantes del Escuadrón</button>
+    </nav>
+
+    <!-- Contenido dinámico según la pestaña activa -->
+    <section id="mainContent"></section>
+
+  </main>
+
+  <!-- Modal para ver espíritus al pulsar en la matriz -->
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modalTitle" style="font-size: 1rem; color: #ffd070;">Detalles de Intercambio</h3>
+        <button class="modal-close" id="modalClose">&times;</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Toast de notificación para copiado -->
+  <div class="toast" id="toast">
+    <span>📋</span>
+    <span class="toast-text">¡Copiado con éxito!</span>
+  </div>
+
+  <!-- Scripts -->
+  <script src="db.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
