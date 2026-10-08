@@ -18,8 +18,10 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-primary btn-sm" id="btnShareRoom">🔗 Compartir Sala Online</button>
-      <button class="btn btn-secondary btn-sm" id="btnResetDemo">🔄 Restablecer Demo</button>
+      <button class="btn btn-primary btn-sm" id="btnReloadAll" title="Recarga todos los inventarios en vivo o re-analiza los enlaces">🔄 Recargar Inventarios</button>
+      <button class="btn btn-secondary btn-sm" id="btnBatchImport" title="Pega varios enlaces del chat a la vez">⚡ Pegado Rápido</button>
+      <button class="btn btn-secondary btn-sm" id="btnShareRoom">🔗 Compartir Sala</button>
+      <button class="btn btn-secondary btn-sm" id="btnResetDemo">🔄 Demo</button>
     </div>
   </header>
 
@@ -30,9 +32,9 @@
       <div class="panel-header">
         <div>
           <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
-          <p class="panel-desc">Pega el link de Sprite Locker (#vs= o #c=) de cada miembro del escuadrón. Se ordenan y analizan automáticamente.</p>
+          <p class="panel-desc">Pega el link de Sprite Locker (#vs=, #c= o ?p=) de cada miembro. Actualízalo durante tus partidas en tiempo real.</p>
         </div>
-        <div>
+        <div style="display: flex; gap: 0.5rem;">
           <button class="btn btn-primary btn-sm" id="btnAddPlayer">➕ Añadir Jugador</button>
         </div>
       </div>
@@ -62,6 +64,26 @@
         <button class="modal-close" id="modalClose">&times;</button>
       </div>
       <div class="modal-body" id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- Modal de Actualización Rápida en Lote -->
+  <div class="modal-backdrop" id="batchModalBackdrop">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 style="font-size: 1rem; color: #3fd0ff;">⚡ Actualización Rápida de Enlaces</h3>
+        <button class="modal-close" id="batchModalClose">&times;</button>
+      </div>
+      <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          Pega los mensajes de Discord o WhatsApp de tus amigos con sus nuevos links de Sprite Locker. La app actualizará a cada jugador automáticamente:
+        </p>
+        <textarea id="batchTextarea" class="batch-textarea" placeholder="Ejemplo:&#10;Canito: https://spritelocker.com/compare#vs=4.772...&#10;Roberto: https://spritelocker.com/#c=4.770...&#10;Ivan: https://spritelocker.com/#c=4.779..."></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
+          <button class="btn btn-secondary btn-sm" id="btnBatchCancel">Cancelar</button>
+          <button class="btn btn-primary btn-sm" id="btnApplyBatch">Aplicar a la Sala</button>
+        </div>
+      </div>
     </div>
   </div>
 

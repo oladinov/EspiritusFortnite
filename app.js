@@ -37,16 +37,35 @@
   };
 
   // --- FUNCIONES DE DECODIFICACIÓN ---
-  function extractCode(urlOrCode) {
+  function extractCodeOrToken(urlOrCode) {
     if (!urlOrCode) return null;
     let t = urlOrCode.trim();
+
+    // 1. Detectar token en vivo: ?p=TOKEN o /share/TOKEN
+    if (t.includes("?")) {
+      let queryPart = t.split("?")[1].split("#")[0];
+      let params = new URLSearchParams(queryPart);
+      if (params.has("p")) {
+        return { type: "token", value: params.get("p") };
+      }
+    }
+    let shareMatch = t.match(/\/share\/([A-Za-z0-9_-]+)/);
+    if (shareMatch) {
+      return { type: "token", value: shareMatch[1] };
+    }
+
+    // 2. Detectar código hash: #vs=... o #c=...
     let hashIdx = t.indexOf("#");
     if (hashIdx !== -1) {
       let fragment = t.slice(hashIdx + 1);
       let params = new URLSearchParams(fragment);
-      return params.get("vs") || params.get("c") || t;
+      let val = params.get("vs") || params.get("c");
+      if (val) return { type: "code", value: val };
+      return { type: "code", value: fragment };
     }
-    return t;
+
+    // 3. Código directo
+    return { type: "code", value: t };
   }
 
   function b64UrlDecode(s) {
@@ -67,14 +86,13 @@
     return !!(bytes[byteIdx] & (1 << (idx & 7)));
   }
 
-  function decodeCollection(urlOrCode) {
-    let clean = extractCode(urlOrCode);
-    if (!clean) throw new Error("Enlace o código vacío");
+  function decodeCollection(codeStr) {
+    if (!codeStr) throw new Error("Código vacío");
 
     let version = "4";
-    let dataStr = clean;
-    if (clean.includes(".")) {
-      let parts = clean.split(".");
+    let dataStr = codeStr;
+    if (codeStr.includes(".")) {
+      let parts = codeStr.split(".");
       version = parts[0];
       dataStr = parts[1];
     }
@@ -118,7 +136,7 @@
 
     return {
       version,
-      rawCode: clean,
+      rawCode: codeStr,
       owned,
       mastered,
       lost,
@@ -126,6 +144,49 @@
       ownedCount,
       percentage
     };
+  }
+
+  // --- PROCESAMIENTO / ACTUALIZACIÓN DE JUGADOR ---
+  async function updatePlayer(player, notify = false) {
+    try {
+      let prevCount = player.data ? player.data.ownedCount : null;
+      let target = extractCodeOrToken(player.url);
+      if (!target) throw new Error("Enlace o código vacío");
+
+      let codeToDecode = null;
+      if (target.type === "token") {
+        player.isLive = true;
+        let res = await fetch(`https://api.spritelocker.com/share/${encodeURIComponent(target.value)}`);
+        if (!res.ok) throw new Error(`Error del servidor Sprite Locker (${res.status})`);
+        let json = await res.json();
+        if (!json.data) throw new Error("Colección en vivo no encontrada");
+        codeToDecode = json.data;
+        if (json.name && (!player.name || player.name.startsWith("Jugador") || player.name.startsWith("Amigo"))) {
+          player.name = json.name;
+        }
+      } else {
+        player.isLive = false;
+        codeToDecode = target.value;
+      }
+
+      player.data = decodeCollection(codeToDecode);
+      player.lastUpdated = new Date();
+      player.error = null;
+
+      if (notify && prevCount !== null) {
+        let diff = player.data.ownedCount - prevCount;
+        if (diff !== 0) {
+          let sign = diff > 0 ? `+${diff}` : `${diff}`;
+          player.changeBadge = sign;
+          showToast(`✨ ¡${player.name} actualizado! ${sign} espíritus (${player.data.ownedCount}/122)`);
+        } else {
+          showToast(`✔️ ${player.name} recargado (${player.data.ownedCount}/122 espíritus sin cambios).`);
+        }
+      }
+    } catch (err) {
+      player.data = null;
+      player.error = err.message || "Enlace no válido";
+    }
   }
 
   // --- CÁLCULO DE INTERCAMBIO ENTRE PARES ---
@@ -183,6 +244,11 @@
         let jsonStr = decodeURIComponent(escape(atob(standardB64)));
         let list = JSON.parse(jsonStr);
         if (Array.isArray(list) && list.length > 0) {
+          // IMPORTANTE: Limpiar el hash de la barra para que recargar con F5 no revierta cambios del usuario
+          try {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          } catch (_) {}
+
           return list.map(item => ({
             id: "p_" + Math.random().toString(36).substr(2, 9),
             name: item.n || "Jugador",
@@ -229,30 +295,20 @@
     return DEFAULT_PLAYERS;
   }
 
-  // --- PROCESAMIENTO DE JUGADORES ---
-  function updatePlayer(player) {
-    try {
-      player.data = decodeCollection(player.url);
-      player.error = null;
-    } catch (err) {
-      player.data = null;
-      player.error = err.message || "Enlace no válido";
-    }
-  }
-
-  function initPlayers() {
+  async function initPlayers() {
     let rawList = loadSavedState();
-    state.players = rawList.map(p => {
-      let player = {
-        id: p.id || "p_" + Math.random().toString(36).substr(2, 9),
-        name: p.name || "Jugador",
-        url: p.url || "",
-        data: null,
-        error: null
-      };
-      updatePlayer(player);
-      return player;
-    });
+    state.players = rawList.map(p => ({
+      id: p.id || "p_" + Math.random().toString(36).substr(2, 9),
+      name: p.name || "Jugador",
+      url: p.url || "",
+      data: null,
+      error: null,
+      lastUpdated: new Date()
+    }));
+
+    for (let p of state.players) {
+      await updatePlayer(p);
+    }
 
     if (state.players.length >= 2) {
       state.versusA = state.players[0].id;
@@ -271,14 +327,23 @@
     elToast.classList.add("show");
     setTimeout(() => {
       elToast.classList.remove("show");
-    }, 2800);
+    }, 3200);
+  }
+
+  function formatTime(d) {
+    if (!d) return "";
+    let h = String(d.getHours()).padStart(2, "0");
+    let m = String(d.getMinutes()).padStart(2, "0");
+    let s = String(d.getSeconds()).padStart(2, "0");
+    return `${h}:${m}:${s}`;
   }
 
   function renderLobby() {
     elLobbyGrid.innerHTML = "";
-    state.players.forEach((player, index) => {
+    state.players.forEach((player) => {
       const card = document.createElement("div");
       card.className = "player-card" + (player.error ? " has-error" : "");
+      card.id = `card_${player.id}`;
 
       const count = player.data ? player.data.ownedCount : 0;
       const pct = player.data ? player.data.percentage : 0;
@@ -286,50 +351,109 @@
       card.innerHTML = `
         <div class="player-card-header">
           <input type="text" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Nombre del jugador" data-id="${player.id}">
-          <span class="player-stats-badge">${player.error ? '⚠️ Error' : `${count}/122 (${pct}%)`}</span>
+          <div class="player-header-badges">
+            ${player.changeBadge ? `<span class="badge-change">${player.changeBadge}</span>` : ''}
+            ${player.isLive ? `<span class="badge-live">🟢 LIVE</span>` : ''}
+            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Error' : `${count}/122 (${pct}%)`}</span>
+          </div>
         </div>
         <div class="progress-container">
           <div class="progress-labels">
             <span>Colección</span>
-            <span>${pct}%</span>
+            <span class="progress-pct-${player.id}">${pct}%</span>
           </div>
           <div class="progress-bar-bg">
-            <div class="progress-bar-fill" style="width: ${pct}%;"></div>
+            <div class="progress-bar-fill progress-fill-${player.id}" style="width: ${pct}%;"></div>
           </div>
         </div>
-        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="Pega el enlace de Sprite Locker (#vs= o #c=)" data-id="${player.id}">
-        ${player.error ? `<div style="color: #ff8585; font-size: 0.75rem;">${escapeHtml(player.error)}</div>` : ''}
+        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="Pega el enlace de Sprite Locker (#vs=, #c= o ?p=)" data-id="${player.id}">
+        <div class="player-meta-row">
+          <span class="player-updated-time">🕒 Act: <span class="time-label-${player.id}">${formatTime(player.lastUpdated)}</span></span>
+          <span class="error-msg-${player.id}" style="color: #ff8585;">${player.error ? escapeHtml(player.error) : ''}</span>
+        </div>
         <div class="player-actions">
+          <button class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Lee el nuevo link de tu portapapeles y actualiza este jugador">📋 Pegar Nuevo Link</button>
+          <button class="btn btn-secondary btn-sm btn-reload-one" data-id="${player.id}" title="Recargar inventario de este jugador">🔄 Recargar</button>
           <button class="btn btn-secondary btn-sm btn-clear" data-id="${player.id}" title="Limpiar enlace">Limpiar</button>
           <button class="btn btn-danger btn-sm btn-remove" data-id="${player.id}" title="Eliminar jugador">Eliminar</button>
         </div>
       `;
 
-      // Eventos
+      // Evento: Nombre
       const nameInput = card.querySelector(".player-name-input");
       nameInput.addEventListener("change", (e) => {
-        player.name = e.target.value || "Jugador";
+        player.name = e.target.value.trim() || "Jugador";
         saveState();
         renderActiveTab();
       });
 
+      // Evento: Input del Link
       const linkInput = card.querySelector(".player-link-input");
-      linkInput.addEventListener("input", (e) => {
-        player.url = e.target.value;
-        updatePlayer(player);
+      const handleLinkChange = async (newVal) => {
+        if (player.url === newVal && player.data) return;
+        player.url = newVal;
+        await updatePlayer(player, true);
         saveState();
-        renderLobby();
+        updatePlayerCardUI(player);
         renderActiveTab();
+      };
+
+      linkInput.addEventListener("change", (e) => handleLinkChange(e.target.value));
+      linkInput.addEventListener("paste", () => {
+        setTimeout(() => handleLinkChange(linkInput.value), 50);
       });
 
+      // Botón: Pegar desde portapapeles
+      card.querySelector(".btn-paste").addEventListener("click", async () => {
+        try {
+          const clipText = await navigator.clipboard.readText();
+          if (clipText && (clipText.includes("spritelocker.com") || clipText.includes("#") || clipText.includes("4."))) {
+            linkInput.value = clipText.trim();
+            await handleLinkChange(clipText.trim());
+            card.classList.add("is-updated");
+            setTimeout(() => card.classList.remove("is-updated"), 1200);
+          } else {
+            let manual = prompt(`Pega el nuevo enlace de Sprite Locker para ${player.name}:`, player.url);
+            if (manual !== null) {
+              linkInput.value = manual.trim();
+              await handleLinkChange(manual.trim());
+            }
+          }
+        } catch (err) {
+          let manual = prompt(`Pega el nuevo enlace de Sprite Locker para ${player.name}:`, player.url);
+          if (manual !== null) {
+            linkInput.value = manual.trim();
+            await handleLinkChange(manual.trim());
+          }
+        }
+      });
+
+      // Botón: Recargar individual
+      card.querySelector(".btn-reload-one").addEventListener("click", async () => {
+        const btn = card.querySelector(".btn-reload-one");
+        btn.textContent = "⏳...";
+        await updatePlayer(player, true);
+        saveState();
+        updatePlayerCardUI(player);
+        renderActiveTab();
+        btn.textContent = "🔄 Recargar";
+        card.classList.add("is-updated");
+        setTimeout(() => card.classList.remove("is-updated"), 1200);
+      });
+
+      // Botón: Limpiar
       card.querySelector(".btn-clear").addEventListener("click", () => {
         player.url = "";
-        updatePlayer(player);
+        linkInput.value = "";
+        player.data = null;
+        player.error = null;
+        player.changeBadge = null;
         saveState();
-        renderLobby();
+        updatePlayerCardUI(player);
         renderActiveTab();
       });
 
+      // Botón: Eliminar
       card.querySelector(".btn-remove").addEventListener("click", () => {
         if (state.players.length <= 1) {
           showToast("Debe haber al menos un jugador en la sala.");
@@ -343,6 +467,34 @@
 
       elLobbyGrid.appendChild(card);
     });
+  }
+
+  function updatePlayerCardUI(player) {
+    const card = document.getElementById(`card_${player.id}`);
+    if (!card) return;
+
+    const count = player.data ? player.data.ownedCount : 0;
+    const pct = player.data ? player.data.percentage : 0;
+
+    const badge = card.querySelector(`.stats-badge-${player.id}`);
+    if (badge) {
+      badge.textContent = player.error ? "⚠️ Error" : `${count}/122 (${pct}%)`;
+    }
+
+    const pctLabel = card.querySelector(`.progress-pct-${player.id}`);
+    if (pctLabel) pctLabel.textContent = `${pct}%`;
+
+    const fill = card.querySelector(`.progress-fill-${player.id}`);
+    if (fill) fill.style.width = `${pct}%`;
+
+    const timeLabel = card.querySelector(`.time-label-${player.id}`);
+    if (timeLabel) timeLabel.textContent = formatTime(player.lastUpdated);
+
+    const errMsg = card.querySelector(`.error-msg-${player.id}`);
+    if (errMsg) errMsg.textContent = player.error ? player.error : "";
+
+    if (player.error) card.classList.add("has-error");
+    else card.classList.remove("has-error");
   }
 
   function getSortedPlayers() {
@@ -752,6 +904,7 @@
 
   function closeModal() {
     document.getElementById("modalBackdrop")?.classList.remove("open");
+    document.getElementById("batchModalBackdrop")?.classList.remove("open");
   }
 
   function escapeHtml(str) {
@@ -783,7 +936,8 @@
         name: "Amigo " + (state.players.length + 1),
         url: "",
         data: null,
-        error: null
+        error: null,
+        lastUpdated: new Date()
       };
       state.players.push(newPlayer);
       saveState();
@@ -791,24 +945,116 @@
       renderActiveTab();
     });
 
+    // Recargar Todos los Inventarios
+    document.getElementById("btnReloadAll")?.addEventListener("click", async () => {
+      const btn = document.getElementById("btnReloadAll");
+      const originalText = btn.textContent;
+      btn.textContent = "⏳ Recargando...";
+      btn.disabled = true;
+
+      for (let player of state.players) {
+        if (player.url) {
+          await updatePlayer(player, false);
+        }
+      }
+
+      saveState();
+      renderLobby();
+      renderActiveTab();
+
+      btn.textContent = originalText;
+      btn.disabled = false;
+      showToast("🔄 ¡Todos los inventarios fueron recargados con éxito!");
+    });
+
+    // Modal de Pegado Rápido
+    const batchBackdrop = document.getElementById("batchModalBackdrop");
+    const batchTextarea = document.getElementById("batchTextarea");
+
+    document.getElementById("btnBatchImport")?.addEventListener("click", () => {
+      batchBackdrop.classList.add("open");
+      batchTextarea.value = state.players.map(p => `${p.name}: ${p.url}`).join("\n");
+      batchTextarea.focus();
+    });
+
+    document.getElementById("batchModalClose")?.addEventListener("click", closeModal);
+    document.getElementById("btnBatchCancel")?.addEventListener("click", closeModal);
+    batchBackdrop?.addEventListener("click", (e) => {
+      if (e.target.id === "batchModalBackdrop") closeModal();
+    });
+
+    // Aplicar Pegado Rápido
+    document.getElementById("btnApplyBatch")?.addEventListener("click", async () => {
+      const lines = batchTextarea.value.split("\n").map(l => l.trim()).filter(Boolean);
+      let countUpdated = 0;
+
+      for (let line of lines) {
+        let name = "";
+        let url = "";
+
+        if (line.includes(":") && (line.includes("http") || line.includes("#") || line.includes("4."))) {
+          let parts = line.split(":");
+          name = parts[0].trim();
+          url = parts.slice(1).join(":").trim();
+        } else if (line.includes("http") || line.includes("#") || line.includes("4.")) {
+          // Extraer URL o código
+          let urlMatch = line.match(/(https?:\/\/[^\s]+|4\.[A-Za-z0-9_-]+)/);
+          if (urlMatch) {
+            url = urlMatch[1];
+            name = line.replace(url, "").trim().replace(/[-–—:]+$/, "").trim();
+          }
+        }
+
+        if (url) {
+          let existing = state.players.find(p => p.name.toLowerCase() === name.toLowerCase());
+          if (existing) {
+            existing.url = url;
+            await updatePlayer(existing);
+            countUpdated++;
+          } else {
+            let newP = {
+              id: "p_" + Math.random().toString(36).substr(2, 9),
+              name: name || `Amigo ${state.players.length + 1}`,
+              url: url,
+              data: null,
+              error: null,
+              lastUpdated: new Date()
+            };
+            await updatePlayer(newP);
+            state.players.push(newP);
+            countUpdated++;
+          }
+        }
+      }
+
+      saveState();
+      renderLobby();
+      renderActiveTab();
+      closeModal();
+      showToast(`⚡ ¡${countUpdated} jugadores actualizados correctamente!`);
+    });
+
     // Compartir Sala por URL
     document.getElementById("btnShareRoom")?.addEventListener("click", () => {
       let shareUrl = getShareableRoomUrl();
       navigator.clipboard.writeText(shareUrl).then(() => {
-        showToast("¡Enlace de la sala copiado! Cualquier amigo verá la sala completa al abrirlo.");
+        showToast("¡Enlace de la sala copiado! Tus amigos verán la sala completa al abrirlo.");
       }).catch(() => {
-        showToast("No se pudo copiar el enlace automáticamente.");
+        prompt("Copia este enlace para compartir la sala con tus amigos:", shareUrl);
       });
     });
 
-    // Cargar Demo
+    // Restablecer / Cargar Demo
     document.getElementById("btnResetDemo")?.addEventListener("click", () => {
-      window.location.hash = "";
-      localStorage.removeItem(STORAGE_KEY);
-      initPlayers();
-      renderLobby();
-      renderActiveTab();
-      showToast("¡Colecciones de Canito y Roberto cargadas!");
+      if (confirm("¿Quieres restablecer la sala a los datos originales de Canito y Roberto?")) {
+        window.location.hash = "";
+        localStorage.removeItem(STORAGE_KEY);
+        initPlayers().then(() => {
+          renderLobby();
+          renderActiveTab();
+          showToast("¡Colecciones de Canito y Roberto restablecidas!");
+        });
+      }
     });
 
     // Modal cerrar
@@ -818,10 +1064,11 @@
     });
   }
 
-  // Inicialización
-  initPlayers();
-  renderLobby();
-  setupListeners();
-  renderActiveTab();
+  // Inicialización asíncrona
+  initPlayers().then(() => {
+    renderLobby();
+    setupListeners();
+    renderActiveTab();
+  });
 
 })();
