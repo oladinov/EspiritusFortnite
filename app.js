@@ -98,7 +98,16 @@
     }
 
     let bytes = b64UrlDecode(dataStr);
-    let cells = DB.cells;
+
+    // Detección automática del diseño de celdas según la longitud en bytes:
+    // - Enlaces antiguos (antes de Dulce o Truco): 122 celdas (~92 bytes)
+    // - Enlaces actuales (con Dulce o Truco): 145 celdas (~109 bytes)
+    let cells = DB.cells_v4_145 || DB.cells;
+    let layoutName = "145";
+    if (bytes.length < 100 && DB.cells_v4_122) {
+      cells = DB.cells_v4_122;
+      layoutName = "122";
+    }
     let numCells = cells.length;
 
     let owned = {};
@@ -132,7 +141,8 @@
     }
 
     let ownedCount = Object.keys(owned).length;
-    let percentage = Math.round((ownedCount / numCells) * 1000) / 10;
+    let totalTarget = DB.totalCells || DB.cells.length;
+    let percentage = Math.round((ownedCount / totalTarget) * 1000) / 10;
 
     return {
       version,
@@ -142,7 +152,10 @@
       lost,
       levels,
       ownedCount,
-      percentage
+      percentage,
+      totalCells: totalTarget,
+      layoutCells: numCells,
+      layoutName
     };
   }
 
@@ -174,13 +187,14 @@
       player.error = null;
 
       if (notify && prevCount !== null) {
+        let total = player.data.totalCells || 145;
         let diff = player.data.ownedCount - prevCount;
         if (diff !== 0) {
           let sign = diff > 0 ? `+${diff}` : `${diff}`;
           player.changeBadge = sign;
-          showToast(`✨ ¡${player.name} actualizado! ${sign} espíritus (${player.data.ownedCount}/122)`);
+          showToast(`✨ ¡${player.name} actualizado! ${sign} espíritus (${player.data.ownedCount}/${total})`);
         } else {
-          showToast(`✔️ ${player.name} recargado (${player.data.ownedCount}/122 espíritus sin cambios).`);
+          showToast(`✔️ ${player.name} recargado (${player.data.ownedCount}/${total} espíritus sin cambios).`);
         }
       }
     } catch (err) {
@@ -354,7 +368,7 @@
           <div class="player-header-badges">
             ${player.changeBadge ? `<span class="badge-change">${player.changeBadge}</span>` : ''}
             ${player.isLive ? `<span class="badge-live">🟢 LIVE</span>` : ''}
-            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Error' : `${count}/122 (${pct}%)`}</span>
+            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Error' : `${count}/${player.data?.totalCells || DB.totalCells || 145} (${pct}%)`}</span>
           </div>
         </div>
         <div class="progress-container">
@@ -478,7 +492,7 @@
 
     const badge = card.querySelector(`.stats-badge-${player.id}`);
     if (badge) {
-      badge.textContent = player.error ? "⚠️ Error" : `${count}/122 (${pct}%)`;
+      badge.textContent = player.error ? "⚠️ Error" : `${count}/${player.data?.totalCells || DB.totalCells || 145} (${pct}%)`;
     }
 
     const pctLabel = card.querySelector(`.progress-pct-${player.id}`);
@@ -554,7 +568,7 @@
             <div class="chain-player-tag" style="border-color: ${idx === 0 ? '#ffd070' : 'rgba(120, 170, 255, 0.4)'};">
               <span>${idx === 0 ? '👑' : `${idx + 1}º`}</span>
               <strong>${escapeHtml(p.name)}</strong>
-              <span style="color: var(--accent-cyan); font-size: 0.75rem;">(${p.data.ownedCount}/122)</span>
+              <span style="color: var(--accent-cyan); font-size: 0.75rem;">(${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 145})</span>
             </div>
           `).join('<span style="color: var(--text-muted);">➜</span>')}
         </div>
@@ -644,7 +658,7 @@
             <thead>
               <tr>
                 <th style="text-align: left;">Donante ╲ Receptor</th>
-                ${players.map(p => `<th>${escapeHtml(p.name)}<br><small style="color: var(--accent-cyan);">${p.data.ownedCount}/122</small></th>`).join("")}
+                ${players.map(p => `<th>${escapeHtml(p.name)}<br><small style="color: var(--accent-cyan);">${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 145}</small></th>`).join("")}
                 <th>Total que puede donar</th>
               </tr>
             </thead>
@@ -706,11 +720,11 @@
 
         <div class="versus-selectors">
           <select id="selVersusA" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/122)</option>`).join("")}
+            ${players.map(p => `<option value="${p.id}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 145})</option>`).join("")}
           </select>
           <div class="versus-badge">VS</div>
           <select id="selVersusB" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/122)</option>`).join("")}
+            ${players.map(p => `<option value="${p.id}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 145})</option>`).join("")}
           </select>
         </div>
 

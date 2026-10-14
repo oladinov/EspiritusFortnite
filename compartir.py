@@ -80,7 +80,10 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
         data_str = parts[1]
 
     raw_bytes = b64_url_decode(data_str)
-    cells = db['cells']
+    if len(raw_bytes) < 100 and 'cells_v4_122' in db:
+        cells = db['cells_v4_122']
+    else:
+        cells = db.get('cells_v4_145', db['cells'])
     num_cells = len(cells)
 
     owned = {}
@@ -115,6 +118,7 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
             if lvl > 0:
                 levels[key] = min(5, max(1, lvl + 1))
 
+    total_target = db.get('totalCells', len(db['cells']))
     return {
         'version': version,
         'raw_code': clean,
@@ -123,8 +127,8 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
         'lost': lost,
         'levels': levels,
         'owned_count': len(owned),
-        'total_cells': num_cells,
-        'percentage': round((len(owned) / num_cells) * 100, 1)
+        'total_cells': total_target,
+        'percentage': round((len(owned) / total_target) * 100, 1)
     }
 
 class Player:
@@ -191,17 +195,18 @@ def run_analysis(players: List[Player], db: Dict[str, Any]):
 
     print_separator("=")
     print("      🎮 FORTNITE ESPÍRITUS - ORGANIZADOR DE INTERCAMBIOS DE SALA")
-    print("              Temporada 4 / Capítulo 7 (122 Espíritus)")
+    print(f"              Temporada 4 / Capítulo 7 ({db.get('totalCells', 145)} Espíritus)")
     print_separator("=")
 
     # 1. ORDENAR DE MAYOR A MENOR COLECCIÓN
     players_sorted = sorted(players, key=lambda p: p.owned_count, reverse=True)
 
     print("\n📊 CLASIFICACIÓN DE LA SALA (De más a menos espíritus):")
+    total_db_cells = db.get('totalCells', 145)
     for i, p in enumerate(players_sorted, 1):
         bar_len = int(p.percentage / 5)
         bar = "█" * bar_len + "░" * (20 - bar_len)
-        print(f"  {i}. {p.name.ljust(15)} : {str(p.owned_count).rjust(3)}/122 espíritus ({p.percentage}%) [{bar}]")
+        print(f"  {i}. {p.name.ljust(15)} : {str(p.owned_count).rjust(3)}/{total_db_cells} espíritus ({p.percentage}%) [{bar}]")
 
     # 2. FILA / CADENA DE COMPARTIR (CASCADA)
     print("\n" + "="*75)
@@ -333,7 +338,7 @@ def main():
         try:
             p = Player(name, url, db)
             players.append(p)
-            print(f"✔️ {name} agregado con éxito ({p.owned_count}/122 espíritus, {p.percentage}%).")
+            print(f"✔️ {name} agregado con éxito ({p.owned_count}/{p.data.get('total_cells', 145)} espíritus, {p.percentage}%).")
         except Exception as e:
             print(f"❌ Error al procesar el enlace de {name}: {e}")
 

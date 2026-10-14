@@ -51,7 +51,10 @@ function decodeCollection(urlOrCode) {
   }
 
   let bytes = b64UrlDecode(dataStr);
-  let cells = DB.cells;
+  let cells = DB.cells_v4_145 || DB.cells;
+  if (bytes.length < 100 && DB.cells_v4_122) {
+    cells = DB.cells_v4_122;
+  }
   let numCells = cells.length;
 
   let owned = {};
@@ -83,9 +86,10 @@ function decodeCollection(urlOrCode) {
   }
 
   let ownedCount = Object.keys(owned).length;
-  let percentage = Math.round((ownedCount / numCells) * 1000) / 10;
+  let totalTarget = DB.totalCells || DB.cells.length;
+  let percentage = Math.round((ownedCount / totalTarget) * 1000) / 10;
 
-  return { version, rawCode: clean, owned, mastered, lost, levels, ownedCount, percentage };
+  return { version, rawCode: clean, owned, mastered, lost, levels, ownedCount, percentage, totalCells: totalTarget };
 }
 
 function getTransferable(donor, recipient) {
@@ -137,8 +141,9 @@ console.log('='.repeat(70));
 console.log('  🎮 FORTNITE ESPÍRITUS - CADENA DE INTERCAMBIO (SPRITE LOCKER)');
 console.log('='.repeat(70));
 console.log('\n📊 CLASIFICACIÓN DE LA SALA:');
+let totalCells = DB.totalCells || 145;
 players.forEach((p, idx) => {
-  console.log(`  ${idx + 1}. ${p.name.padEnd(12)}: ${p.data.ownedCount}/122 espíritus (${p.data.percentage}%)`);
+  console.log(`  ${idx + 1}. ${p.name.padEnd(12)}: ${p.data.ownedCount}/${totalCells} espíritus (${p.data.percentage}%)`);
 });
 
 console.log('\n' + '='.repeat(70));
