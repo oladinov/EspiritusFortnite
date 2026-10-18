@@ -51,9 +51,11 @@ function decodeCollection(urlOrCode) {
   }
 
   let bytes = b64UrlDecode(dataStr);
-  let cells = DB.cells_v4_145 || DB.cells;
+  let cells = DB.cells_v4_162 || DB.cells;
   if (bytes.length < 100 && DB.cells_v4_122) {
     cells = DB.cells_v4_122;
+  } else if (bytes.length < 116 && DB.cells_v4_145) {
+    cells = DB.cells_v4_145;
   }
   let numCells = cells.length;
 
@@ -141,7 +143,7 @@ console.log('='.repeat(70));
 console.log('  🎮 FORTNITE ESPÍRITUS - CADENA DE INTERCAMBIO (SPRITE LOCKER)');
 console.log('='.repeat(70));
 console.log('\n📊 CLASIFICACIÓN DE LA SALA:');
-let totalCells = DB.totalCells || 145;
+let totalCells = DB.totalCells || 162;
 players.forEach((p, idx) => {
   console.log(`  ${idx + 1}. ${p.name.padEnd(12)}: ${p.data.ownedCount}/${totalCells} espíritus (${p.data.percentage}%)`);
 });
