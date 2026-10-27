@@ -712,7 +712,9 @@ window.SPRITES_DB = {
       "dust": 100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_basic.webp"
+      "image": "/sprites/c7s4/bush_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 1,
@@ -730,7 +732,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_gold.webp"
+      "image": "/sprites/c7s4/bush_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 2,
@@ -748,7 +752,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_cheatmaster.webp"
+      "image": "/sprites/c7s4/bush_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 3,
@@ -766,7 +772,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_loothacker.webp"
+      "image": "/sprites/c7s4/bush_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 4,
@@ -784,7 +792,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_bountyhunter.webp"
+      "image": "/sprites/c7s4/bush_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 5,
@@ -802,7 +812,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_tricktreat.webp"
+      "image": "/sprites/c7s4/bush_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 6,
@@ -820,7 +832,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_quack.webp"
+      "image": "/sprites/c7s4/bush_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_quack.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 7,
@@ -838,7 +852,9 @@ window.SPRITES_DB = {
       "dust": 100,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_basic.webp"
+      "image": "/sprites/c7s4/adventure_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 8,
@@ -856,7 +872,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_gold.webp"
+      "image": "/sprites/c7s4/adventure_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 9,
@@ -874,7 +892,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_cheatmaster.webp"
+      "image": "/sprites/c7s4/adventure_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 10,
@@ -892,7 +912,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_loothacker.webp"
+      "image": "/sprites/c7s4/adventure_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 11,
@@ -910,7 +932,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_bountyhunter.webp"
+      "image": "/sprites/c7s4/adventure_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 12,
@@ -928,7 +952,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_tricktreat.webp"
+      "image": "/sprites/c7s4/adventure_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 13,
@@ -946,7 +972,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_quack.webp"
+      "image": "/sprites/c7s4/adventure_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_quack.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 14,
@@ -964,7 +992,9 @@ window.SPRITES_DB = {
       "dust": 100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_basic.webp"
+      "image": "/sprites/c7s4/jonesy_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 15,
@@ -982,7 +1012,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_gold.webp"
+      "image": "/sprites/c7s4/jonesy_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 16,
@@ -1000,7 +1032,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_cheatmaster.webp"
+      "image": "/sprites/c7s4/jonesy_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 17,
@@ -1018,7 +1052,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_loothacker.webp"
+      "image": "/sprites/c7s4/jonesy_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 18,
@@ -1036,7 +1072,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_bountyhunter.webp"
+      "image": "/sprites/c7s4/jonesy_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 19,
@@ -1054,7 +1092,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_tricktreat.webp"
+      "image": "/sprites/c7s4/jonesy_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 20,
@@ -1072,7 +1112,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_quack.webp"
+      "image": "/sprites/c7s4/jonesy_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_quack.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 21,
@@ -1090,7 +1132,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_basic.webp"
+      "image": "/sprites/c7s4/eightbit_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 22,
@@ -1108,7 +1152,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_gold.webp"
+      "image": "/sprites/c7s4/eightbit_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 23,
@@ -1126,7 +1172,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_cheatmaster.webp"
+      "image": "/sprites/c7s4/eightbit_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 24,
@@ -1144,7 +1192,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_loothacker.webp"
+      "image": "/sprites/c7s4/eightbit_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 25,
@@ -1162,7 +1212,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_bountyhunter.webp"
+      "image": "/sprites/c7s4/eightbit_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 26,
@@ -1180,7 +1232,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_tricktreat.webp"
+      "image": "/sprites/c7s4/eightbit_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 27,
@@ -1198,7 +1252,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_basic.webp"
+      "image": "/sprites/c7s4/stormscout_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 28,
@@ -1216,7 +1272,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_gold.webp"
+      "image": "/sprites/c7s4/stormscout_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 29,
@@ -1234,7 +1292,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_cheatmaster.webp"
+      "image": "/sprites/c7s4/stormscout_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 30,
@@ -1252,7 +1312,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_loothacker.webp"
+      "image": "/sprites/c7s4/stormscout_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 31,
@@ -1270,7 +1332,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_bountyhunter.webp"
+      "image": "/sprites/c7s4/stormscout_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 32,
@@ -1288,7 +1352,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_tricktreat.webp"
+      "image": "/sprites/c7s4/stormscout_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 33,
@@ -1306,7 +1372,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/megaman_basic.webp"
+      "image": "/sprites/c7s4/megaman_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/megaman_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 34,
@@ -1324,7 +1392,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_basic.webp"
+      "image": "/sprites/c7s4/onigiri_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 35,
@@ -1342,7 +1412,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_gold.webp"
+      "image": "/sprites/c7s4/onigiri_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 36,
@@ -1360,7 +1432,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_cheatmaster.webp"
+      "image": "/sprites/c7s4/onigiri_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 37,
@@ -1378,7 +1452,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_loothacker.webp"
+      "image": "/sprites/c7s4/onigiri_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 38,
@@ -1396,7 +1472,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_bountyhunter.webp"
+      "image": "/sprites/c7s4/onigiri_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 39,
@@ -1414,7 +1492,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_tricktreat.webp"
+      "image": "/sprites/c7s4/onigiri_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 40,
@@ -1432,7 +1512,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_basic.webp"
+      "image": "/sprites/c7s4/birthday_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 41,
@@ -1450,7 +1532,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_gold.webp"
+      "image": "/sprites/c7s4/birthday_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 42,
@@ -1468,7 +1552,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_cheatmaster.webp"
+      "image": "/sprites/c7s4/birthday_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 43,
@@ -1486,7 +1572,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_loothacker.webp"
+      "image": "/sprites/c7s4/birthday_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 44,
@@ -1504,7 +1592,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_bountyhunter.webp"
+      "image": "/sprites/c7s4/birthday_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 45,
@@ -1522,7 +1612,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_tricktreat.webp"
+      "image": "/sprites/c7s4/birthday_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 46,
@@ -1540,7 +1632,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_basic.webp"
+      "image": "/sprites/c7s4/sonic_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 47,
@@ -1558,7 +1652,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_gold.webp"
+      "image": "/sprites/c7s4/sonic_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 48,
@@ -1576,7 +1672,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_cheatmaster.webp"
+      "image": "/sprites/c7s4/sonic_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 49,
@@ -1594,7 +1692,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_loothacker.webp"
+      "image": "/sprites/c7s4/sonic_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 50,
@@ -1612,7 +1712,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_bountyhunter.webp"
+      "image": "/sprites/c7s4/sonic_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 51,
@@ -1630,7 +1732,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_tricktreat.webp"
+      "image": "/sprites/c7s4/sonic_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 52,
@@ -1648,7 +1752,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_basic.webp"
+      "image": "/sprites/c7s4/tails_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 53,
@@ -1666,7 +1772,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_gold.webp"
+      "image": "/sprites/c7s4/tails_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 54,
@@ -1684,7 +1792,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_cheatmaster.webp"
+      "image": "/sprites/c7s4/tails_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 55,
@@ -1702,7 +1812,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_loothacker.webp"
+      "image": "/sprites/c7s4/tails_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 56,
@@ -1720,7 +1832,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_bountyhunter.webp"
+      "image": "/sprites/c7s4/tails_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 57,
@@ -1738,7 +1852,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_tricktreat.webp"
+      "image": "/sprites/c7s4/tails_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 58,
@@ -1756,7 +1872,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_basic.webp"
+      "image": "/sprites/c7s4/shadow_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 59,
@@ -1774,7 +1892,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_gold.webp"
+      "image": "/sprites/c7s4/shadow_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 60,
@@ -1792,7 +1912,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_cheatmaster.webp"
+      "image": "/sprites/c7s4/shadow_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 61,
@@ -1810,7 +1932,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_loothacker.webp"
+      "image": "/sprites/c7s4/shadow_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 62,
@@ -1828,7 +1952,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_bountyhunter.webp"
+      "image": "/sprites/c7s4/shadow_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 63,
@@ -1846,7 +1972,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_tricktreat.webp"
+      "image": "/sprites/c7s4/shadow_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 64,
@@ -1864,7 +1992,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_basic.webp"
+      "image": "/sprites/c7s4/pond_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 65,
@@ -1882,7 +2012,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_gold.webp"
+      "image": "/sprites/c7s4/pond_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 66,
@@ -1900,7 +2032,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_cheatmaster.webp"
+      "image": "/sprites/c7s4/pond_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 67,
@@ -1918,7 +2052,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_loothacker.webp"
+      "image": "/sprites/c7s4/pond_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 68,
@@ -1936,7 +2072,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_bountyhunter.webp"
+      "image": "/sprites/c7s4/pond_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 69,
@@ -1954,7 +2092,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_tricktreat.webp"
+      "image": "/sprites/c7s4/pond_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 70,
@@ -1972,7 +2112,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_basic.webp"
+      "image": "/sprites/c7s4/overshield_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 71,
@@ -1990,7 +2132,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_gold.webp"
+      "image": "/sprites/c7s4/overshield_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 72,
@@ -2008,7 +2152,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_cheatmaster.webp"
+      "image": "/sprites/c7s4/overshield_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 73,
@@ -2026,7 +2172,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_loothacker.webp"
+      "image": "/sprites/c7s4/overshield_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 74,
@@ -2044,7 +2192,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_bountyhunter.webp"
+      "image": "/sprites/c7s4/overshield_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 75,
@@ -2062,7 +2212,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_tricktreat.webp"
+      "image": "/sprites/c7s4/overshield_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 76,
@@ -2080,7 +2232,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_basic.webp"
+      "image": "/sprites/c7s4/morgana_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 77,
@@ -2098,7 +2252,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_gold.webp"
+      "image": "/sprites/c7s4/morgana_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 78,
@@ -2116,7 +2272,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_cheatmaster.webp"
+      "image": "/sprites/c7s4/morgana_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 79,
@@ -2134,7 +2292,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_loothacker.webp"
+      "image": "/sprites/c7s4/morgana_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 80,
@@ -2152,7 +2312,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_bountyhunter.webp"
+      "image": "/sprites/c7s4/morgana_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 81,
@@ -2170,7 +2332,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_tricktreat.webp"
+      "image": "/sprites/c7s4/morgana_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 82,
@@ -2188,7 +2352,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_basic.webp"
+      "image": "/sprites/c7s4/dumpsterdive_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 83,
@@ -2206,7 +2372,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_gold.webp"
+      "image": "/sprites/c7s4/dumpsterdive_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 84,
@@ -2224,7 +2392,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_cheatmaster.webp"
+      "image": "/sprites/c7s4/dumpsterdive_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 85,
@@ -2242,7 +2412,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_loothacker.webp"
+      "image": "/sprites/c7s4/dumpsterdive_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 86,
@@ -2260,7 +2432,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_bountyhunter.webp"
+      "image": "/sprites/c7s4/dumpsterdive_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 87,
@@ -2278,7 +2452,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_tricktreat.webp"
+      "image": "/sprites/c7s4/dumpsterdive_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 88,
@@ -2296,7 +2472,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_basic.webp"
+      "image": "/sprites/c7s4/honey_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 89,
@@ -2314,7 +2492,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_gold.webp"
+      "image": "/sprites/c7s4/honey_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 90,
@@ -2332,7 +2512,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_cheatmaster.webp"
+      "image": "/sprites/c7s4/honey_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 91,
@@ -2350,7 +2532,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_loothacker.webp"
+      "image": "/sprites/c7s4/honey_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 92,
@@ -2368,7 +2552,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_bountyhunter.webp"
+      "image": "/sprites/c7s4/honey_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 93,
@@ -2386,7 +2572,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_tricktreat.webp"
+      "image": "/sprites/c7s4/honey_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 94,
@@ -2404,7 +2592,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_basic.webp"
+      "image": "/sprites/c7s4/jackrabbit_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 95,
@@ -2422,7 +2612,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_gold.webp"
+      "image": "/sprites/c7s4/jackrabbit_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 96,
@@ -2440,7 +2632,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_cheatmaster.webp"
+      "image": "/sprites/c7s4/jackrabbit_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 97,
@@ -2458,7 +2652,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_loothacker.webp"
+      "image": "/sprites/c7s4/jackrabbit_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 98,
@@ -2476,7 +2672,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_bountyhunter.webp"
+      "image": "/sprites/c7s4/jackrabbit_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 99,
@@ -2494,7 +2692,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_tricktreat.webp"
+      "image": "/sprites/c7s4/jackrabbit_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 100,
@@ -2512,7 +2712,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_basic.webp"
+      "image": "/sprites/c7s4/xray_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 101,
@@ -2530,7 +2732,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_gold.webp"
+      "image": "/sprites/c7s4/xray_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 102,
@@ -2548,7 +2752,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_cheatmaster.webp"
+      "image": "/sprites/c7s4/xray_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 103,
@@ -2566,7 +2772,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_loothacker.webp"
+      "image": "/sprites/c7s4/xray_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 104,
@@ -2584,7 +2792,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_bountyhunter.webp"
+      "image": "/sprites/c7s4/xray_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 105,
@@ -2602,7 +2812,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_tricktreat.webp"
+      "image": "/sprites/c7s4/xray_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 106,
@@ -2620,7 +2832,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_basic.webp"
+      "image": "/sprites/c7s4/killswitch_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 107,
@@ -2638,7 +2852,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_gold.webp"
+      "image": "/sprites/c7s4/killswitch_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 108,
@@ -2656,7 +2872,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_cheatmaster.webp"
+      "image": "/sprites/c7s4/killswitch_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 109,
@@ -2674,7 +2892,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_loothacker.webp"
+      "image": "/sprites/c7s4/killswitch_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 110,
@@ -2692,7 +2912,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_bountyhunter.webp"
+      "image": "/sprites/c7s4/killswitch_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 111,
@@ -2710,7 +2932,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_tricktreat.webp"
+      "image": "/sprites/c7s4/killswitch_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 112,
@@ -2728,7 +2952,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_basic.webp"
+      "image": "/sprites/c7s4/crashbandicoot_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 113,
@@ -2746,7 +2972,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_gold.webp"
+      "image": "/sprites/c7s4/crashbandicoot_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 114,
@@ -2764,7 +2992,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_cheatmaster.webp"
+      "image": "/sprites/c7s4/crashbandicoot_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 115,
@@ -2782,7 +3012,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_loothacker.webp"
+      "image": "/sprites/c7s4/crashbandicoot_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 116,
@@ -2800,7 +3032,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_bountyhunter.webp"
+      "image": "/sprites/c7s4/crashbandicoot_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 117,
@@ -2818,7 +3052,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_tricktreat.webp"
+      "image": "/sprites/c7s4/crashbandicoot_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 118,
@@ -2836,7 +3072,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_basic.webp"
+      "image": "/sprites/c7s4/blinky_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 119,
@@ -2854,7 +3092,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_gold.webp"
+      "image": "/sprites/c7s4/blinky_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 120,
@@ -2872,7 +3112,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_cheatmaster.webp"
+      "image": "/sprites/c7s4/blinky_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 121,
@@ -2890,7 +3132,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_loothacker.webp"
+      "image": "/sprites/c7s4/blinky_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 122,
@@ -2908,7 +3152,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_bountyhunter.webp"
+      "image": "/sprites/c7s4/blinky_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 123,
@@ -2926,7 +3172,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_tricktreat.webp"
+      "image": "/sprites/c7s4/blinky_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 124,
@@ -2944,7 +3192,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_basic.webp"
+      "image": "/sprites/c7s4/thedeer_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 125,
@@ -2962,7 +3212,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_gold.webp"
+      "image": "/sprites/c7s4/thedeer_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 126,
@@ -2980,7 +3232,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_cheatmaster.webp"
+      "image": "/sprites/c7s4/thedeer_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 127,
@@ -2998,7 +3252,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_loothacker.webp"
+      "image": "/sprites/c7s4/thedeer_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 128,
@@ -3016,7 +3272,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_bountyhunter.webp"
+      "image": "/sprites/c7s4/thedeer_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 129,
@@ -3034,7 +3292,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_tricktreat.webp"
+      "image": "/sprites/c7s4/thedeer_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 130,
@@ -3052,7 +3312,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_basic.webp"
+      "image": "/sprites/c7s4/vampire_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 131,
@@ -3070,7 +3332,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_gold.webp"
+      "image": "/sprites/c7s4/vampire_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 132,
@@ -3088,7 +3352,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_cheatmaster.webp"
+      "image": "/sprites/c7s4/vampire_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 133,
@@ -3106,7 +3372,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_loothacker.webp"
+      "image": "/sprites/c7s4/vampire_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 134,
@@ -3124,7 +3392,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_bountyhunter.webp"
+      "image": "/sprites/c7s4/vampire_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 135,
@@ -3142,7 +3412,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_tricktreat.webp"
+      "image": "/sprites/c7s4/vampire_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 136,
@@ -3160,7 +3432,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_basic.webp"
+      "image": "/sprites/c7s4/crown_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 137,
@@ -3178,7 +3452,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_gold.webp"
+      "image": "/sprites/c7s4/crown_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 138,
@@ -3196,7 +3472,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_cheatmaster.webp"
+      "image": "/sprites/c7s4/crown_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 139,
@@ -3214,7 +3492,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_loothacker.webp"
+      "image": "/sprites/c7s4/crown_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 140,
@@ -3232,7 +3512,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_bountyhunter.webp"
+      "image": "/sprites/c7s4/crown_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 141,
@@ -3250,7 +3532,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_tricktreat.webp"
+      "image": "/sprites/c7s4/crown_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 142,
@@ -3268,7 +3552,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_basic.webp"
+      "image": "/sprites/c7s4/klombo_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 143,
@@ -3286,7 +3572,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_gold.webp"
+      "image": "/sprites/c7s4/klombo_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 144,
@@ -3304,7 +3592,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_cheatmaster.webp"
+      "image": "/sprites/c7s4/klombo_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 145,
@@ -3322,7 +3612,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_loothacker.webp"
+      "image": "/sprites/c7s4/klombo_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 146,
@@ -3340,7 +3632,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_bountyhunter.webp"
+      "image": "/sprites/c7s4/klombo_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 147,
@@ -3358,7 +3652,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_tricktreat.webp"
+      "image": "/sprites/c7s4/klombo_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 148,
@@ -3376,7 +3672,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_quack.webp"
+      "image": "/sprites/c7s4/klombo_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_quack.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 149,
@@ -3394,7 +3692,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_basic.webp"
+      "image": "/sprites/c7s4/spookydash_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 150,
@@ -3412,7 +3712,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_gold.webp"
+      "image": "/sprites/c7s4/spookydash_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 151,
@@ -3430,7 +3732,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_cheatmaster.webp"
+      "image": "/sprites/c7s4/spookydash_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 152,
@@ -3448,7 +3752,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_loothacker.webp"
+      "image": "/sprites/c7s4/spookydash_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 153,
@@ -3466,7 +3772,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_bountyhunter.webp"
+      "image": "/sprites/c7s4/spookydash_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 154,
@@ -3484,7 +3792,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_tricktreat.webp"
+      "image": "/sprites/c7s4/spookydash_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 155,
@@ -3502,7 +3812,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_quack.webp"
+      "image": "/sprites/c7s4/spookydash_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_quack.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 156,
@@ -3520,7 +3832,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_basic.webp"
+      "image": "/sprites/c7s4/onewishwillow_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 157,
@@ -3538,7 +3852,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_gold.webp"
+      "image": "/sprites/c7s4/onewishwillow_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 158,
@@ -3556,7 +3872,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_cheatmaster.webp"
+      "image": "/sprites/c7s4/onewishwillow_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 159,
@@ -3574,7 +3892,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_loothacker.webp"
+      "image": "/sprites/c7s4/onewishwillow_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 160,
@@ -3592,7 +3912,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_bountyhunter.webp"
+      "image": "/sprites/c7s4/onewishwillow_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 161,
@@ -3610,7 +3932,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_tricktreat.webp"
+      "image": "/sprites/c7s4/onewishwillow_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     }
   ],
   "cells_v4_162": [
@@ -3630,7 +3954,9 @@ window.SPRITES_DB = {
       "dust": 100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_basic.webp"
+      "image": "/sprites/c7s4/bush_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 1,
@@ -3648,7 +3974,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_gold.webp"
+      "image": "/sprites/c7s4/bush_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 2,
@@ -3666,7 +3994,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_cheatmaster.webp"
+      "image": "/sprites/c7s4/bush_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 3,
@@ -3684,7 +4014,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_loothacker.webp"
+      "image": "/sprites/c7s4/bush_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 4,
@@ -3702,7 +4034,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_bountyhunter.webp"
+      "image": "/sprites/c7s4/bush_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 5,
@@ -3720,7 +4054,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_tricktreat.webp"
+      "image": "/sprites/c7s4/bush_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 6,
@@ -3738,7 +4074,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/bush_quack.webp"
+      "image": "/sprites/c7s4/bush_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/bush_quack.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 7,
@@ -3756,7 +4094,9 @@ window.SPRITES_DB = {
       "dust": 100,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_basic.webp"
+      "image": "/sprites/c7s4/adventure_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 8,
@@ -3774,7 +4114,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_gold.webp"
+      "image": "/sprites/c7s4/adventure_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 9,
@@ -3792,7 +4134,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_cheatmaster.webp"
+      "image": "/sprites/c7s4/adventure_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 10,
@@ -3810,7 +4154,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_loothacker.webp"
+      "image": "/sprites/c7s4/adventure_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 11,
@@ -3828,7 +4174,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_bountyhunter.webp"
+      "image": "/sprites/c7s4/adventure_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 12,
@@ -3846,7 +4194,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_tricktreat.webp"
+      "image": "/sprites/c7s4/adventure_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 13,
@@ -3864,7 +4214,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 4,
-      "image": "/sprites/c7s4/adventure_quack.webp"
+      "image": "/sprites/c7s4/adventure_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/adventure_quack.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 14,
@@ -3882,7 +4234,9 @@ window.SPRITES_DB = {
       "dust": 100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_basic.webp"
+      "image": "/sprites/c7s4/jonesy_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 15,
@@ -3900,7 +4254,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_gold.webp"
+      "image": "/sprites/c7s4/jonesy_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 16,
@@ -3918,7 +4274,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_cheatmaster.webp"
+      "image": "/sprites/c7s4/jonesy_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 17,
@@ -3936,7 +4294,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_loothacker.webp"
+      "image": "/sprites/c7s4/jonesy_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 18,
@@ -3954,7 +4314,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_bountyhunter.webp"
+      "image": "/sprites/c7s4/jonesy_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 19,
@@ -3972,7 +4334,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_tricktreat.webp"
+      "image": "/sprites/c7s4/jonesy_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 20,
@@ -3990,7 +4354,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jonesy_quack.webp"
+      "image": "/sprites/c7s4/jonesy_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jonesy_quack.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 21,
@@ -4008,7 +4374,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_basic.webp"
+      "image": "/sprites/c7s4/eightbit_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 22,
@@ -4026,7 +4394,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_gold.webp"
+      "image": "/sprites/c7s4/eightbit_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 23,
@@ -4044,7 +4414,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_cheatmaster.webp"
+      "image": "/sprites/c7s4/eightbit_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 24,
@@ -4062,7 +4434,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_loothacker.webp"
+      "image": "/sprites/c7s4/eightbit_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 25,
@@ -4080,7 +4454,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_bountyhunter.webp"
+      "image": "/sprites/c7s4/eightbit_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 26,
@@ -4098,7 +4474,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/eightbit_tricktreat.webp"
+      "image": "/sprites/c7s4/eightbit_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/eightbit_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 27,
@@ -4116,7 +4494,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_basic.webp"
+      "image": "/sprites/c7s4/stormscout_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 28,
@@ -4134,7 +4514,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_gold.webp"
+      "image": "/sprites/c7s4/stormscout_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 29,
@@ -4152,7 +4534,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_cheatmaster.webp"
+      "image": "/sprites/c7s4/stormscout_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 30,
@@ -4170,7 +4554,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_loothacker.webp"
+      "image": "/sprites/c7s4/stormscout_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 31,
@@ -4188,7 +4574,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_bountyhunter.webp"
+      "image": "/sprites/c7s4/stormscout_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 32,
@@ -4206,7 +4594,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/stormscout_tricktreat.webp"
+      "image": "/sprites/c7s4/stormscout_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/stormscout_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 33,
@@ -4224,7 +4614,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/megaman_basic.webp"
+      "image": "/sprites/c7s4/megaman_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/megaman_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 34,
@@ -4242,7 +4634,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_basic.webp"
+      "image": "/sprites/c7s4/onigiri_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 35,
@@ -4260,7 +4654,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_gold.webp"
+      "image": "/sprites/c7s4/onigiri_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 36,
@@ -4278,7 +4674,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_cheatmaster.webp"
+      "image": "/sprites/c7s4/onigiri_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 37,
@@ -4296,7 +4694,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_loothacker.webp"
+      "image": "/sprites/c7s4/onigiri_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 38,
@@ -4314,7 +4714,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_bountyhunter.webp"
+      "image": "/sprites/c7s4/onigiri_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 39,
@@ -4332,7 +4734,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onigiri_tricktreat.webp"
+      "image": "/sprites/c7s4/onigiri_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onigiri_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 40,
@@ -4350,7 +4754,9 @@ window.SPRITES_DB = {
       "dust": 1250,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_basic.webp"
+      "image": "/sprites/c7s4/birthday_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_basic.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 41,
@@ -4368,7 +4774,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_gold.webp"
+      "image": "/sprites/c7s4/birthday_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_gold.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 42,
@@ -4386,7 +4794,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_cheatmaster.webp"
+      "image": "/sprites/c7s4/birthday_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_cheatmaster.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 43,
@@ -4404,7 +4814,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_loothacker.webp"
+      "image": "/sprites/c7s4/birthday_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_loothacker.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 44,
@@ -4422,7 +4834,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_bountyhunter.webp"
+      "image": "/sprites/c7s4/birthday_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_bountyhunter.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 45,
@@ -4440,7 +4854,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/birthday_tricktreat.webp"
+      "image": "/sprites/c7s4/birthday_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/birthday_tricktreat.webp",
+      "rarityColor": "#3aa0ff"
     },
     {
       "index": 46,
@@ -4458,7 +4874,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_basic.webp"
+      "image": "/sprites/c7s4/sonic_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 47,
@@ -4476,7 +4894,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_gold.webp"
+      "image": "/sprites/c7s4/sonic_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 48,
@@ -4494,7 +4914,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_cheatmaster.webp"
+      "image": "/sprites/c7s4/sonic_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 49,
@@ -4512,7 +4934,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_loothacker.webp"
+      "image": "/sprites/c7s4/sonic_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 50,
@@ -4530,7 +4954,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_bountyhunter.webp"
+      "image": "/sprites/c7s4/sonic_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 51,
@@ -4548,7 +4974,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/sonic_tricktreat.webp"
+      "image": "/sprites/c7s4/sonic_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/sonic_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 52,
@@ -4566,7 +4994,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_basic.webp"
+      "image": "/sprites/c7s4/tails_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 53,
@@ -4584,7 +5014,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_gold.webp"
+      "image": "/sprites/c7s4/tails_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 54,
@@ -4602,7 +5034,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_cheatmaster.webp"
+      "image": "/sprites/c7s4/tails_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 55,
@@ -4620,7 +5054,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_loothacker.webp"
+      "image": "/sprites/c7s4/tails_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 56,
@@ -4638,7 +5074,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_bountyhunter.webp"
+      "image": "/sprites/c7s4/tails_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 57,
@@ -4656,7 +5094,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/tails_tricktreat.webp"
+      "image": "/sprites/c7s4/tails_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/tails_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 58,
@@ -4674,7 +5114,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_basic.webp"
+      "image": "/sprites/c7s4/shadow_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 59,
@@ -4692,7 +5134,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_gold.webp"
+      "image": "/sprites/c7s4/shadow_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 60,
@@ -4710,7 +5154,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_cheatmaster.webp"
+      "image": "/sprites/c7s4/shadow_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 61,
@@ -4728,7 +5174,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_loothacker.webp"
+      "image": "/sprites/c7s4/shadow_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 62,
@@ -4746,7 +5194,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_bountyhunter.webp"
+      "image": "/sprites/c7s4/shadow_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 63,
@@ -4764,7 +5214,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/shadow_tricktreat.webp"
+      "image": "/sprites/c7s4/shadow_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/shadow_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 64,
@@ -4782,7 +5234,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_basic.webp"
+      "image": "/sprites/c7s4/pond_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 65,
@@ -4800,7 +5254,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_gold.webp"
+      "image": "/sprites/c7s4/pond_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 66,
@@ -4818,7 +5274,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_cheatmaster.webp"
+      "image": "/sprites/c7s4/pond_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 67,
@@ -4836,7 +5294,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_loothacker.webp"
+      "image": "/sprites/c7s4/pond_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 68,
@@ -4854,7 +5314,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_bountyhunter.webp"
+      "image": "/sprites/c7s4/pond_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 69,
@@ -4872,7 +5334,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/pond_tricktreat.webp"
+      "image": "/sprites/c7s4/pond_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/pond_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 70,
@@ -4890,7 +5354,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_basic.webp"
+      "image": "/sprites/c7s4/overshield_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 71,
@@ -4908,7 +5374,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_gold.webp"
+      "image": "/sprites/c7s4/overshield_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 72,
@@ -4926,7 +5394,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_cheatmaster.webp"
+      "image": "/sprites/c7s4/overshield_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 73,
@@ -4944,7 +5414,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_loothacker.webp"
+      "image": "/sprites/c7s4/overshield_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 74,
@@ -4962,7 +5434,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_bountyhunter.webp"
+      "image": "/sprites/c7s4/overshield_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 75,
@@ -4980,7 +5454,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/overshield_tricktreat.webp"
+      "image": "/sprites/c7s4/overshield_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/overshield_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 76,
@@ -4998,7 +5474,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_basic.webp"
+      "image": "/sprites/c7s4/morgana_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 77,
@@ -5016,7 +5494,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_gold.webp"
+      "image": "/sprites/c7s4/morgana_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 78,
@@ -5034,7 +5514,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_cheatmaster.webp"
+      "image": "/sprites/c7s4/morgana_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 79,
@@ -5052,7 +5534,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_loothacker.webp"
+      "image": "/sprites/c7s4/morgana_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 80,
@@ -5070,7 +5554,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_bountyhunter.webp"
+      "image": "/sprites/c7s4/morgana_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 81,
@@ -5088,7 +5574,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/morgana_tricktreat.webp"
+      "image": "/sprites/c7s4/morgana_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/morgana_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 82,
@@ -5106,7 +5594,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_basic.webp"
+      "image": "/sprites/c7s4/dumpsterdive_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 83,
@@ -5124,7 +5614,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_gold.webp"
+      "image": "/sprites/c7s4/dumpsterdive_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 84,
@@ -5142,7 +5634,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_cheatmaster.webp"
+      "image": "/sprites/c7s4/dumpsterdive_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 85,
@@ -5160,7 +5654,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_loothacker.webp"
+      "image": "/sprites/c7s4/dumpsterdive_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 86,
@@ -5178,7 +5674,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_bountyhunter.webp"
+      "image": "/sprites/c7s4/dumpsterdive_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 87,
@@ -5196,7 +5694,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/dumpsterdive_tricktreat.webp"
+      "image": "/sprites/c7s4/dumpsterdive_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/dumpsterdive_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 88,
@@ -5214,7 +5714,9 @@ window.SPRITES_DB = {
       "dust": 1500,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_basic.webp"
+      "image": "/sprites/c7s4/honey_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_basic.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 89,
@@ -5232,7 +5734,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_gold.webp"
+      "image": "/sprites/c7s4/honey_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_gold.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 90,
@@ -5250,7 +5754,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_cheatmaster.webp"
+      "image": "/sprites/c7s4/honey_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_cheatmaster.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 91,
@@ -5268,7 +5774,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_loothacker.webp"
+      "image": "/sprites/c7s4/honey_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_loothacker.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 92,
@@ -5286,7 +5794,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_bountyhunter.webp"
+      "image": "/sprites/c7s4/honey_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_bountyhunter.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 93,
@@ -5304,7 +5814,9 @@ window.SPRITES_DB = {
       "dust": 1800,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/honey_tricktreat.webp"
+      "image": "/sprites/c7s4/honey_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/honey_tricktreat.webp",
+      "rarityColor": "#b34dff"
     },
     {
       "index": 94,
@@ -5322,7 +5834,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_basic.webp"
+      "image": "/sprites/c7s4/jackrabbit_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 95,
@@ -5340,7 +5854,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_gold.webp"
+      "image": "/sprites/c7s4/jackrabbit_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 96,
@@ -5358,7 +5874,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_cheatmaster.webp"
+      "image": "/sprites/c7s4/jackrabbit_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 97,
@@ -5376,7 +5894,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_loothacker.webp"
+      "image": "/sprites/c7s4/jackrabbit_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 98,
@@ -5394,7 +5914,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_bountyhunter.webp"
+      "image": "/sprites/c7s4/jackrabbit_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 99,
@@ -5412,7 +5934,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/jackrabbit_tricktreat.webp"
+      "image": "/sprites/c7s4/jackrabbit_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/jackrabbit_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 100,
@@ -5430,7 +5954,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_basic.webp"
+      "image": "/sprites/c7s4/xray_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 101,
@@ -5448,7 +5974,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_gold.webp"
+      "image": "/sprites/c7s4/xray_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 102,
@@ -5466,7 +5994,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_cheatmaster.webp"
+      "image": "/sprites/c7s4/xray_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 103,
@@ -5484,7 +6014,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_loothacker.webp"
+      "image": "/sprites/c7s4/xray_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 104,
@@ -5502,7 +6034,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_bountyhunter.webp"
+      "image": "/sprites/c7s4/xray_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 105,
@@ -5520,7 +6054,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/xray_tricktreat.webp"
+      "image": "/sprites/c7s4/xray_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/xray_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 106,
@@ -5538,7 +6074,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_basic.webp"
+      "image": "/sprites/c7s4/killswitch_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 107,
@@ -5556,7 +6094,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_gold.webp"
+      "image": "/sprites/c7s4/killswitch_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 108,
@@ -5574,7 +6114,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_cheatmaster.webp"
+      "image": "/sprites/c7s4/killswitch_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 109,
@@ -5592,7 +6134,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_loothacker.webp"
+      "image": "/sprites/c7s4/killswitch_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 110,
@@ -5610,7 +6154,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_bountyhunter.webp"
+      "image": "/sprites/c7s4/killswitch_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 111,
@@ -5628,7 +6174,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/killswitch_tricktreat.webp"
+      "image": "/sprites/c7s4/killswitch_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/killswitch_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 112,
@@ -5646,7 +6194,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_basic.webp"
+      "image": "/sprites/c7s4/crashbandicoot_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 113,
@@ -5664,7 +6214,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_gold.webp"
+      "image": "/sprites/c7s4/crashbandicoot_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 114,
@@ -5682,7 +6234,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_cheatmaster.webp"
+      "image": "/sprites/c7s4/crashbandicoot_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 115,
@@ -5700,7 +6254,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_loothacker.webp"
+      "image": "/sprites/c7s4/crashbandicoot_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 116,
@@ -5718,7 +6274,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_bountyhunter.webp"
+      "image": "/sprites/c7s4/crashbandicoot_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 117,
@@ -5736,7 +6294,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crashbandicoot_tricktreat.webp"
+      "image": "/sprites/c7s4/crashbandicoot_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crashbandicoot_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 118,
@@ -5754,7 +6314,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_basic.webp"
+      "image": "/sprites/c7s4/blinky_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 119,
@@ -5772,7 +6334,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_gold.webp"
+      "image": "/sprites/c7s4/blinky_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 120,
@@ -5790,7 +6354,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_cheatmaster.webp"
+      "image": "/sprites/c7s4/blinky_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 121,
@@ -5808,7 +6374,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_loothacker.webp"
+      "image": "/sprites/c7s4/blinky_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 122,
@@ -5826,7 +6394,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_bountyhunter.webp"
+      "image": "/sprites/c7s4/blinky_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 123,
@@ -5844,7 +6414,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/blinky_tricktreat.webp"
+      "image": "/sprites/c7s4/blinky_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/blinky_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 124,
@@ -5862,7 +6434,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_basic.webp"
+      "image": "/sprites/c7s4/thedeer_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 125,
@@ -5880,7 +6454,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_gold.webp"
+      "image": "/sprites/c7s4/thedeer_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 126,
@@ -5898,7 +6474,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_cheatmaster.webp"
+      "image": "/sprites/c7s4/thedeer_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 127,
@@ -5916,7 +6494,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_loothacker.webp"
+      "image": "/sprites/c7s4/thedeer_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 128,
@@ -5934,7 +6514,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_bountyhunter.webp"
+      "image": "/sprites/c7s4/thedeer_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 129,
@@ -5952,7 +6534,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/thedeer_tricktreat.webp"
+      "image": "/sprites/c7s4/thedeer_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/thedeer_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 130,
@@ -5970,7 +6554,9 @@ window.SPRITES_DB = {
       "dust": 1750,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_basic.webp"
+      "image": "/sprites/c7s4/vampire_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_basic.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 131,
@@ -5988,7 +6574,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_gold.webp"
+      "image": "/sprites/c7s4/vampire_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_gold.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 132,
@@ -6006,7 +6594,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_cheatmaster.webp"
+      "image": "/sprites/c7s4/vampire_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_cheatmaster.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 133,
@@ -6024,7 +6614,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_loothacker.webp"
+      "image": "/sprites/c7s4/vampire_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_loothacker.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 134,
@@ -6042,7 +6634,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_bountyhunter.webp"
+      "image": "/sprites/c7s4/vampire_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_bountyhunter.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 135,
@@ -6060,7 +6654,9 @@ window.SPRITES_DB = {
       "dust": 2100,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/vampire_tricktreat.webp"
+      "image": "/sprites/c7s4/vampire_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/vampire_tricktreat.webp",
+      "rarityColor": "#f5a623"
     },
     {
       "index": 136,
@@ -6078,7 +6674,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_basic.webp"
+      "image": "/sprites/c7s4/crown_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 137,
@@ -6096,7 +6694,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_gold.webp"
+      "image": "/sprites/c7s4/crown_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 138,
@@ -6114,7 +6714,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_cheatmaster.webp"
+      "image": "/sprites/c7s4/crown_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 139,
@@ -6132,7 +6734,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_loothacker.webp"
+      "image": "/sprites/c7s4/crown_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 140,
@@ -6150,7 +6754,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_bountyhunter.webp"
+      "image": "/sprites/c7s4/crown_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 141,
@@ -6168,7 +6774,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/crown_tricktreat.webp"
+      "image": "/sprites/c7s4/crown_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/crown_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 142,
@@ -6186,7 +6794,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_basic.webp"
+      "image": "/sprites/c7s4/klombo_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 143,
@@ -6204,7 +6814,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_gold.webp"
+      "image": "/sprites/c7s4/klombo_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 144,
@@ -6222,7 +6834,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_cheatmaster.webp"
+      "image": "/sprites/c7s4/klombo_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 145,
@@ -6240,7 +6854,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_loothacker.webp"
+      "image": "/sprites/c7s4/klombo_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 146,
@@ -6258,7 +6874,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_bountyhunter.webp"
+      "image": "/sprites/c7s4/klombo_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 147,
@@ -6276,7 +6894,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_tricktreat.webp"
+      "image": "/sprites/c7s4/klombo_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 148,
@@ -6294,7 +6914,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/klombo_quack.webp"
+      "image": "/sprites/c7s4/klombo_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/klombo_quack.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 149,
@@ -6312,7 +6934,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_basic.webp"
+      "image": "/sprites/c7s4/spookydash_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 150,
@@ -6330,7 +6954,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_gold.webp"
+      "image": "/sprites/c7s4/spookydash_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 151,
@@ -6348,7 +6974,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_cheatmaster.webp"
+      "image": "/sprites/c7s4/spookydash_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 152,
@@ -6366,7 +6994,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_loothacker.webp"
+      "image": "/sprites/c7s4/spookydash_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 153,
@@ -6384,7 +7014,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_bountyhunter.webp"
+      "image": "/sprites/c7s4/spookydash_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 154,
@@ -6402,7 +7034,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_tricktreat.webp"
+      "image": "/sprites/c7s4/spookydash_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 155,
@@ -6420,7 +7054,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/spookydash_quack.webp"
+      "image": "/sprites/c7s4/spookydash_quack.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/spookydash_quack.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 156,
@@ -6438,7 +7074,9 @@ window.SPRITES_DB = {
       "dust": 2000,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_basic.webp"
+      "image": "/sprites/c7s4/onewishwillow_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_basic.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 157,
@@ -6456,7 +7094,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_gold.webp"
+      "image": "/sprites/c7s4/onewishwillow_gold.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_gold.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 158,
@@ -6474,7 +7114,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_cheatmaster.webp"
+      "image": "/sprites/c7s4/onewishwillow_cheatmaster.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_cheatmaster.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 159,
@@ -6492,7 +7134,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_loothacker.webp"
+      "image": "/sprites/c7s4/onewishwillow_loothacker.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_loothacker.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 160,
@@ -6510,7 +7154,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_bountyhunter.webp"
+      "image": "/sprites/c7s4/onewishwillow_bountyhunter.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_bountyhunter.webp",
+      "rarityColor": "#ff4d4d"
     },
     {
       "index": 161,
@@ -6528,7 +7174,9 @@ window.SPRITES_DB = {
       "dust": 2400,
       "tradable": true,
       "maxLevel": 5,
-      "image": "/sprites/c7s4/onewishwillow_tricktreat.webp"
+      "image": "/sprites/c7s4/onewishwillow_tricktreat.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7s4/onewishwillow_tricktreat.webp",
+      "rarityColor": "#ff4d4d"
     }
   ],
   "cells_v4_145": [

@@ -416,33 +416,20 @@
         renderActiveTab();
       };
 
+      linkInput.addEventListener("focus", () => linkInput.select());
       linkInput.addEventListener("change", (e) => handleLinkChange(e.target.value));
       linkInput.addEventListener("paste", () => {
         setTimeout(() => handleLinkChange(linkInput.value), 50);
       });
 
-      // Botón: Pegar desde portapapeles
+      // Botón: Pegar nuevo link (abre directamente el modal/prompt sin el bloqueo de permiso del navegador)
       card.querySelector(".btn-paste").addEventListener("click", async () => {
-        try {
-          const clipText = await navigator.clipboard.readText();
-          if (clipText && (clipText.includes("spritelocker.com") || clipText.includes("#") || clipText.includes("4."))) {
-            linkInput.value = clipText.trim();
-            await handleLinkChange(clipText.trim());
-            card.classList.add("is-updated");
-            setTimeout(() => card.classList.remove("is-updated"), 1200);
-          } else {
-            let manual = prompt(`Pega el nuevo enlace de Sprite Locker para ${player.name}:`, player.url);
-            if (manual !== null) {
-              linkInput.value = manual.trim();
-              await handleLinkChange(manual.trim());
-            }
-          }
-        } catch (err) {
-          let manual = prompt(`Pega el nuevo enlace de Sprite Locker para ${player.name}:`, player.url);
-          if (manual !== null) {
-            linkInput.value = manual.trim();
-            await handleLinkChange(manual.trim());
-          }
+        let manual = prompt(`Pega el nuevo enlace de Sprite Locker para ${player.name}:`, "");
+        if (manual !== null && manual.trim() !== "") {
+          linkInput.value = manual.trim();
+          await handleLinkChange(manual.trim());
+          card.classList.add("is-updated");
+          setTimeout(() => card.classList.remove("is-updated"), 1200);
         }
       });
 
@@ -825,11 +812,12 @@
       Mythic: '#ff4d4d'
     };
     const rarityColor = rarityColors[cell.rarity] || '#fff';
+    const imgSrc = cell.imageUrl || (cell.image ? `https://spritelocker.com${cell.image}` : '');
 
     return `
       <div class="spirit-item" style="border-left: 3px solid ${rarityColor};">
         <div class="spirit-img-wrap">
-          <img src="${cell.imageUrl}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" onerror="this.style.display='none'">
+          <img src="${imgSrc}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
         </div>
         <div class="spirit-name" title="${escapeHtml(cell.spriteNameEs)}">${escapeHtml(cell.spriteNameEs)}</div>
         <div class="spirit-tags">
