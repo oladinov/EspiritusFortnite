@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Organizador de Espíritus Fortnite — Intercambios de Sala</title>
-  <link rel="stylesheet" href="style.css?v=162.1">
+  <link rel="stylesheet" href="style.css?v=162.2">
 </head>
 <body>
 
@@ -32,9 +32,10 @@
       <div class="panel-header">
         <div>
           <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
-          <p class="panel-desc">Pega el link de Sprite Locker (#vs=, #c= o ?p=) de cada miembro. Actualízalo durante tus partidas en tiempo real.</p>
+          <p class="panel-desc">Pega el link de Sprite Locker de cada miembro o usa <strong>✏️ Casillero Manual / Plantillas Rápidas</strong> si tu amigo nunca ha usado Sprite Locker.</p>
         </div>
-        <div style="display: flex; gap: 0.5rem;">
+        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+          <button class="btn btn-secondary btn-sm" id="btnAddGuestPlayer" title="Añade un amigo sin link de Sprite Locker y abre su selector visual">✏️ Añadir Amigo sin Link</button>
           <button class="btn btn-primary btn-sm" id="btnAddPlayer">➕ Añadir Jugador</button>
         </div>
       </div>
@@ -87,6 +88,64 @@
     </div>
   </div>
 
+  <!-- Modal Editor Visual de Casillero (Para jugadores sin Sprite Locker) -->
+  <dialog id="lockerDialog" closedby="any" class="locker-dialog" aria-labelledby="lockerDialogTitle">
+    <div class="locker-dialog-inner">
+      <div class="modal-header">
+        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
+          <h3 id="lockerDialogTitle" style="font-size: 1.05rem; color: #3fd0ff;">✏️ Casillero Manual:</h3>
+          <input type="text" id="lockerPlayerNameInput" class="locker-name-input" placeholder="Nombre del jugador">
+          <span id="lockerCountBadge" class="player-stats-badge">0/162 (0%)</span>
+        </div>
+        <button type="button" class="modal-close" id="lockerDialogClose" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <div class="locker-toolbar">
+        <div class="locker-presets-row">
+          <span class="locker-toolbar-label">⚡ Plantillas 1-Clic:</span>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetZero" title="Dejar en 0 espíritus (Ideal para ver todo lo que pueden darle)">🆕 Empezando (0)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetNormals" title="Marcar los 27 espíritus normales base">📦 Solo Normales (27)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetAll" title="Marcar los 162 espíritus">✨ Todos (162)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar filtrados</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Desmarcar filtrados</button>
+        </div>
+
+        <div class="locker-filters-row">
+          <input type="search" id="lockerSearchInput" class="locker-filter-input" placeholder="🔎 Buscar espíritu (ej. Arbusto, Miel, Corona, Patito)...">
+          <select id="lockerVariantFilter" class="locker-filter-select">
+            <option value="all">🎨 Todas las variantes</option>
+            <option value="NORMAL">Normal (27)</option>
+            <option value="GOLD">Oro (27)</option>
+            <option value="CHEATMASTER">Cheat Master (27)</option>
+            <option value="LOOTHACKER">Loot Hacker (27)</option>
+            <option value="BOUNTYHUNTER">Bounty Hunter (27)</option>
+            <option value="TRICKTREAT">Dulce o truco (24)</option>
+            <option value="QUACK">Quack / Patito (3)</option>
+          </select>
+          <select id="lockerStatusFilter" class="locker-filter-select">
+            <option value="all">👁️ Todos (162)</option>
+            <option value="owned">✅ Solo los que TIENE</option>
+            <option value="missing">❌ Solo los que LE FALTAN</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="modal-body locker-grid-body">
+        <div id="lockerSpritesGrid" class="locker-sprites-grid"></div>
+      </div>
+
+      <div class="locker-footer">
+        <div class="locker-footer-hint">
+          💡 Haz clic en cada espíritu para marcar si <strong>✅ Lo tiene</strong> o <strong>❌ Le falta</strong>.
+        </div>
+        <div class="locker-footer-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnLockerCopyShare" title="Si eres invitado, copia tu código y pégalo en el WhatsApp/Discord del grupo">📋 Copiar mi Código para el Grupo</button>
+          <button type="button" class="btn btn-primary btn-sm" id="btnLockerSave">💾 Guardar en la Sala</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Toast de notificación para copiado -->
   <div class="toast" id="toast">
     <span>📋</span>
@@ -94,7 +153,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="db.js?v=162.1"></script>
-  <script src="app.js?v=162.1"></script>
+  <script src="db.js?v=162.2"></script>
+  <script src="app.js?v=162.2"></script>
 </body>
 </html>

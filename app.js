@@ -86,6 +86,55 @@
     return !!(bytes[byteIdx] & (1 << (idx & 7)));
   }
 
+  function setBit(bytes, idx) {
+    let byteIdx = idx >> 3;
+    if (byteIdx >= bytes.length) return;
+    bytes[byteIdx] |= (1 << (idx & 7));
+  }
+
+  function b64UrlEncode(bytes) {
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+  }
+
+  function encodeCollection(col) {
+    let cells = DB.cells_v4_162 || DB.cells;
+    let numCells = cells.length;
+    let totalBits = numCells * 6;
+    let bytes = new Uint8Array(Math.ceil(totalBits / 8));
+
+    let owned = (col && col.owned) || {};
+    let mastered = (col && col.mastered) || {};
+    let lost = (col && col.lost) || {};
+    let levels = (col && col.levels) || {};
+
+    let offsetMastered = numCells;
+    let offsetLost = numCells * 2;
+    let offsetLevels = numCells * 3;
+
+    for (let i = 0; i < numCells; i++) {
+      let key = cells[i].key;
+      let isOwned = !!(owned[key] || mastered[key] || lost[key]);
+      if (isOwned) setBit(bytes, i);
+      if (mastered[key]) setBit(bytes, offsetMastered + i);
+      if (lost[key]) setBit(bytes, offsetLost + i);
+
+      if (isOwned && levels[key] && levels[key] > 1) {
+        let lvlBits = Math.min(4, Math.max(0, levels[key] - 1));
+        for (let b = 0; b < 3; b++) {
+          if (lvlBits & (1 << b)) {
+            setBit(bytes, offsetLevels + i * 3 + b);
+          }
+        }
+      }
+    }
+
+    return "https://spritelocker.com/#c=4." + b64UrlEncode(bytes);
+  }
+
   function decodeCollection(codeStr) {
     if (!codeStr) throw new Error("Código vacío");
 
@@ -238,7 +287,8 @@
   function getShareableRoomUrl() {
     let simpleList = state.players.map(p => ({
       n: p.name,
-      u: p.url
+      u: p.url,
+      m: p.isManual ? 1 : 0
     }));
     try {
       let jsonStr = JSON.stringify(simpleList);
@@ -270,7 +320,8 @@
           return list.map(item => ({
             id: "p_" + Math.random().toString(36).substr(2, 9),
             name: item.n || "Jugador",
-            url: item.u || ""
+            url: item.u || "",
+            isManual: !!item.m
           }));
         }
       }
@@ -285,7 +336,8 @@
     let payload = state.players.map(p => ({
       id: p.id,
       name: p.name,
-      url: p.url
+      url: p.url,
+      isManual: !!p.isManual
     }));
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
@@ -319,6 +371,7 @@
       id: p.id || "p_" + Math.random().toString(36).substr(2, 9),
       name: p.name || "Jugador",
       url: p.url || "",
+      isManual: !!p.isManual,
       data: null,
       error: null,
       lastUpdated: new Date()
@@ -331,6 +384,34 @@
     if (state.players.length >= 2) {
       state.versusA = state.players[0].id;
       state.versusB = state.players[1].id;
+    }
+  }
+
+  // --- SOLUCIÓN 2: PLANTILLAS RÁPIDAS (SIN LINK DE SPRITE LOCKER) ---
+  async function applyPlayerPreset(player, presetType) {
+    let owned = {};
+    if (presetType === "normals") {
+      for (let cell of DB.cells) {
+        if (cell.variantKey === "NORMAL") {
+          owned[cell.key] = true;
+        }
+      }
+    } else if (presetType === "all") {
+      for (let cell of DB.cells) {
+        owned[cell.key] = true;
+      }
+    }
+    player.isManual = true;
+    player.url = encodeCollection({ owned });
+    await updatePlayer(player, false);
+    saveState();
+    renderLobby();
+    renderActiveTab();
+
+    if (presetType === "zero") {
+      showToast(`🆕 ${player.name} añadido con 0/162 espíritus (listo para recibir).`);
+    } else if (presetType === "normals") {
+      showToast(`📦 ${player.name} configurado con los 27 espíritus Normales.`);
     }
   }
 
@@ -371,8 +452,8 @@
           <input type="text" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Nombre del jugador" data-id="${player.id}">
           <div class="player-header-badges">
             ${player.changeBadge ? `<span class="badge-change">${player.changeBadge}</span>` : ''}
-            ${player.isLive ? `<span class="badge-live">🟢 LIVE</span>` : ''}
-            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Error' : `${count}/${player.data?.totalCells || DB.totalCells || 162} (${pct}%)`}</span>
+            ${player.isLive ? `<span class="badge-live">🟢 LIVE</span>` : (player.isManual ? `<span class="badge-manual">✏️ MANUAL</span>` : '')}
+            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Sin Link' : `${count}/${player.data?.totalCells || DB.totalCells || 162} (${pct}%)`}</span>
           </div>
         </div>
         <div class="progress-container">
@@ -384,13 +465,19 @@
             <div class="progress-bar-fill progress-fill-${player.id}" style="width: ${pct}%;"></div>
           </div>
         </div>
-        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="Pega el enlace de Sprite Locker (#vs=, #c= o ?p=)" data-id="${player.id}">
+        <div class="quick-presets-bar">
+          <span class="quick-presets-label">¿Sin link?</span>
+          <button type="button" class="btn btn-locker-open btn-xs btn-open-locker" data-id="${player.id}" title="Abrir selector visual de espíritus en español">✏️ Casillero Manual</button>
+          <button type="button" class="btn btn-secondary btn-xs btn-preset-zero" data-id="${player.id}" title="Marcar 0/162 para ver todo lo que pueden darle">🆕 Empezando (0)</button>
+          <button type="button" class="btn btn-secondary btn-xs btn-preset-normals" data-id="${player.id}" title="Asumir que tiene los 27 espíritus normales y busca variantes">📦 Solo Normales (27)</button>
+        </div>
+        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="O pega enlace de Sprite Locker (#vs=, #c= o ?p=)" data-id="${player.id}">
         <div class="player-meta-row">
           <span class="player-updated-time">🕒 Act: <span class="time-label-${player.id}">${formatTime(player.lastUpdated)}</span></span>
           <span class="error-msg-${player.id}" style="color: #ff8585;">${player.error ? escapeHtml(player.error) : ''}</span>
         </div>
         <div class="player-actions">
-          <button class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Lee el nuevo link de tu portapapeles y actualiza este jugador">📋 Pegar Nuevo Link</button>
+          <button class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Lee el nuevo link de tu portapapeles y actualiza este jugador">📋 Pegar Link</button>
           <button class="btn btn-secondary btn-sm btn-reload-one" data-id="${player.id}" title="Recargar inventario de este jugador">🔄 Recargar</button>
           <button class="btn btn-secondary btn-sm btn-clear" data-id="${player.id}" title="Limpiar enlace">Limpiar</button>
           <button class="btn btn-danger btn-sm btn-remove" data-id="${player.id}" title="Eliminar jugador">Eliminar</button>
@@ -405,11 +492,23 @@
         renderActiveTab();
       });
 
+      // Eventos: Casillero Manual y Plantillas Rápidas (Soluciones 1 y 2)
+      card.querySelector(".btn-open-locker").addEventListener("click", () => {
+        openLockerModal(player.id);
+      });
+      card.querySelector(".btn-preset-zero").addEventListener("click", () => {
+        applyPlayerPreset(player, "zero");
+      });
+      card.querySelector(".btn-preset-normals").addEventListener("click", () => {
+        applyPlayerPreset(player, "normals");
+      });
+
       // Evento: Input del Link
       const linkInput = card.querySelector(".player-link-input");
       const handleLinkChange = async (newVal) => {
         if (player.url === newVal && player.data) return;
         player.url = newVal;
+        player.isManual = false;
         await updatePlayer(player, true);
         saveState();
         updatePlayerCardUI(player);
@@ -449,6 +548,7 @@
       // Botón: Limpiar
       card.querySelector(".btn-clear").addEventListener("click", () => {
         player.url = "";
+        player.isManual = false;
         linkInput.value = "";
         player.data = null;
         player.error = null;
@@ -483,7 +583,12 @@
 
     const badge = card.querySelector(`.stats-badge-${player.id}`);
     if (badge) {
-      badge.textContent = player.error ? "⚠️ Error" : `${count}/${player.data?.totalCells || DB.totalCells || 162} (${pct}%)`;
+      badge.textContent = player.error ? "⚠️ Sin Link" : `${count}/${player.data?.totalCells || DB.totalCells || 162} (${pct}%)`;
+    }
+
+    const linkInput = card.querySelector(".player-link-input");
+    if (linkInput && linkInput.value !== player.url) {
+      linkInput.value = player.url || "";
     }
 
     const pctLabel = card.querySelector(`.progress-pct-${player.id}`);
@@ -597,7 +702,7 @@
 
             ${gives.length > 0 ? `
               <div class="spirits-grid">
-                ${gives.map(c => renderSpiritItem(c)).join("")}
+                ${gives.map(c => renderSpiritItem(c, { donor, recipient })).join("")}
               </div>
             ` : `
               <div style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">
@@ -612,7 +717,7 @@
                   <span style="font-size: 0.78rem; font-weight: normal; margin-left: auto;">(💨 ${dustReturns} polvo)</span>
                 </div>
                 <div class="spirits-grid" style="margin-bottom: 0;">
-                  ${returns.map(c => renderSpiritItem(c)).join("")}
+                  ${returns.map(c => renderSpiritItem(c, { donor: recipient, recipient: donor })).join("")}
                 </div>
               </div>
             ` : ''}
@@ -727,7 +832,7 @@
             </div>
             ${aGivesB.length > 0 ? `
               <div class="spirits-grid">
-                ${aGivesB.map(c => renderSpiritItem(c)).join("")}
+                ${aGivesB.map(c => renderSpiritItem(c, { donor: pA, recipient: pB })).join("")}
               </div>
             ` : `<p style="color: var(--text-muted); font-size: 0.85rem;">Ninguno.</p>`}
           </div>
@@ -739,7 +844,7 @@
             </div>
             ${bGivesA.length > 0 ? `
               <div class="spirits-grid">
-                ${bGivesA.map(c => renderSpiritItem(c)).join("")}
+                ${bGivesA.map(c => renderSpiritItem(c, { donor: pB, recipient: pA })).join("")}
               </div>
             ` : `<p style="color: var(--text-muted); font-size: 0.85rem;">Ninguno.</p>`}
           </div>
@@ -789,7 +894,7 @@
 
         ${missingList.length > 0 ? `
           <div class="spirits-grid">
-            ${missingList.map(c => renderSpiritItem(c)).join("")}
+            ${missingList.map(c => renderSpiritItem(c, { missingPlayers: players })).join("")}
           </div>
         ` : `
           <div style="text-align: center; padding: 2rem; color: #3fe06b;">
@@ -803,8 +908,8 @@
     elMainContent.innerHTML = html;
   }
 
-  // --- RENDERIZADO DE ITEM ESPÍRITU ---
-  function renderSpiritItem(cell) {
+  // --- RENDERIZADO DE ITEM ESPÍRITU (CON CHECKLIST EN VIVO - SOLUCIÓN 4) ---
+  function renderSpiritItem(cell, context = null) {
     const rarityColors = {
       Rare: '#3aa0ff',
       Epic: '#b34dff',
@@ -813,6 +918,32 @@
     };
     const rarityColor = rarityColors[cell.rarity] || '#fff';
     const imgSrc = cell.imageUrl || (cell.image ? `https://spritelocker.com${cell.image}` : '');
+
+    let actionsHtml = "";
+    if (context && context.recipient) {
+      const recId = escapeHtml(context.recipient.id);
+      const recName = escapeHtml(context.recipient.name);
+      const donorId = context.donor ? escapeHtml(context.donor.id) : "";
+      const isModal = context.inModal ? "true" : "false";
+      const safeKey = escapeHtml(cell.key);
+      actionsHtml = `
+        <div class="spirit-quick-actions">
+          <button type="button" class="btn-spirit-action" onclick="window.markSpiritDelivered('${recId}', '${safeKey}', '${donorId}', ${isModal})" title="Marca que ${recName} ya recibió o ya tenía este espíritu">
+            ✅ Ya lo tiene ${recName}
+          </button>
+        </div>
+      `;
+    } else if (context && Array.isArray(context.missingPlayers) && context.missingPlayers.length > 0) {
+      const firstPlayer = context.missingPlayers[0];
+      const safeKey = escapeHtml(cell.key);
+      actionsHtml = `
+        <div class="spirit-quick-actions">
+          <button type="button" class="btn-spirit-action secondary" onclick="window.markSpiritDelivered('${escapeHtml(firstPlayer.id)}', '${safeKey}', '', false)" title="Añadir este espíritu a ${escapeHtml(firstPlayer.name)}">
+            ➕ Lo consiguió ${escapeHtml(firstPlayer.name)}
+          </button>
+        </div>
+      `;
+    }
 
     return `
       <div class="spirit-item" style="border-left: 3px solid ${rarityColor};">
@@ -825,8 +956,201 @@
           <span class="rarity-pill" style="background: ${rarityColor}22; color: ${rarityColor}; border: 1px solid ${rarityColor}66;">${escapeHtml(cell.rarityEs)}</span>
         </div>
         <div class="spirit-dust">💨 ${cell.dust} polvo</div>
+        ${actionsHtml}
       </div>
     `;
+  }
+
+  // --- SOLUCIÓN 4: MARCAR ESPÍRITU ENTREGADO / EN POSESIÓN EN TIEMPO REAL ---
+  window.markSpiritDelivered = async function (recipientId, cellKey, donorId = "", inModal = false) {
+    const player = state.players.find(p => p.id === recipientId);
+    if (!player) return;
+
+    const currentOwned = player.data ? { ...player.data.owned } : {};
+    const currentMastered = player.data ? { ...player.data.mastered } : {};
+    const currentLost = player.data ? { ...player.data.lost } : {};
+    const currentLevels = player.data ? { ...player.data.levels } : {};
+
+    currentOwned[cellKey] = true;
+    player.url = encodeCollection({
+      owned: currentOwned,
+      mastered: currentMastered,
+      lost: currentLost,
+      levels: currentLevels
+    });
+    player.isManual = true;
+    player.isLive = false;
+
+    await updatePlayer(player, false);
+    saveState();
+    renderLobby();
+    renderActiveTab();
+
+    if (inModal && donorId) {
+      window.viewTradeModal(donorId, recipientId);
+    }
+
+    const cellInfo = DB.cells.find(c => c.key === cellKey);
+    const label = cellInfo ? `${cellInfo.spriteNameEs} (${cellInfo.variantNameEs})` : cellKey;
+    showToast(`✅ ¡${label} marcado en el casillero de ${player.name}!`);
+  };
+
+  // --- SOLUCIÓN 1: EDITOR VISUAL DE CASILLERO (<dialog closedby="any">) ---
+  let lockerEditorState = {
+    playerId: null,
+    owned: {},
+    mastered: {},
+    lost: {},
+    levels: {}
+  };
+
+  function getFilteredLockerCells() {
+    const searchVal = (document.getElementById("lockerSearchInput")?.value || "").trim().toLowerCase();
+    const variantVal = document.getElementById("lockerVariantFilter")?.value || "all";
+    const statusVal = document.getElementById("lockerStatusFilter")?.value || "all";
+
+    return DB.cells.filter(cell => {
+      if (variantVal !== "all" && cell.variantKey !== variantVal) return false;
+      const isOwned = !!lockerEditorState.owned[cell.key];
+      if (statusVal === "owned" && !isOwned) return false;
+      if (statusVal === "missing" && isOwned) return false;
+      if (searchVal) {
+        const haystack = `${cell.spriteNameEs} ${cell.spriteNameEn} ${cell.variantNameEs} ${cell.variantNameEn} ${cell.rarityEs}`.toLowerCase();
+        if (!haystack.includes(searchVal)) return false;
+      }
+      return true;
+    });
+  }
+
+  function renderLockerGrid() {
+    const gridEl = document.getElementById("lockerSpritesGrid");
+    const badgeEl = document.getElementById("lockerCountBadge");
+    if (!gridEl) return;
+
+    const totalCells = DB.totalCells || DB.cells.length || 162;
+    const ownedCount = Object.keys(lockerEditorState.owned).filter(k => lockerEditorState.owned[k]).length;
+    const pct = Math.round((ownedCount / totalCells) * 1000) / 10;
+
+    if (badgeEl) {
+      badgeEl.textContent = `${ownedCount}/${totalCells} (${pct}%)`;
+    }
+
+    const rarityColors = {
+      Rare: '#3aa0ff',
+      Epic: '#b34dff',
+      Legendary: '#f5a623',
+      Mythic: '#ff4d4d'
+    };
+
+    const filtered = getFilteredLockerCells();
+    if (filtered.length === 0) {
+      gridEl.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">No se encontraron espíritus con ese filtro.</div>`;
+      return;
+    }
+
+    gridEl.innerHTML = filtered.map(cell => {
+      const isOwned = !!lockerEditorState.owned[cell.key];
+      const rarityColor = rarityColors[cell.rarity] || '#fff';
+      const imgSrc = cell.imageUrl || (cell.image ? `https://spritelocker.com${cell.image}` : '');
+
+      return `
+        <div class="locker-cell-card ${isOwned ? 'is-owned' : ''}" data-key="${escapeHtml(cell.key)}" style="border-bottom: 3px solid ${rarityColor};">
+          <span class="locker-cell-status">${isOwned ? '✅ TIENE' : '❌ FALTA'}</span>
+          <div class="spirit-img-wrap" style="width: 54px; height: 54px; margin-top: 0.5rem;">
+            <img src="${imgSrc}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+          </div>
+          <div class="spirit-name" title="${escapeHtml(cell.spriteNameEs)}">${escapeHtml(cell.spriteNameEs)}</div>
+          <div class="spirit-tags" style="margin-bottom: 0;">
+            <span class="variant-pill" style="border-color: ${rarityColor}; color: #eaf4ff;">${escapeHtml(cell.variantNameEs)}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    gridEl.querySelectorAll(".locker-cell-card").forEach(cardEl => {
+      cardEl.addEventListener("click", () => {
+        const key = cardEl.getAttribute("data-key");
+        if (!key) return;
+        if (lockerEditorState.owned[key]) {
+          delete lockerEditorState.owned[key];
+          delete lockerEditorState.mastered[key];
+          delete lockerEditorState.lost[key];
+        } else {
+          lockerEditorState.owned[key] = true;
+        }
+        renderLockerGrid();
+      });
+    });
+  }
+
+  function openLockerModal(playerId) {
+    const player = state.players.find(p => p.id === playerId);
+    if (!player) return;
+
+    lockerEditorState = {
+      playerId: player.id,
+      owned: player.data ? { ...player.data.owned } : {},
+      mastered: player.data ? { ...player.data.mastered } : {},
+      lost: player.data ? { ...player.data.lost } : {},
+      levels: player.data ? { ...player.data.levels } : {}
+    };
+
+    const nameInput = document.getElementById("lockerPlayerNameInput");
+    if (nameInput) nameInput.value = player.name || "Jugador";
+
+    const searchInput = document.getElementById("lockerSearchInput");
+    if (searchInput) searchInput.value = "";
+    const variantFilter = document.getElementById("lockerVariantFilter");
+    if (variantFilter) variantFilter.value = "all";
+    const statusFilter = document.getElementById("lockerStatusFilter");
+    if (statusFilter) statusFilter.value = "all";
+
+    renderLockerGrid();
+
+    const dialog = document.getElementById("lockerDialog");
+    if (dialog && typeof dialog.showModal === "function") {
+      dialog.showModal();
+    }
+  }
+
+  async function saveLockerModalToPlayer(copyForGroup = false) {
+    const player = state.players.find(p => p.id === lockerEditorState.playerId);
+    if (!player) return;
+
+    const nameInput = document.getElementById("lockerPlayerNameInput");
+    if (nameInput && nameInput.value.trim()) {
+      player.name = nameInput.value.trim();
+    }
+
+    const encodedUrl = encodeCollection({
+      owned: lockerEditorState.owned,
+      mastered: lockerEditorState.mastered,
+      lost: lockerEditorState.lost,
+      levels: lockerEditorState.levels
+    });
+
+    player.url = encodedUrl;
+    player.isManual = true;
+    player.isLive = false;
+
+    await updatePlayer(player, false);
+    saveState();
+    renderLobby();
+    renderActiveTab();
+
+    if (copyForGroup) {
+      const shareLine = `${player.name}: ${encodedUrl}`;
+      try {
+        await navigator.clipboard.writeText(shareLine);
+        showToast(`📋 ¡Código de ${player.name} copiado! Pégalo en WhatsApp o Discord.`);
+      } catch (_) {
+        prompt("Copia esta línea y envíala al grupo de WhatsApp o Discord:", shareLine);
+      }
+    } else {
+      const dialog = document.getElementById("lockerDialog");
+      dialog?.close();
+      showToast(`💾 ¡Casillero de ${player.name} guardado (${player.data?.ownedCount || 0}/162)!`);
+    }
   }
 
   // --- COPIAR TEXTO FORMATEADO ---
@@ -898,7 +1222,7 @@
     if (list.length > 0) {
       modalBody.innerHTML = `
         <div class="spirits-grid">
-          ${list.map(c => renderSpiritItem(c)).join("")}
+          ${list.map(c => renderSpiritItem(c, { donor, recipient, inModal: true })).join("")}
         </div>
       `;
     } else {
@@ -911,6 +1235,8 @@
   function closeModal() {
     document.getElementById("modalBackdrop")?.classList.remove("open");
     document.getElementById("batchModalBackdrop")?.classList.remove("open");
+    const lockerDialog = document.getElementById("lockerDialog");
+    if (lockerDialog?.open) lockerDialog.close();
   }
 
   function escapeHtml(str) {
@@ -921,6 +1247,30 @@
       .replace(/>/g, "&gt;")
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
+  }
+
+  // Crear nuevo jugador (con casillero 0/162 por defecto para que entre al grupo sin tener link)
+  async function createNewPlayer(openVisualLocker = false) {
+    const newPlayer = {
+      id: "p_" + Math.random().toString(36).substr(2, 9),
+      name: "Amigo " + (state.players.length + 1),
+      url: encodeCollection({ owned: {} }),
+      isManual: true,
+      data: null,
+      error: null,
+      lastUpdated: new Date()
+    };
+    await updatePlayer(newPlayer, false);
+    state.players.push(newPlayer);
+    saveState();
+    renderLobby();
+    renderActiveTab();
+
+    if (openVisualLocker) {
+      openLockerModal(newPlayer.id);
+    } else {
+      showToast(`➕ ¡${newPlayer.name} unido al grupo! Puedes usar una plantilla o pegar su link.`);
+    }
   }
 
   // --- EVENT LISTENERS GENERALES ---
@@ -935,20 +1285,77 @@
       });
     });
 
-    // Añadir jugador
+    // Añadir jugador (entra listo con 0/162 sin exigir link)
     document.getElementById("btnAddPlayer")?.addEventListener("click", () => {
-      const newPlayer = {
-        id: "p_" + Math.random().toString(36).substr(2, 9),
-        name: "Amigo " + (state.players.length + 1),
-        url: "",
-        data: null,
-        error: null,
-        lastUpdated: new Date()
-      };
-      state.players.push(newPlayer);
-      saveState();
-      renderLobby();
-      renderActiveTab();
+      createNewPlayer(false);
+    });
+
+    // Añadir amigo sin link y abrir su casillero visual directamente
+    document.getElementById("btnAddGuestPlayer")?.addEventListener("click", () => {
+      createNewPlayer(true);
+    });
+
+    // Controles del Dialog Editor Visual de Casillero (Solución 1)
+    const lockerDialog = document.getElementById("lockerDialog");
+    if (lockerDialog && !("closedBy" in HTMLDialogElement.prototype)) {
+      lockerDialog.addEventListener("click", (event) => {
+        if (event.target !== lockerDialog) return;
+        const rect = lockerDialog.getBoundingClientRect();
+        const isDialogContent = (
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width
+        );
+        if (isDialogContent) return;
+        lockerDialog.close();
+      });
+    }
+
+    document.getElementById("lockerDialogClose")?.addEventListener("click", () => {
+      lockerDialog?.close();
+    });
+    document.getElementById("lockerSearchInput")?.addEventListener("input", renderLockerGrid);
+    document.getElementById("lockerVariantFilter")?.addEventListener("change", renderLockerGrid);
+    document.getElementById("lockerStatusFilter")?.addEventListener("change", renderLockerGrid);
+
+    document.getElementById("btnPresetZero")?.addEventListener("click", () => {
+      lockerEditorState.owned = {};
+      lockerEditorState.mastered = {};
+      lockerEditorState.lost = {};
+      renderLockerGrid();
+    });
+    document.getElementById("btnPresetNormals")?.addEventListener("click", () => {
+      lockerEditorState.owned = {};
+      for (let cell of DB.cells) {
+        if (cell.variantKey === "NORMAL") lockerEditorState.owned[cell.key] = true;
+      }
+      renderLockerGrid();
+    });
+    document.getElementById("btnPresetAll")?.addEventListener("click", () => {
+      lockerEditorState.owned = {};
+      for (let cell of DB.cells) {
+        lockerEditorState.owned[cell.key] = true;
+      }
+      renderLockerGrid();
+    });
+    document.getElementById("btnMarkFiltered")?.addEventListener("click", () => {
+      for (let cell of getFilteredLockerCells()) {
+        lockerEditorState.owned[cell.key] = true;
+      }
+      renderLockerGrid();
+    });
+    document.getElementById("btnUnmarkFiltered")?.addEventListener("click", () => {
+      for (let cell of getFilteredLockerCells()) {
+        delete lockerEditorState.owned[cell.key];
+      }
+      renderLockerGrid();
+    });
+    document.getElementById("btnLockerCopyShare")?.addEventListener("click", () => {
+      saveLockerModalToPlayer(true);
+    });
+    document.getElementById("btnLockerSave")?.addEventListener("click", () => {
+      saveLockerModalToPlayer(false);
     });
 
     // Recargar Todos los Inventarios
