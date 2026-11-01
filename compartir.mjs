@@ -42,7 +42,30 @@ function decodeCollection(urlOrCode) {
   let clean = extractCode(urlOrCode);
   if (!clean) throw new Error('Código vacío o inválido');
 
-  let version = '4';
+  let activeKeySet = new Set((DB.cells || []).map(c => c.key));
+  let totalTarget = DB.totalCells || DB.cells.length;
+
+  if (clean.startsWith('3.')) {
+    let bytes = b64UrlDecode(clean.slice(2));
+    let parsed = JSON.parse(new TextDecoder().decode(bytes));
+    let owned = {};
+    let mastered = {};
+    let lost = {};
+    let levels = {};
+    for (let k of (parsed.o || [])) if (activeKeySet.has(k)) owned[k] = true;
+    for (let k of (parsed.m || [])) if (activeKeySet.has(k)) { mastered[k] = true; owned[k] = true; }
+    for (let k of (parsed.l || [])) if (activeKeySet.has(k)) { lost[k] = true; owned[k] = true; }
+    if (parsed.v && typeof parsed.v === 'object') {
+      for (let [k, v] of Object.entries(parsed.v)) {
+        if (owned[k] && typeof v === 'number') levels[k] = Math.min(5, Math.max(1, Math.round(v)));
+      }
+    }
+    let ownedCount = Object.keys(owned).length;
+    let percentage = Math.round((ownedCount / totalTarget) * 1000) / 10;
+    return { version: '3', rawCode: clean, owned, mastered, lost, levels, ownedCount, percentage, totalCells: totalTarget };
+  }
+
+  let version = DB.shareVersion || '5';
   let dataStr = clean;
   if (clean.includes('.')) {
     let parts = clean.split('.');
@@ -51,11 +74,15 @@ function decodeCollection(urlOrCode) {
   }
 
   let bytes = b64UrlDecode(dataStr);
-  let cells = DB.cells_v4_162 || DB.cells;
-  if (bytes.length < 100 && DB.cells_v4_122) {
-    cells = DB.cells_v4_122;
-  } else if (bytes.length < 116 && DB.cells_v4_145) {
-    cells = DB.cells_v4_145;
+  if (version === '4' || (version !== '5' && bytes.length >= 80)) {
+    return { version: '4', rawCode: clean, owned: {}, mastered: {}, lost: {}, levels: {}, ownedCount: 0, percentage: 0, totalCells: totalTarget };
+  }
+
+  let cells = DB.cells_v5_24 || DB.cells;
+  if (bytes.length === 26 && DB.cells_v5_34) {
+    cells = DB.cells_v5_34;
+  } else if (bytes.length >= 27 && DB.cells_v5_35) {
+    cells = DB.cells_v5_35;
   }
   let numCells = cells.length;
 
@@ -74,11 +101,11 @@ function decodeCollection(urlOrCode) {
     let isMastered = getBit(bytes, offsetMastered + i);
     let isLost = getBit(bytes, offsetLost + i);
 
-    if (isOwned) owned[key] = true;
-    if (isMastered) { mastered[key] = true; owned[key] = true; }
-    if (isLost) { lost[key] = true; owned[key] = true; }
+    if (isOwned && activeKeySet.has(key)) owned[key] = true;
+    if (isMastered && activeKeySet.has(key)) { mastered[key] = true; owned[key] = true; }
+    if (isLost && activeKeySet.has(key)) { lost[key] = true; owned[key] = true; }
 
-    if (isOwned) {
+    if (owned[key]) {
       let lvl = 0;
       for (let b = 0; b < 3; b++) {
         if (getBit(bytes, offsetLevels + i * 3 + b)) lvl |= (1 << b);
@@ -88,7 +115,6 @@ function decodeCollection(urlOrCode) {
   }
 
   let ownedCount = Object.keys(owned).length;
-  let totalTarget = DB.totalCells || DB.cells.length;
   let percentage = Math.round((ownedCount / totalTarget) * 1000) / 10;
 
   return { version, rawCode: clean, owned, mastered, lost, levels, ownedCount, percentage, totalCells: totalTarget };
@@ -118,15 +144,15 @@ function getTransferable(donor, recipient) {
   return results;
 }
 
-// Jugadores demo
+// Jugadores demo (Cap. 7 Minitemporada - v5)
 const demoPlayers = [
   {
     name: 'Canito',
-    url: 'https://spritelocker.com/compare#vs=4.772zvvTaGS2utF564UQhhvYCOMAJAgQAwHgAAAAAAAAwAgCAFAEAQgAkAwAAAAFhAECSIAAIAEgKABCQDAgMIIAAABEAAAABGACQCEgSAIAAAQAAAAAAAABgAAA'
+    url: 'https://spritelocker.com/compare#vs=5.313jAAAAAAAAAAAAAAAAAAAA'
   },
   {
     name: 'Roberto',
-    url: 'https://spritelocker.com/#c=4.770WvlLaGKGsFFZawUQBAIACAAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAwAJggJCAIAAMABBECAQMAAQAAoAIQAAAAAABADAAAEAQAAAAAAAAAgAAAAAAAAA'
+    url: 'https://spritelocker.com/#c=5.dQcMAAAAAAAAAAAAAAAAAAAA'
   }
 ];
 
@@ -140,10 +166,10 @@ const players = demoPlayers.map(p => ({
 players.sort((a, b) => b.data.ownedCount - a.data.ownedCount);
 
 console.log('='.repeat(70));
-console.log('  🎮 FORTNITE ESPÍRITUS - CADENA DE INTERCAMBIO (SPRITE LOCKER)');
+console.log('  🎮 FORTNITE ESPÍRITUS - CADENA DE INTERCAMBIO (CAP. 7 MINITEMPORADA)');
 console.log('='.repeat(70));
 console.log('\n📊 CLASIFICACIÓN DE LA SALA:');
-let totalCells = DB.totalCells || 162;
+let totalCells = DB.totalCells || 24;
 players.forEach((p, idx) => {
   console.log(`  ${idx + 1}. ${p.name.padEnd(12)}: ${p.data.ownedCount}/${totalCells} espíritus (${p.data.percentage}%)`);
 });

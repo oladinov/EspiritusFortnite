@@ -9,20 +9,20 @@
     return;
   }
 
-  // Clave para guardar en LocalStorage
-  const STORAGE_KEY = "fortnite_sprites_players_v1";
+  // Clave para guardar en LocalStorage (Temporada actual: Cap. 7 Minitemporada)
+  const STORAGE_KEY = "fortnite_sprites_players_c7ms_v1";
 
-  // Jugadores iniciales por defecto con los links proporcionados por el usuario
+  // Jugadores iniciales por defecto (Cap. 7 Minitemporada - v5)
   const DEFAULT_PLAYERS = [
     {
       id: "p1",
       name: "Canito",
-      url: "https://spritelocker.com/compare#vs=4.772zvvTaGS2utF564UQhhvYCOMAJAgQAwHgAAAAAAAAwAgCAFAEAQgAkAwAAAAFhAECSIAAIAEgKABCQDAgMIIAAABEAAAABGACQCEgSAIAAAQAAAAAAAABgAAA"
+      url: "https://spritelocker.com/compare#vs=5.313jAAAAAAAAAAAAAAAAAAAA"
     },
     {
       id: "p2",
       name: "Roberto",
-      url: "https://spritelocker.com/#c=4.770WvlLaGKGsFFZawUQBAIACAAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAwAJggJCAIAAMABBECAQMAAQAAoAIQAAAAAABADAAAEAQAAAAAAAAAgAAAAAAAAA"
+      url: "https://spritelocker.com/#c=5.dQcMAAAAAAAAAAAAAAAAAAAA"
     }
   ];
 
@@ -101,7 +101,7 @@
   }
 
   function encodeCollection(col) {
-    let cells = DB.cells_v4_162 || DB.cells;
+    let cells = DB.cells_v5_24 || DB.cells;
     let numCells = cells.length;
     let totalBits = numCells * 6;
     let bytes = new Uint8Array(Math.ceil(totalBits / 8));
@@ -132,13 +132,66 @@
       }
     }
 
-    return "https://spritelocker.com/#c=4." + b64UrlEncode(bytes);
+    let ver = DB.shareVersion || "5";
+    return `https://spritelocker.com/#c=${ver}.` + b64UrlEncode(bytes);
   }
 
   function decodeCollection(codeStr) {
     if (!codeStr) throw new Error("Código vacío");
 
-    let version = "4";
+    let activeKeySet = new Set((DB.cells || []).map(c => c.key));
+    let totalTarget = DB.totalCells || (DB.cells ? DB.cells.length : 24);
+
+    // Soporte para formato 3. (JSON en base64url usado por perfiles en vivo de Sprite Locker)
+    if (codeStr.startsWith("3.")) {
+      let bytes = b64UrlDecode(codeStr.slice(2));
+      let jsonStr = new TextDecoder().decode(bytes);
+      let parsed = JSON.parse(jsonStr);
+      let owned = {};
+      let mastered = {};
+      let lost = {};
+      let levels = {};
+      let vaultedOwned = {};
+
+      for (let k of (parsed.o || [])) {
+        if (activeKeySet.has(k)) owned[k] = true;
+        else vaultedOwned[k] = true;
+      }
+      for (let k of (parsed.m || [])) {
+        if (activeKeySet.has(k)) { mastered[k] = true; owned[k] = true; }
+        else vaultedOwned[k] = true;
+      }
+      for (let k of (parsed.l || [])) {
+        if (activeKeySet.has(k)) { lost[k] = true; owned[k] = true; }
+        else vaultedOwned[k] = true;
+      }
+      if (parsed.v && typeof parsed.v === "object") {
+        for (let [k, v] of Object.entries(parsed.v)) {
+          if (owned[k] && typeof v === "number") {
+            levels[k] = Math.min(5, Math.max(1, Math.round(v)));
+          }
+        }
+      }
+
+      let ownedCount = Object.keys(owned).length;
+      let percentage = Math.round((ownedCount / totalTarget) * 1000) / 10;
+      return {
+        version: "3",
+        rawCode: codeStr,
+        owned,
+        mastered,
+        lost,
+        levels,
+        vaultedOwned,
+        ownedCount,
+        percentage,
+        totalCells: totalTarget,
+        layoutCells: totalTarget,
+        layoutName: "json_v3"
+      };
+    }
+
+    let version = DB.shareVersion || "5";
     let dataStr = codeStr;
     if (codeStr.includes(".")) {
       let parts = codeStr.split(".");
@@ -148,18 +201,52 @@
 
     let bytes = b64UrlDecode(dataStr);
 
-    // Detección automática del diseño de celdas según la longitud en bytes:
-    // - Enlaces antiguos v1 (inicial): 122 celdas (~92 bytes)
-    // - Enlaces intermedios v2 (con Dulce o Truco): 145 celdas (~109 bytes)
-    // - Enlaces actuales v3 (con Honey, One Wish Willow y Quack): 162 celdas (~122 bytes)
-    let cells = DB.cells_v4_162 || DB.cells;
-    let layoutName = "162";
-    if (bytes.length < 100 && DB.cells_v4_122) {
-      cells = DB.cells_v4_122;
-      layoutName = "122";
-    } else if (bytes.length < 116 && DB.cells_v4_145) {
-      cells = DB.cells_v4_145;
-      layoutName = "145";
+    // Si es un código v4 (Cap. 7 Temp. 4 - En la Bóveda)
+    if (version === "4" || (version !== "5" && bytes.length >= 80)) {
+      let v4Cells = DB.cells_v4_162 || (DB.vault && DB.vault.c7s4 ? DB.vault.c7s4.cells : []);
+      if (bytes.length < 100 && DB.cells_v4_122) {
+        v4Cells = DB.cells_v4_122;
+      } else if (bytes.length < 116 && DB.cells_v4_145) {
+        v4Cells = DB.cells_v4_145;
+      }
+      let vaultedOwned = {};
+      for (let i = 0; i < v4Cells.length; i++) {
+        let key = v4Cells[i].key;
+        if (getBit(bytes, i) || getBit(bytes, v4Cells.length + i) || getBit(bytes, v4Cells.length * 2 + i)) {
+          vaultedOwned[key] = true;
+        }
+      }
+      return {
+        version: "4",
+        rawCode: codeStr,
+        owned: {},
+        mastered: {},
+        lost: {},
+        levels: {},
+        vaultedOwned,
+        isVaultedLink: true,
+        vaultedCount: Object.keys(vaultedOwned).length,
+        vaultedTotal: 162,
+        ownedCount: 0,
+        percentage: 0,
+        totalCells: totalTarget,
+        layoutCells: v4Cells.length,
+        layoutName: "v4_vaulted"
+      };
+    }
+
+    // Diseño de celdas de la temporada actual (v5 - Cap. 7 Minitemporada):
+    // - 24 celdas activas (Normal + Fortuna): 18 bytes
+    // - 34 celdas (con variante Maldito): 26 bytes
+    // - 35 celdas (con Chester Maldito): 27 bytes
+    let cells = DB.cells_v5_24 || DB.cells;
+    let layoutName = "24";
+    if (bytes.length === 26 && DB.cells_v5_34) {
+      cells = DB.cells_v5_34;
+      layoutName = "34";
+    } else if (bytes.length >= 27 && DB.cells_v5_35) {
+      cells = DB.cells_v5_35;
+      layoutName = "35";
     }
     let numCells = cells.length;
 
@@ -193,8 +280,7 @@
       }
     }
 
-    let ownedCount = Object.keys(owned).length;
-    let totalTarget = DB.totalCells || DB.cells.length;
+    let ownedCount = Object.keys(owned).filter(k => activeKeySet.has(k)).length;
     let percentage = Math.round((ownedCount / totalTarget) * 1000) / 10;
 
     return {
@@ -240,7 +326,7 @@
       player.error = null;
 
       if (notify && prevCount !== null) {
-        let total = player.data.totalCells || DB.totalCells || 162;
+        let total = player.data.totalCells || DB.totalCells || 24;
         let diff = player.data.ownedCount - prevCount;
         if (diff !== 0) {
           let sign = diff > 0 ? `+${diff}` : `${diff}`;
@@ -408,10 +494,12 @@
     renderLobby();
     renderActiveTab();
 
+    let totalCells = DB.totalCells || 24;
+    let totalSprites = DB.totalSprites || 13;
     if (presetType === "zero") {
-      showToast(`🆕 ${player.name} añadido con 0/162 espíritus (listo para recibir).`);
+      showToast(`🆕 ${player.name} añadido con 0/${totalCells} espíritus (listo para recibir).`);
     } else if (presetType === "normals") {
-      showToast(`📦 ${player.name} configurado con los 27 espíritus Normales.`);
+      showToast(`📦 ${player.name} configurado con los ${totalSprites} espíritus Normales.`);
     }
   }
 
@@ -446,6 +534,11 @@
 
       const count = player.data ? player.data.ownedCount : 0;
       const pct = player.data ? player.data.percentage : 0;
+      const totalC = player.data?.totalCells || DB.totalCells || 24;
+      const totalS = DB.totalSprites || 13;
+      const vaultedNote = player.data?.isVaultedLink
+        ? `⚠️ Enlace de Cap. 7 Temp. 4 (Bóveda: ${player.data.vaultedCount}/162). Actualiza el link para la Minitemporada.`
+        : "";
 
       card.innerHTML = `
         <div class="player-card-header">
@@ -453,7 +546,7 @@
           <div class="player-header-badges">
             ${player.changeBadge ? `<span class="badge-change">${player.changeBadge}</span>` : ''}
             ${player.isLive ? `<span class="badge-live">🟢 LIVE</span>` : (player.isManual ? `<span class="badge-manual">✏️ MANUAL</span>` : '')}
-            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Sin Link' : `${count}/${player.data?.totalCells || DB.totalCells || 162} (${pct}%)`}</span>
+            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Sin Link' : `${count}/${totalC} (${pct}%)`}</span>
           </div>
         </div>
         <div class="progress-container">
@@ -468,13 +561,13 @@
         <div class="quick-presets-bar">
           <span class="quick-presets-label">¿Sin link?</span>
           <button type="button" class="btn btn-locker-open btn-xs btn-open-locker" data-id="${player.id}" title="Abrir selector visual de espíritus en español">✏️ Casillero Manual</button>
-          <button type="button" class="btn btn-secondary btn-xs btn-preset-zero" data-id="${player.id}" title="Marcar 0/162 para ver todo lo que pueden darle">🆕 Empezando (0)</button>
-          <button type="button" class="btn btn-secondary btn-xs btn-preset-normals" data-id="${player.id}" title="Asumir que tiene los 27 espíritus normales y busca variantes">📦 Solo Normales (27)</button>
+          <button type="button" class="btn btn-secondary btn-xs btn-preset-zero" data-id="${player.id}" title="Marcar 0/${totalC} para ver todo lo que pueden darle">🆕 Empezando (0)</button>
+          <button type="button" class="btn btn-secondary btn-xs btn-preset-normals" data-id="${player.id}" title="Asumir que tiene los ${totalS} espíritus normales y busca variantes">📦 Solo Normales (${totalS})</button>
         </div>
-        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="O pega enlace de Sprite Locker (#vs=, #c= o ?p=)" data-id="${player.id}">
+        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="O pega enlace de Sprite Locker (#vs=5..., #c=5... o ?p=)" data-id="${player.id}">
         <div class="player-meta-row">
           <span class="player-updated-time">🕒 Act: <span class="time-label-${player.id}">${formatTime(player.lastUpdated)}</span></span>
-          <span class="error-msg-${player.id}" style="color: #ff8585;">${player.error ? escapeHtml(player.error) : ''}</span>
+          <span class="error-msg-${player.id}" style="color: ${player.error ? '#ff8585' : '#ffd070'};">${player.error ? escapeHtml(player.error) : escapeHtml(vaultedNote)}</span>
         </div>
         <div class="player-actions">
           <button class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Lee el nuevo link de tu portapapeles y actualiza este jugador">📋 Pegar Link</button>
@@ -583,7 +676,7 @@
 
     const badge = card.querySelector(`.stats-badge-${player.id}`);
     if (badge) {
-      badge.textContent = player.error ? "⚠️ Sin Link" : `${count}/${player.data?.totalCells || DB.totalCells || 162} (${pct}%)`;
+      badge.textContent = player.error ? "⚠️ Sin Link" : `${count}/${player.data?.totalCells || DB.totalCells || 24} (${pct}%)`;
     }
 
     const linkInput = card.querySelector(".player-link-input");
@@ -601,7 +694,13 @@
     if (timeLabel) timeLabel.textContent = formatTime(player.lastUpdated);
 
     const errMsg = card.querySelector(`.error-msg-${player.id}`);
-    if (errMsg) errMsg.textContent = player.error ? player.error : "";
+    if (errMsg) {
+      const vaultedNote = player.data?.isVaultedLink
+        ? `⚠️ Enlace de Cap. 7 Temp. 4 (Bóveda: ${player.data.vaultedCount}/162). Actualiza el link para la Minitemporada.`
+        : "";
+      errMsg.style.color = player.error ? "#ff8585" : "#ffd070";
+      errMsg.textContent = player.error ? player.error : vaultedNote;
+    }
 
     if (player.error) card.classList.add("has-error");
     else card.classList.remove("has-error");
@@ -619,6 +718,11 @@
 
   // --- RENDERIZADO DE TABS ---
   function renderActiveTab() {
+    if (state.currentTab === "vault") {
+      renderVaultTab();
+      return;
+    }
+
     const validPlayers = getSortedPlayers();
     if (validPlayers.length < 2) {
       elMainContent.innerHTML = `
@@ -664,7 +768,7 @@
             <div class="chain-player-tag" style="border-color: ${idx === 0 ? '#ffd070' : 'rgba(120, 170, 255, 0.4)'};">
               <span>${idx === 0 ? '👑' : `${idx + 1}º`}</span>
               <strong>${escapeHtml(p.name)}</strong>
-              <span style="color: var(--accent-cyan); font-size: 0.75rem;">(${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 162})</span>
+              <span style="color: var(--accent-cyan); font-size: 0.75rem;">(${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 24})</span>
             </div>
           `).join('<span style="color: var(--text-muted);">➜</span>')}
         </div>
@@ -754,7 +858,7 @@
             <thead>
               <tr>
                 <th style="text-align: left;">Donante ╲ Receptor</th>
-                ${players.map(p => `<th>${escapeHtml(p.name)}<br><small style="color: var(--accent-cyan);">${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 162}</small></th>`).join("")}
+                ${players.map(p => `<th>${escapeHtml(p.name)}<br><small style="color: var(--accent-cyan);">${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 24}</small></th>`).join("")}
                 <th>Total que puede donar</th>
               </tr>
             </thead>
@@ -816,11 +920,11 @@
 
         <div class="versus-selectors">
           <select id="selVersusA" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 162})</option>`).join("")}
+            ${players.map(p => `<option value="${p.id}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 24})</option>`).join("")}
           </select>
           <div class="versus-badge">VS</div>
           <select id="selVersusB" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 162})</option>`).join("")}
+            ${players.map(p => `<option value="${p.id}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 24})</option>`).join("")}
           </select>
         </div>
 
@@ -906,6 +1010,64 @@
     `;
 
     elMainContent.innerHTML = html;
+  }
+
+  // --- TAB 5: BÓVEDA (ROSTER ANTERIOR C7S4) ---
+  function renderVaultTab() {
+    const vaultC7S4 = DB.vault && DB.vault.c7s4 ? DB.vault.c7s4 : null;
+    const vaultCells = vaultC7S4 ? vaultC7S4.cells : (DB.cells_v4_162 || []);
+    const vaultSprites = vaultC7S4 ? vaultC7S4.sprites : [];
+
+    let html = `
+      <div class="panel">
+        <div class="panel-header">
+          <div>
+            <div class="panel-title">🗄️ Bóveda de Espíritus — Capítulo 7 Temporada 4 (${vaultSprites.length} espíritus · ${vaultCells.length} variantes)</div>
+            <div class="panel-desc">Roster completo de la temporada anterior enviado a la bóveda con la llegada de la Minitemporada del Capítulo 7.</div>
+          </div>
+        </div>
+
+        <div class="locker-filters-row" style="margin-bottom: 1.2rem;">
+          <input type="search" id="vaultSearchInput" class="locker-filter-input" placeholder="🔎 Buscar en la bóveda (ej. Arbusto, Klombo, Corona, Sonic, Miel)...">
+          <select id="vaultVariantFilter" class="locker-filter-select">
+            <option value="all">🎨 Todas las variantes (${vaultCells.length})</option>
+            <option value="NORMAL">Normal (27)</option>
+            <option value="GOLD">Oro (26)</option>
+            <option value="CHEATMASTER">Cheat Master (26)</option>
+            <option value="LOOTHACKER">Loot Hacker (26)</option>
+            <option value="BOUNTYHUNTER">Bounty Hunter (26)</option>
+            <option value="TRICKTREAT">Dulce o truco (26)</option>
+            <option value="QUACK">Quack / Patito (5)</option>
+          </select>
+        </div>
+
+        <div id="vaultSpritesGrid" class="spirits-grid"></div>
+      </div>
+    `;
+
+    elMainContent.innerHTML = html;
+
+    const updateVaultGrid = () => {
+      const q = (document.getElementById("vaultSearchInput")?.value || "").trim().toLowerCase();
+      const vFilter = document.getElementById("vaultVariantFilter")?.value || "all";
+      const grid = document.getElementById("vaultSpritesGrid");
+      if (!grid) return;
+
+      const filtered = vaultCells.filter(c => {
+        if (vFilter !== "all" && c.variantKey !== vFilter) return false;
+        if (q) {
+          const hay = `${c.spriteNameEs} ${c.spriteNameEn} ${c.variantNameEs} ${c.rarityEs}`.toLowerCase();
+          if (!hay.includes(q)) return false;
+        }
+        return true;
+      });
+
+      grid.innerHTML = filtered.map(c => renderSpiritItem(c, null)).join("");
+    };
+
+    document.getElementById("vaultSearchInput")?.addEventListener("input", updateVaultGrid);
+    document.getElementById("vaultVariantFilter")?.addEventListener("change", updateVaultGrid);
+    updateVaultGrid();
   }
 
   // --- RENDERIZADO DE ITEM ESPÍRITU (CON CHECKLIST EN VIVO - SOLUCIÓN 4) ---
@@ -1027,7 +1189,7 @@
     const badgeEl = document.getElementById("lockerCountBadge");
     if (!gridEl) return;
 
-    const totalCells = DB.totalCells || DB.cells.length || 162;
+    const totalCells = DB.totalCells || DB.cells.length || 24;
     const ownedCount = Object.keys(lockerEditorState.owned).filter(k => lockerEditorState.owned[k]).length;
     const pct = Math.round((ownedCount / totalCells) * 1000) / 10;
 
@@ -1149,7 +1311,7 @@
     } else {
       const dialog = document.getElementById("lockerDialog");
       dialog?.close();
-      showToast(`💾 ¡Casillero de ${player.name} guardado (${player.data?.ownedCount || 0}/162)!`);
+      showToast(`💾 ¡Casillero de ${player.name} guardado (${player.data?.ownedCount || 0}/${DB.totalCells || 24})!`);
     }
   }
 
@@ -1157,10 +1319,10 @@
   function copyChainText(players, platform) {
     let lines = [];
     if (platform === "discord") {
-      lines.push("**🎮 FORTNITE - FILA DE INTERCAMBIO DE ESPÍRITUS (C7S4)**");
+      lines.push("**🎮 FORTNITE - FILA DE INTERCAMBIO DE ESPÍRITUS (CAP. 7 MINITEMPORADA)**");
       lines.push("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
     } else {
-      lines.push("🎮 *FORTNITE - FILA DE INTERCAMBIO DE ESPÍRITUS (C7S4)*");
+      lines.push("🎮 *FORTNITE - FILA DE INTERCAMBIO DE ESPÍRITUS (CAP. 7 MINITEMPORADA)*");
       lines.push("---------------------------------------------");
     }
 
@@ -1405,13 +1567,14 @@
         let name = "";
         let url = "";
 
-        if (line.includes(":") && (line.includes("http") || line.includes("#") || line.includes("4."))) {
+        const hasCode = line.includes("http") || line.includes("#") || /[345]\.[A-Za-z0-9_-]+/.test(line);
+        if (line.includes(":") && hasCode) {
           let parts = line.split(":");
           name = parts[0].trim();
           url = parts.slice(1).join(":").trim();
-        } else if (line.includes("http") || line.includes("#") || line.includes("4.")) {
+        } else if (hasCode) {
           // Extraer URL o código
-          let urlMatch = line.match(/(https?:\/\/[^\s]+|4\.[A-Za-z0-9_-]+)/);
+          let urlMatch = line.match(/(https?:\/\/[^\s]+|[345]\.[A-Za-z0-9_-]+)/);
           if (urlMatch) {
             url = urlMatch[1];
             name = line.replace(url, "").trim().replace(/[-–—:]+$/, "").trim();

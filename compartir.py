@@ -72,7 +72,40 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
     if not clean:
         raise ValueError("Código vacío o no encontrado en el enlace")
 
-    version = "4"
+    active_keys = {c['key'] for c in db['cells']}
+    total_target = db.get('totalCells', len(db['cells']))
+
+    if clean.startswith('3.'):
+        raw_bytes = b64_url_decode(clean[2:])
+        parsed = json.loads(raw_bytes.decode('utf-8'))
+        owned = {k: True for k in parsed.get('o', []) if k in active_keys}
+        mastered = {}
+        for k in parsed.get('m', []):
+            if k in active_keys:
+                mastered[k] = True
+                owned[k] = True
+        lost = {}
+        for k in parsed.get('l', []):
+            if k in active_keys:
+                lost[k] = True
+                owned[k] = True
+        levels = {}
+        for k, v in (parsed.get('v') or {}).items():
+            if k in owned and isinstance(v, (int, float)):
+                levels[k] = min(5, max(1, int(round(v))))
+        return {
+            'version': '3',
+            'raw_code': clean,
+            'owned': owned,
+            'mastered': mastered,
+            'lost': lost,
+            'levels': levels,
+            'owned_count': len(owned),
+            'total_cells': total_target,
+            'percentage': round((len(owned) / total_target) * 100, 1)
+        }
+
+    version = db.get('shareVersion', '5')
     data_str = clean
     if '.' in clean:
         parts = clean.split('.', 1)
@@ -80,12 +113,25 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
         data_str = parts[1]
 
     raw_bytes = b64_url_decode(data_str)
-    if len(raw_bytes) < 100 and 'cells_v4_122' in db:
-        cells = db['cells_v4_122']
-    elif len(raw_bytes) < 116 and 'cells_v4_145' in db:
-        cells = db['cells_v4_145']
+    if version == '4' or (version != '5' and len(raw_bytes) >= 80):
+        return {
+            'version': '4',
+            'raw_code': clean,
+            'owned': {},
+            'mastered': {},
+            'lost': {},
+            'levels': {},
+            'owned_count': 0,
+            'total_cells': total_target,
+            'percentage': 0.0
+        }
+
+    if len(raw_bytes) == 26 and 'cells_v5_34' in db:
+        cells = db['cells_v5_34']
+    elif len(raw_bytes) >= 27 and 'cells_v5_35' in db:
+        cells = db['cells_v5_35']
     else:
-        cells = db.get('cells_v4_162', db['cells'])
+        cells = db.get('cells_v5_24', db['cells'])
     num_cells = len(cells)
 
     owned = {}
@@ -103,16 +149,16 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
         is_mastered = get_bit(raw_bytes, offset_mastered + idx)
         is_lost = get_bit(raw_bytes, offset_lost + idx)
 
-        if is_owned:
+        if is_owned and key in active_keys:
             owned[key] = True
-        if is_mastered:
+        if is_mastered and key in active_keys:
             mastered[key] = True
             owned[key] = True
-        if is_lost:
+        if is_lost and key in active_keys:
             lost[key] = True
             owned[key] = True
 
-        if is_owned:
+        if key in owned:
             lvl = 0
             for b in range(3):
                 if get_bit(raw_bytes, offset_levels + idx * 3 + b):
@@ -120,7 +166,6 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
             if lvl > 0:
                 levels[key] = min(5, max(1, lvl + 1))
 
-    total_target = db.get('totalCells', len(db['cells']))
     return {
         'version': version,
         'raw_code': clean,
@@ -197,14 +242,14 @@ def run_analysis(players: List[Player], db: Dict[str, Any]):
 
     print_separator("=")
     print("      🎮 FORTNITE ESPÍRITUS - ORGANIZADOR DE INTERCAMBIOS DE SALA")
-    print(f"              Temporada 4 / Capítulo 7 ({db.get('totalCells', 162)} Espíritus)")
+    print(f"          Capítulo 7 — Minitemporada ({db.get('totalCells', 24)} Espíritus / Variantes)")
     print_separator("=")
 
     # 1. ORDENAR DE MAYOR A MENOR COLECCIÓN
     players_sorted = sorted(players, key=lambda p: p.owned_count, reverse=True)
 
     print("\n📊 CLASIFICACIÓN DE LA SALA (De más a menos espíritus):")
-    total_db_cells = db.get('totalCells', 162)
+    total_db_cells = db.get('totalCells', 24)
     for i, p in enumerate(players_sorted, 1):
         bar_len = int(p.percentage / 5)
         bar = "█" * bar_len + "░" * (20 - bar_len)
@@ -280,8 +325,8 @@ def run_analysis(players: List[Player], db: Dict[str, Any]):
 
 def get_demo_players(db: Dict[str, Any]) -> List[Player]:
     return [
-        Player("Canito", "https://spritelocker.com/compare#vs=4.772zvvTaGS2utF564UQhhvYCOMAJAgQAwHgAAAAAAAAwAgCAFAEAQgAkAwAAAAFhAECSIAAIAEgKABCQDAgMIIAAABEAAAABGACQCEgSAIAAAQAAAAAAAABgAAA", db),
-        Player("Roberto", "https://spritelocker.com/#c=4.770WvlLaGKGsFFZawUQBAIACAAAAAAAAAFAAAAAAAAAAAAAAAAAAAAAAAAAAwAJggJCAIAAMABBECAQMAAQAAoAIQAAAAAABADAAAEAQAAAAAAAAAgAAAAAAAAA", db),
+        Player("Canito", "https://spritelocker.com/compare#vs=5.313jAAAAAAAAAAAAAAAAAAAA", db),
+        Player("Roberto", "https://spritelocker.com/#c=5.dQcMAAAAAAAAAAAAAAAAAAAA", db),
     ]
 
 def main():
@@ -340,7 +385,7 @@ def main():
         try:
             p = Player(name, url, db)
             players.append(p)
-            print(f"✔️ {name} agregado con éxito ({p.owned_count}/{p.data.get('total_cells', 162)} espíritus, {p.percentage}%).")
+            print(f"✔️ {name} agregado con éxito ({p.owned_count}/{p.data.get('total_cells', 24)} espíritus, {p.percentage}%).")
         except Exception as e:
             print(f"❌ Error al procesar el enlace de {name}: {e}")
 

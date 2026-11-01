@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Organizador de Espíritus Fortnite — Intercambios de Sala</title>
-  <link rel="stylesheet" href="style.css?v=162.2">
+  <title>Organizador de Espíritus Fortnite — Intercambios de Sala (Cap. 7 Minitemporada)</title>
+  <link rel="stylesheet" href="style.css?v=c7ms.1">
 </head>
 <body>
 
@@ -14,7 +14,7 @@
       <span class="brand-icon">✨</span>
       <div>
         <h1 class="brand-title">Espíritus Fortnite</h1>
-        <div class="brand-subtitle">Organizador de Intercambios en Cadena · Cap. 7 Temp. 4</div>
+        <div class="brand-subtitle">Organizador de Intercambios en Cadena · Cap. 7 Minitemporada</div>
       </div>
     </div>
     <div class="header-actions">
@@ -50,6 +50,7 @@
       <button class="tab-btn" data-tab="matrix">📋 Matriz Completa</button>
       <button class="tab-btn" data-tab="versus">⚔️ 1 vs 1 Detallado</button>
       <button class="tab-btn" data-tab="missing">🔍 Faltantes del Escuadrón</button>
+      <button class="tab-btn" data-tab="vault">🗄️ Bóveda (C7S4)</button>
     </nav>
 
     <!-- Contenido dinámico según la pestaña activa -->
@@ -79,7 +80,7 @@
         <p style="font-size: 0.85rem; color: var(--text-secondary);">
           Pega los mensajes de Discord o WhatsApp de tus amigos con sus nuevos links de Sprite Locker. La app actualizará a cada jugador automáticamente:
         </p>
-        <textarea id="batchTextarea" class="batch-textarea" placeholder="Ejemplo:&#10;Canito: https://spritelocker.com/compare#vs=4.772...&#10;Roberto: https://spritelocker.com/#c=4.770...&#10;Ivan: https://spritelocker.com/#c=4.779..."></textarea>
+        <textarea id="batchTextarea" class="batch-textarea" placeholder="Ejemplo:&#10;Canito: https://spritelocker.com/compare#vs=5.313j...&#10;Roberto: https://spritelocker.com/#c=5.dQcM...&#10;Ivan: https://spritelocker.com/#c=5.AAAA..."></textarea>
         <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
           <button class="btn btn-secondary btn-sm" id="btnBatchCancel">Cancelar</button>
           <button class="btn btn-primary btn-sm" id="btnApplyBatch">Aplicar a la Sala</button>
@@ -95,7 +96,7 @@
         <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
           <h3 id="lockerDialogTitle" style="font-size: 1.05rem; color: #3fd0ff;">✏️ Casillero Manual:</h3>
           <input type="text" id="lockerPlayerNameInput" class="locker-name-input" placeholder="Nombre del jugador">
-          <span id="lockerCountBadge" class="player-stats-badge">0/162 (0%)</span>
+          <span id="lockerCountBadge" class="player-stats-badge">0/24 (0%)</span>
         </div>
         <button type="button" class="modal-close" id="lockerDialogClose" aria-label="Cerrar">&times;</button>
       </div>
@@ -104,26 +105,21 @@
         <div class="locker-presets-row">
           <span class="locker-toolbar-label">⚡ Plantillas 1-Clic:</span>
           <button type="button" class="btn btn-secondary btn-sm" id="btnPresetZero" title="Dejar en 0 espíritus (Ideal para ver todo lo que pueden darle)">🆕 Empezando (0)</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetNormals" title="Marcar los 27 espíritus normales base">📦 Solo Normales (27)</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetAll" title="Marcar los 162 espíritus">✨ Todos (162)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetNormals" title="Marcar los 13 espíritus normales base">📦 Solo Normales (13)</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetAll" title="Marcar los 24 espíritus">✨ Todos (24)</button>
           <button type="button" class="btn btn-secondary btn-sm" id="btnMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar filtrados</button>
           <button type="button" class="btn btn-secondary btn-sm" id="btnUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Desmarcar filtrados</button>
         </div>
 
         <div class="locker-filters-row">
-          <input type="search" id="lockerSearchInput" class="locker-filter-input" placeholder="🔎 Buscar espíritu (ej. Arbusto, Miel, Corona, Patito)...">
+          <input type="search" id="lockerSearchInput" class="locker-filter-input" placeholder="🔎 Buscar espíritu (ej. Plundarrgh, Dulces sueños, Caracol, Buscarrutas)...">
           <select id="lockerVariantFilter" class="locker-filter-select">
-            <option value="all">🎨 Todas las variantes</option>
-            <option value="NORMAL">Normal (27)</option>
-            <option value="GOLD">Oro (27)</option>
-            <option value="CHEATMASTER">Cheat Master (27)</option>
-            <option value="LOOTHACKER">Loot Hacker (27)</option>
-            <option value="BOUNTYHUNTER">Bounty Hunter (27)</option>
-            <option value="TRICKTREAT">Dulce o truco (24)</option>
-            <option value="QUACK">Quack / Patito (3)</option>
+            <option value="all">🎨 Todas las variantes (24)</option>
+            <option value="NORMAL">Normal (13)</option>
+            <option value="JEWELED">Fortuna (11)</option>
           </select>
           <select id="lockerStatusFilter" class="locker-filter-select">
-            <option value="all">👁️ Todos (162)</option>
+            <option value="all">👁️ Todos (24)</option>
             <option value="owned">✅ Solo los que TIENE</option>
             <option value="missing">❌ Solo los que LE FALTAN</option>
           </select>
@@ -153,7 +149,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="db.js?v=162.2"></script>
-  <script src="app.js?v=162.2"></script>
+  <script src="db.js?v=c7ms.1"></script>
+  <script src="app.js?v=c7ms.1"></script>
 </body>
 </html>
