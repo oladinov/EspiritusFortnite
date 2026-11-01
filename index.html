@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Organizador de Espíritus Fortnite — Intercambios de Sala (Cap. 7 Minitemporada)</title>
-  <link rel="stylesheet" href="style.css?v=c7ms.1">
+  <link rel="stylesheet" href="style.css?v=c7ms.2">
 </head>
 <body>
 
@@ -18,10 +18,7 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-primary btn-sm" id="btnReloadAll" title="Recarga todos los inventarios en vivo o re-analiza los enlaces">🔄 Recargar Inventarios</button>
-      <button class="btn btn-secondary btn-sm" id="btnBatchImport" title="Pega varios enlaces del chat a la vez">⚡ Pegado Rápido</button>
-      <button class="btn btn-secondary btn-sm" id="btnShareRoom">🔗 Compartir Sala</button>
-      <button class="btn btn-secondary btn-sm" id="btnResetDemo">🔄 Demo</button>
+      <button class="btn btn-primary btn-sm" id="btnShareRoom">🔗 Compartir Sala</button>
     </div>
   </header>
 
@@ -32,7 +29,7 @@
       <div class="panel-header">
         <div>
           <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
-          <p class="panel-desc">Pega el link de Sprite Locker de cada miembro o usa <strong>✏️ Casillero Manual / Plantillas Rápidas</strong> si tu amigo nunca ha usado Sprite Locker.</p>
+          <p class="panel-desc">Pega el link de Sprite Locker de cada miembro o usa <strong>✏️ Casillero Manual</strong> si tu amigo no usa Sprite Locker.</p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
           <button class="btn btn-secondary btn-sm" id="btnAddGuestPlayer" title="Añade un amigo sin link de Sprite Locker y abre su selector visual">✏️ Añadir Amigo sin Link</button>
@@ -47,7 +44,6 @@
     <!-- Navegación por Pestañas -->
     <nav class="tabs-nav" aria-label="Modos de análisis">
       <button class="tab-btn is-active" data-tab="chain">🤝 Fila de Compartir (Recomendado)</button>
-      <button class="tab-btn" data-tab="matrix">📋 Matriz Completa</button>
       <button class="tab-btn" data-tab="versus">⚔️ 1 vs 1 Detallado</button>
       <button class="tab-btn" data-tab="missing">🔍 Faltantes del Escuadrón</button>
       <button class="tab-btn" data-tab="vault">🗄️ Bóveda (C7S4)</button>
@@ -57,37 +53,6 @@
     <section id="mainContent"></section>
 
   </main>
-
-  <!-- Modal para ver espíritus al pulsar en la matriz -->
-  <div class="modal-backdrop" id="modalBackdrop">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 id="modalTitle" style="font-size: 1rem; color: #ffd070;">Detalles de Intercambio</h3>
-        <button class="modal-close" id="modalClose">&times;</button>
-      </div>
-      <div class="modal-body" id="modalBody"></div>
-    </div>
-  </div>
-
-  <!-- Modal de Actualización Rápida en Lote -->
-  <div class="modal-backdrop" id="batchModalBackdrop">
-    <div class="modal-box">
-      <div class="modal-header">
-        <h3 style="font-size: 1rem; color: #3fd0ff;">⚡ Actualización Rápida de Enlaces</h3>
-        <button class="modal-close" id="batchModalClose">&times;</button>
-      </div>
-      <div class="modal-body" style="display: flex; flex-direction: column; gap: 1rem;">
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">
-          Pega los mensajes de Discord o WhatsApp de tus amigos con sus nuevos links de Sprite Locker. La app actualizará a cada jugador automáticamente:
-        </p>
-        <textarea id="batchTextarea" class="batch-textarea" placeholder="Ejemplo:&#10;Canito: https://spritelocker.com/compare#vs=5.313j...&#10;Roberto: https://spritelocker.com/#c=5.dQcM...&#10;Ivan: https://spritelocker.com/#c=5.AAAA..."></textarea>
-        <div style="display: flex; justify-content: flex-end; gap: 0.5rem;">
-          <button class="btn btn-secondary btn-sm" id="btnBatchCancel">Cancelar</button>
-          <button class="btn btn-primary btn-sm" id="btnApplyBatch">Aplicar a la Sala</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <!-- Modal Editor Visual de Casillero (Para jugadores sin Sprite Locker) -->
   <dialog id="lockerDialog" closedby="any" class="locker-dialog" aria-labelledby="lockerDialogTitle">
@@ -102,15 +67,6 @@
       </div>
 
       <div class="locker-toolbar">
-        <div class="locker-presets-row">
-          <span class="locker-toolbar-label">⚡ Plantillas 1-Clic:</span>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetZero" title="Dejar en 0 espíritus (Ideal para ver todo lo que pueden darle)">🆕 Empezando (0)</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetNormals" title="Marcar los 13 espíritus normales base">📦 Solo Normales (13)</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnPresetAll" title="Marcar los 24 espíritus">✨ Todos (24)</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar filtrados</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Desmarcar filtrados</button>
-        </div>
-
         <div class="locker-filters-row">
           <input type="search" id="lockerSearchInput" class="locker-filter-input" placeholder="🔎 Buscar espíritu (ej. Plundarrgh, Dulces sueños, Caracol, Buscarrutas)...">
           <select id="lockerVariantFilter" class="locker-filter-select">
@@ -123,6 +79,8 @@
             <option value="owned">✅ Solo los que TIENE</option>
             <option value="missing">❌ Solo los que LE FALTAN</option>
           </select>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar visibles</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Limpiar visibles</button>
         </div>
       </div>
 
@@ -149,7 +107,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="db.js?v=c7ms.1"></script>
-  <script src="app.js?v=c7ms.1"></script>
+  <script src="db.js?v=c7ms.2"></script>
+  <script src="app.js?v=c7ms.2"></script>
 </body>
 </html>

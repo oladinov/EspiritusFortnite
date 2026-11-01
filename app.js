@@ -473,36 +473,6 @@
     }
   }
 
-  // --- SOLUCIÓN 2: PLANTILLAS RÁPIDAS (SIN LINK DE SPRITE LOCKER) ---
-  async function applyPlayerPreset(player, presetType) {
-    let owned = {};
-    if (presetType === "normals") {
-      for (let cell of DB.cells) {
-        if (cell.variantKey === "NORMAL") {
-          owned[cell.key] = true;
-        }
-      }
-    } else if (presetType === "all") {
-      for (let cell of DB.cells) {
-        owned[cell.key] = true;
-      }
-    }
-    player.isManual = true;
-    player.url = encodeCollection({ owned });
-    await updatePlayer(player, false);
-    saveState();
-    renderLobby();
-    renderActiveTab();
-
-    let totalCells = DB.totalCells || 24;
-    let totalSprites = DB.totalSprites || 13;
-    if (presetType === "zero") {
-      showToast(`🆕 ${player.name} añadido con 0/${totalCells} espíritus (listo para recibir).`);
-    } else if (presetType === "normals") {
-      showToast(`📦 ${player.name} configurado con los ${totalSprites} espíritus Normales.`);
-    }
-  }
-
   // --- INTERFAZ / RENDERIZADO ---
   const elLobbyGrid = document.getElementById("lobbyGrid");
   const elMainContent = document.getElementById("mainContent");
@@ -517,14 +487,6 @@
     }, 3200);
   }
 
-  function formatTime(d) {
-    if (!d) return "";
-    let h = String(d.getHours()).padStart(2, "0");
-    let m = String(d.getMinutes()).padStart(2, "0");
-    let s = String(d.getSeconds()).padStart(2, "0");
-    return `${h}:${m}:${s}`;
-  }
-
   function renderLobby() {
     elLobbyGrid.innerHTML = "";
     state.players.forEach((player) => {
@@ -535,7 +497,6 @@
       const count = player.data ? player.data.ownedCount : 0;
       const pct = player.data ? player.data.percentage : 0;
       const totalC = player.data?.totalCells || DB.totalCells || 24;
-      const totalS = DB.totalSprites || 13;
       const vaultedNote = player.data?.isVaultedLink
         ? `⚠️ Enlace de Cap. 7 Temp. 4 (Bóveda: ${player.data.vaultedCount}/162). Actualiza el link para la Minitemporada.`
         : "";
@@ -561,17 +522,13 @@
         <div class="quick-presets-bar">
           <span class="quick-presets-label">¿Sin link?</span>
           <button type="button" class="btn btn-locker-open btn-xs btn-open-locker" data-id="${player.id}" title="Abrir selector visual de espíritus en español">✏️ Casillero Manual</button>
-          <button type="button" class="btn btn-secondary btn-xs btn-preset-zero" data-id="${player.id}" title="Marcar 0/${totalC} para ver todo lo que pueden darle">🆕 Empezando (0)</button>
-          <button type="button" class="btn btn-secondary btn-xs btn-preset-normals" data-id="${player.id}" title="Asumir que tiene los ${totalS} espíritus normales y busca variantes">📦 Solo Normales (${totalS})</button>
         </div>
         <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="O pega enlace de Sprite Locker (#vs=5..., #c=5... o ?p=)" data-id="${player.id}">
         <div class="player-meta-row">
-          <span class="player-updated-time">🕒 Act: <span class="time-label-${player.id}">${formatTime(player.lastUpdated)}</span></span>
           <span class="error-msg-${player.id}" style="color: ${player.error ? '#ff8585' : '#ffd070'};">${player.error ? escapeHtml(player.error) : escapeHtml(vaultedNote)}</span>
         </div>
         <div class="player-actions">
-          <button class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Lee el nuevo link de tu portapapeles y actualiza este jugador">📋 Pegar Link</button>
-          <button class="btn btn-secondary btn-sm btn-reload-one" data-id="${player.id}" title="Recargar inventario de este jugador">🔄 Recargar</button>
+          <button class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Pega el nuevo link de este jugador">📋 Pegar Link</button>
           <button class="btn btn-secondary btn-sm btn-clear" data-id="${player.id}" title="Limpiar enlace">Limpiar</button>
           <button class="btn btn-danger btn-sm btn-remove" data-id="${player.id}" title="Eliminar jugador">Eliminar</button>
         </div>
@@ -585,15 +542,9 @@
         renderActiveTab();
       });
 
-      // Eventos: Casillero Manual y Plantillas Rápidas (Soluciones 1 y 2)
+      // Evento: Casillero Manual
       card.querySelector(".btn-open-locker").addEventListener("click", () => {
         openLockerModal(player.id);
-      });
-      card.querySelector(".btn-preset-zero").addEventListener("click", () => {
-        applyPlayerPreset(player, "zero");
-      });
-      card.querySelector(".btn-preset-normals").addEventListener("click", () => {
-        applyPlayerPreset(player, "normals");
       });
 
       // Evento: Input del Link
@@ -614,7 +565,7 @@
         setTimeout(() => handleLinkChange(linkInput.value), 50);
       });
 
-      // Botón: Pegar nuevo link (abre directamente el modal/prompt sin el bloqueo de permiso del navegador)
+      // Botón: Pegar nuevo link
       card.querySelector(".btn-paste").addEventListener("click", async () => {
         let manual = prompt(`Pega el nuevo enlace de Sprite Locker para ${player.name}:`, "");
         if (manual !== null && manual.trim() !== "") {
@@ -623,19 +574,6 @@
           card.classList.add("is-updated");
           setTimeout(() => card.classList.remove("is-updated"), 1200);
         }
-      });
-
-      // Botón: Recargar individual
-      card.querySelector(".btn-reload-one").addEventListener("click", async () => {
-        const btn = card.querySelector(".btn-reload-one");
-        btn.textContent = "⏳...";
-        await updatePlayer(player, true);
-        saveState();
-        updatePlayerCardUI(player);
-        renderActiveTab();
-        btn.textContent = "🔄 Recargar";
-        card.classList.add("is-updated");
-        setTimeout(() => card.classList.remove("is-updated"), 1200);
       });
 
       // Botón: Limpiar
@@ -690,9 +628,6 @@
     const fill = card.querySelector(`.progress-fill-${player.id}`);
     if (fill) fill.style.width = `${pct}%`;
 
-    const timeLabel = card.querySelector(`.time-label-${player.id}`);
-    if (timeLabel) timeLabel.textContent = formatTime(player.lastUpdated);
-
     const errMsg = card.querySelector(`.error-msg-${player.id}`);
     if (errMsg) {
       const vaultedNote = player.data?.isVaultedLink
@@ -738,8 +673,6 @@
 
     if (state.currentTab === "chain") {
       renderChainTab(validPlayers);
-    } else if (state.currentTab === "matrix") {
-      renderMatrixTab(validPlayers);
     } else if (state.currentTab === "versus") {
       renderVersusTab(validPlayers);
     } else if (state.currentTab === "missing") {
@@ -840,59 +773,6 @@
     document.getElementById("btnCopyChainWhatsapp")?.addEventListener("click", () => {
       copyChainText(players, "whatsapp");
     });
-  }
-
-  // --- TAB 2: MATRIZ DE SALA ---
-  function renderMatrixTab(players) {
-    let html = `
-      <div class="panel">
-        <div class="panel-header">
-          <div>
-            <div class="panel-title">📋 Matriz Completa de Intercambios</div>
-            <div class="panel-desc">Haz clic en cualquier celda para ver qué espíritus puede pasar un jugador a otro.</div>
-          </div>
-        </div>
-
-        <div class="matrix-table-wrap">
-          <table class="matrix-table">
-            <thead>
-              <tr>
-                <th style="text-align: left;">Donante ╲ Receptor</th>
-                ${players.map(p => `<th>${escapeHtml(p.name)}<br><small style="color: var(--accent-cyan);">${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 24}</small></th>`).join("")}
-                <th>Total que puede donar</th>
-              </tr>
-            </thead>
-            <tbody>
-              ${players.map(donor => {
-                let totalGivenByDonor = 0;
-                let cellsHtml = players.map(recipient => {
-                  if (donor.id === recipient.id) {
-                    return `<td class="cell-self">—</td>`;
-                  }
-                  let count = getTransferable(donor, recipient).length;
-                  totalGivenByDonor += count;
-                  return `
-                    <td class="cell-trade" onclick="window.viewTradeModal('${donor.id}', '${recipient.id}')">
-                      ${count > 0 ? `<strong>${count}</strong>` : `<span style="color: var(--text-muted);">0</span>`}
-                    </td>
-                  `;
-                }).join("");
-
-                return `
-                  <tr>
-                    <td style="text-align: left; font-weight: 800;">👑 ${escapeHtml(donor.name)}</td>
-                    ${cellsHtml}
-                    <td style="font-weight: 800; color: #ffd070;">${totalGivenByDonor}</td>
-                  </tr>
-                `;
-              }).join("")}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    `;
-
-    elMainContent.innerHTML = html;
   }
 
   // --- TAB 3: 1 VS 1 DETALLADO ---
@@ -1124,7 +1004,7 @@
   }
 
   // --- SOLUCIÓN 4: MARCAR ESPÍRITU ENTREGADO / EN POSESIÓN EN TIEMPO REAL ---
-  window.markSpiritDelivered = async function (recipientId, cellKey, donorId = "", inModal = false) {
+  window.markSpiritDelivered = async function (recipientId, cellKey) {
     const player = state.players.find(p => p.id === recipientId);
     if (!player) return;
 
@@ -1147,10 +1027,6 @@
     saveState();
     renderLobby();
     renderActiveTab();
-
-    if (inModal && donorId) {
-      window.viewTradeModal(donorId, recipientId);
-    }
 
     const cellInfo = DB.cells.find(c => c.key === cellKey);
     const label = cellInfo ? `${cellInfo.spriteNameEs} (${cellInfo.variantNameEs})` : cellKey;
@@ -1367,40 +1243,6 @@
     });
   }
 
-  // --- MODAL DETALLE DE INTERCAMBIO EN MATRIZ ---
-  window.viewTradeModal = function (donorId, recipientId) {
-    const donor = state.players.find(p => p.id === donorId);
-    const recipient = state.players.find(p => p.id === recipientId);
-    if (!donor || !recipient) return;
-
-    const list = getTransferable(donor, recipient);
-    const dust = list.reduce((s, c) => s + c.dust, 0);
-
-    const modalBackdrop = document.getElementById("modalBackdrop");
-    const modalTitle = document.getElementById("modalTitle");
-    const modalBody = document.getElementById("modalBody");
-
-    modalTitle.innerHTML = `🎁 <strong>${escapeHtml(donor.name)}</strong> ➜ <strong>${escapeHtml(recipient.name)}</strong> (${list.length} espíritus · 💨 ${dust} polvo)`;
-    if (list.length > 0) {
-      modalBody.innerHTML = `
-        <div class="spirits-grid">
-          ${list.map(c => renderSpiritItem(c, { donor, recipient, inModal: true })).join("")}
-        </div>
-      `;
-    } else {
-      modalBody.innerHTML = `<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No hay espíritus transferibles en esta combinación.</p>`;
-    }
-
-    modalBackdrop.classList.add("open");
-  };
-
-  function closeModal() {
-    document.getElementById("modalBackdrop")?.classList.remove("open");
-    document.getElementById("batchModalBackdrop")?.classList.remove("open");
-    const lockerDialog = document.getElementById("lockerDialog");
-    if (lockerDialog?.open) lockerDialog.close();
-  }
-
   function escapeHtml(str) {
     if (!str) return "";
     return String(str)
@@ -1411,7 +1253,7 @@
       .replace(/'/g, "&#039;");
   }
 
-  // Crear nuevo jugador (con casillero 0/162 por defecto para que entre al grupo sin tener link)
+  // Crear nuevo jugador (con casillero 0/24 por defecto para que entre al grupo sin tener link)
   async function createNewPlayer(openVisualLocker = false) {
     const newPlayer = {
       id: "p_" + Math.random().toString(36).substr(2, 9),
@@ -1431,7 +1273,7 @@
     if (openVisualLocker) {
       openLockerModal(newPlayer.id);
     } else {
-      showToast(`➕ ¡${newPlayer.name} unido al grupo! Puedes usar una plantilla o pegar su link.`);
+      showToast(`➕ ¡${newPlayer.name} unido al grupo! Usa Casillero Manual o pega su link.`);
     }
   }
 
@@ -1447,7 +1289,7 @@
       });
     });
 
-    // Añadir jugador (entra listo con 0/162 sin exigir link)
+    // Añadir jugador
     document.getElementById("btnAddPlayer")?.addEventListener("click", () => {
       createNewPlayer(false);
     });
@@ -1457,7 +1299,7 @@
       createNewPlayer(true);
     });
 
-    // Controles del Dialog Editor Visual de Casillero (Solución 1)
+    // Controles del Dialog Editor Visual de Casillero
     const lockerDialog = document.getElementById("lockerDialog");
     if (lockerDialog && !("closedBy" in HTMLDialogElement.prototype)) {
       lockerDialog.addEventListener("click", (event) => {
@@ -1481,26 +1323,6 @@
     document.getElementById("lockerVariantFilter")?.addEventListener("change", renderLockerGrid);
     document.getElementById("lockerStatusFilter")?.addEventListener("change", renderLockerGrid);
 
-    document.getElementById("btnPresetZero")?.addEventListener("click", () => {
-      lockerEditorState.owned = {};
-      lockerEditorState.mastered = {};
-      lockerEditorState.lost = {};
-      renderLockerGrid();
-    });
-    document.getElementById("btnPresetNormals")?.addEventListener("click", () => {
-      lockerEditorState.owned = {};
-      for (let cell of DB.cells) {
-        if (cell.variantKey === "NORMAL") lockerEditorState.owned[cell.key] = true;
-      }
-      renderLockerGrid();
-    });
-    document.getElementById("btnPresetAll")?.addEventListener("click", () => {
-      lockerEditorState.owned = {};
-      for (let cell of DB.cells) {
-        lockerEditorState.owned[cell.key] = true;
-      }
-      renderLockerGrid();
-    });
     document.getElementById("btnMarkFiltered")?.addEventListener("click", () => {
       for (let cell of getFilteredLockerCells()) {
         lockerEditorState.owned[cell.key] = true;
@@ -1520,96 +1342,6 @@
       saveLockerModalToPlayer(false);
     });
 
-    // Recargar Todos los Inventarios
-    document.getElementById("btnReloadAll")?.addEventListener("click", async () => {
-      const btn = document.getElementById("btnReloadAll");
-      const originalText = btn.textContent;
-      btn.textContent = "⏳ Recargando...";
-      btn.disabled = true;
-
-      for (let player of state.players) {
-        if (player.url) {
-          await updatePlayer(player, false);
-        }
-      }
-
-      saveState();
-      renderLobby();
-      renderActiveTab();
-
-      btn.textContent = originalText;
-      btn.disabled = false;
-      showToast("🔄 ¡Todos los inventarios fueron recargados con éxito!");
-    });
-
-    // Modal de Pegado Rápido
-    const batchBackdrop = document.getElementById("batchModalBackdrop");
-    const batchTextarea = document.getElementById("batchTextarea");
-
-    document.getElementById("btnBatchImport")?.addEventListener("click", () => {
-      batchBackdrop.classList.add("open");
-      batchTextarea.value = state.players.map(p => `${p.name}: ${p.url}`).join("\n");
-      batchTextarea.focus();
-    });
-
-    document.getElementById("batchModalClose")?.addEventListener("click", closeModal);
-    document.getElementById("btnBatchCancel")?.addEventListener("click", closeModal);
-    batchBackdrop?.addEventListener("click", (e) => {
-      if (e.target.id === "batchModalBackdrop") closeModal();
-    });
-
-    // Aplicar Pegado Rápido
-    document.getElementById("btnApplyBatch")?.addEventListener("click", async () => {
-      const lines = batchTextarea.value.split("\n").map(l => l.trim()).filter(Boolean);
-      let countUpdated = 0;
-
-      for (let line of lines) {
-        let name = "";
-        let url = "";
-
-        const hasCode = line.includes("http") || line.includes("#") || /[345]\.[A-Za-z0-9_-]+/.test(line);
-        if (line.includes(":") && hasCode) {
-          let parts = line.split(":");
-          name = parts[0].trim();
-          url = parts.slice(1).join(":").trim();
-        } else if (hasCode) {
-          // Extraer URL o código
-          let urlMatch = line.match(/(https?:\/\/[^\s]+|[345]\.[A-Za-z0-9_-]+)/);
-          if (urlMatch) {
-            url = urlMatch[1];
-            name = line.replace(url, "").trim().replace(/[-–—:]+$/, "").trim();
-          }
-        }
-
-        if (url) {
-          let existing = state.players.find(p => p.name.toLowerCase() === name.toLowerCase());
-          if (existing) {
-            existing.url = url;
-            await updatePlayer(existing);
-            countUpdated++;
-          } else {
-            let newP = {
-              id: "p_" + Math.random().toString(36).substr(2, 9),
-              name: name || `Amigo ${state.players.length + 1}`,
-              url: url,
-              data: null,
-              error: null,
-              lastUpdated: new Date()
-            };
-            await updatePlayer(newP);
-            state.players.push(newP);
-            countUpdated++;
-          }
-        }
-      }
-
-      saveState();
-      renderLobby();
-      renderActiveTab();
-      closeModal();
-      showToast(`⚡ ¡${countUpdated} jugadores actualizados correctamente!`);
-    });
-
     // Compartir Sala por URL
     document.getElementById("btnShareRoom")?.addEventListener("click", () => {
       let shareUrl = getShareableRoomUrl();
@@ -1618,25 +1350,6 @@
       }).catch(() => {
         prompt("Copia este enlace para compartir la sala con tus amigos:", shareUrl);
       });
-    });
-
-    // Restablecer / Cargar Demo
-    document.getElementById("btnResetDemo")?.addEventListener("click", () => {
-      if (confirm("¿Quieres restablecer la sala a los datos originales de Canito y Roberto?")) {
-        window.location.hash = "";
-        localStorage.removeItem(STORAGE_KEY);
-        initPlayers().then(() => {
-          renderLobby();
-          renderActiveTab();
-          showToast("¡Colecciones de Canito y Roberto restablecidas!");
-        });
-      }
-    });
-
-    // Modal cerrar
-    document.getElementById("modalClose")?.addEventListener("click", closeModal);
-    document.getElementById("modalBackdrop")?.addEventListener("click", (e) => {
-      if (e.target.id === "modalBackdrop") closeModal();
     });
   }
 
