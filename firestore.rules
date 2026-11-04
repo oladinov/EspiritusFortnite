@@ -1,0 +1,103 @@
+rules_version = '2';
+
+// ===============================================================
+// Assumed Data Model
+// ===============================================================
+//
+// This security rules file assumes the following data structures:
+//
+// Collection: rooms
+// Document ID: {roomId} matching ^[a-zA-Z0-9_-]{4,40}$ (capability token in URL hash #sala=<roomId>)
+// Access Pattern: Unauthenticated capability-based single-document access (get, create, update).
+//                 Listing all rooms and deleting rooms are explicitly denied.
+// Fields:
+//   - seasonKey: string (required, length 1..20) - Active season identifier for the room
+//   - players: map (required, max 30 entries) - Map of player entries keyed by normalized player key
+//   - updatedAt: number (required, > 0) - Epoch millisecond timestamp of last update
+//
+// ===============================================================
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if user owns the resource (for user-owned documents)
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Verify UID hasn't been tampered with on create
+    function uidUnchanged() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == request.auth.uid;
+    }
+
+    // Ensure uid field is not modified on update
+    function uidNotModified() {
+      return !('uid' in request.resource.data) ||
+        request.resource.data.uid == resource.data.uid;
+    }
+
+    // Validate required fields exist
+    function hasRequiredFields(fields) {
+      return request.resource.data.keys().hasAll(fields);
+    }
+
+    // Validate that the document contains only the allowed fields
+    function hasOnlyAllowedFields(fields) {
+      return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Validate roomId format (4 to 40 alphanumeric, underscore, or hyphen characters)
+    function isValidRoomId(roomId) {
+      return roomId.matches('^[a-zA-Z0-9_-]{4,40}$');
+    }
+
+    // ===============================================================
+    // Domain Validators (Used in both create and update)
+    // ===============================================================
+
+    function isValidRoom(data) {
+      return hasOnlyAllowedFields(['seasonKey', 'players', 'updatedAt']) &&
+             hasRequiredFields(['seasonKey', 'players', 'updatedAt']) &&
+             data.seasonKey is string &&
+             data.seasonKey.size() >= 1 &&
+             data.seasonKey.size() <= 20 &&
+             data.updatedAt is number &&
+             data.updatedAt > 0 &&
+             data.players is map &&
+             data.players.size() <= 30;
+    }
+
+    // ===============================================================
+    // Collection Rules
+    // ===============================================================
+
+    match /rooms/{roomId} {
+      // Allow reading a specific room by its capability roomId via getDoc / onSnapshot
+      allow get: if isValidRoomId(roomId);
+
+      // Explicitly deny listing/enumerating all rooms
+      allow list: if false;
+
+      // Allow creating or updating a room if the roomId and payload pass strict validation
+      allow create, update: if isValidRoomId(roomId) && isValidRoom(request.resource.data);
+
+      // Explicitly deny deleting rooms
+      allow delete: if false;
+    }
+
+    // Default deny on all other paths
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -381,8 +381,94 @@
     return results;
   }
 
-  // --- COMPARTIR SALA POR URL (HASH) ---
+  // --- CONFIGURACIÓN FIREBASE Y SALAS EN VIVO (#sala=<id>) ---
+  const ROOM_ID_STORAGE_KEY = "fortnite_sprites_room_id_v1";
+  const CURRENT_SEASON_KEY = DB.season?.key || "c7ms";
+  const FIREBASE_CONFIG = {
+    projectId: "espiritus-fortnite-sync",
+    appId: "1:814145649301:web:27600e5dd60df959ae399c",
+    storageBucket: "espiritus-fortnite-sync.firebasestorage.app",
+    apiKey: "AIzaSyBU7O_aFOw-ZwQGkop3dleHIDNJDD_9q9M",
+    authDomain: "espiritus-fortnite-sync.firebaseapp.com",
+    messagingSenderId: "814145649301"
+  };
+
+  let fb = null; // { db, doc, setDoc, updateDoc, onSnapshot, deleteField }
+  let activeRoomId = null;
+  let unsubscribeRoom = null;
+  let cloudRoomReady = false;
+
+  function isValidRoomId(id) {
+    return typeof id === "string" && /^[a-zA-Z0-9_-]{4,40}$/.test(id);
+  }
+
+  function generateRoomId() {
+    return "s-" + Math.random().toString(36).substring(2, 8);
+  }
+
+  function extractRoomIdFromHash() {
+    const hash = window.location.hash || "";
+    const match = hash.match(/(?:^|[#&])(?:sala|roomId)=([a-zA-Z0-9_-]{4,40})/);
+    return match ? match[1] : null;
+  }
+
+  function getOrInitRoomId() {
+    let fromHash = extractRoomIdFromHash();
+    if (fromHash && isValidRoomId(fromHash)) {
+      try {
+        localStorage.setItem(ROOM_ID_STORAGE_KEY, fromHash);
+      } catch (_) {}
+      return fromHash;
+    }
+
+    try {
+      let savedId = localStorage.getItem(ROOM_ID_STORAGE_KEY);
+      if (savedId && isValidRoomId(savedId)) {
+        return savedId;
+      }
+    } catch (_) {}
+
+    let newId = generateRoomId();
+    try {
+      localStorage.setItem(ROOM_ID_STORAGE_KEY, newId);
+    } catch (_) {}
+    return newId;
+  }
+
+  function setRoomHashInUrl(roomId) {
+    if (!roomId) return;
+    try {
+      const targetHash = `#sala=${roomId}`;
+      if (window.location.hash !== targetHash) {
+        window.history.replaceState(null, "", window.location.pathname + window.location.search + targetHash);
+      }
+    } catch (_) {}
+  }
+
+  function updateSyncStatusUI(status, roomId = activeRoomId) {
+    const dot = document.getElementById("roomSyncDot");
+    const label = document.getElementById("roomSyncLabel");
+    if (!dot || !label) return;
+
+    dot.classList.remove("is-connecting", "is-offline");
+    const shortCode = roomId ? `#${roomId}` : "";
+
+    if (status === "live") {
+      label.textContent = `Sala en vivo ${shortCode}`;
+    } else if (status === "connecting") {
+      dot.classList.add("is-connecting");
+      label.textContent = `Conectando ${shortCode}...`;
+    } else {
+      dot.classList.add("is-offline");
+      label.textContent = `Modo local ${shortCode}`;
+    }
+  }
+
   function getShareableRoomUrl() {
+    const base = getOwnBaseUrl();
+    if (activeRoomId && isValidRoomId(activeRoomId)) {
+      return `${base}#sala=${activeRoomId}`;
+    }
     let simpleList = state.players.map(p => ({
       n: p.name,
       u: p.url,
@@ -391,7 +477,6 @@
     try {
       let jsonStr = JSON.stringify(simpleList);
       let b64 = btoa(unescape(encodeURIComponent(jsonStr))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-      let base = getOwnBaseUrl();
       return `${base}#room=${b64}`;
     } catch (e) {
       console.warn("Error generando enlace de sala:", e);
@@ -399,7 +484,7 @@
     }
   }
 
-  function loadRoomFromUrl() {
+  function loadLegacyRoomFromUrl() {
     try {
       let hash = window.location.hash;
       if (hash && hash.includes("room=")) {
@@ -410,11 +495,6 @@
         let jsonStr = decodeURIComponent(escape(atob(standardB64)));
         let list = JSON.parse(jsonStr);
         if (Array.isArray(list) && list.length > 0) {
-          // IMPORTANTE: Limpiar el hash de la barra para que recargar con F5 no revierta cambios del usuario
-          try {
-            window.history.replaceState(null, '', window.location.pathname + window.location.search);
-          } catch (_) {}
-
           return list.map(item => ({
             id: "p_" + Math.random().toString(36).substr(2, 9),
             name: item.n || "Jugador",
@@ -429,8 +509,8 @@
     return null;
   }
 
-  // --- PERSISTENCIA LOCAL STORAGE ---
-  function saveState() {
+  // --- PERSISTENCIA LOCAL Y NUBE (FIRESTORE) ---
+  function saveLocalOnly() {
     let payload = state.players.map(p => ({
       id: p.id,
       name: p.name,
@@ -444,8 +524,75 @@
     }
   }
 
+  function buildPlayersMapFromState() {
+    const map = {};
+    state.players.slice(0, 30).forEach((p, idx) => {
+      const safeId = String(p.id || ("p_" + idx)).replace(/[^a-zA-Z0-9_-]/g, "_");
+      map[safeId] = {
+        id: safeId,
+        name: String(p.name || "Jugador").slice(0, 60),
+        url: String(p.url || ""),
+        isManual: Boolean(p.isManual),
+        order: idx
+      };
+    });
+    return map;
+  }
+
+  async function syncFullRoomToCloud() {
+    if (!fb || !activeRoomId || !cloudRoomReady) return;
+    try {
+      const roomRef = fb.doc(fb.db, "rooms", activeRoomId);
+      await fb.setDoc(roomRef, {
+        seasonKey: CURRENT_SEASON_KEY,
+        players: buildPlayersMapFromState(),
+        updatedAt: Date.now()
+      });
+      updateSyncStatusUI("live", activeRoomId);
+    } catch (err) {
+      console.warn("Error sincronizando sala completa en Firestore:", err);
+      updateSyncStatusUI("offline", activeRoomId);
+    }
+  }
+
+  async function syncPlayerToCloud(player) {
+    if (!fb || !activeRoomId || !cloudRoomReady || !player) return;
+    try {
+      const idx = state.players.findIndex(p => p.id === player.id);
+      const safeId = String(player.id).replace(/[^a-zA-Z0-9_-]/g, "_");
+      const roomRef = fb.doc(fb.db, "rooms", activeRoomId);
+      await fb.setDoc(roomRef, {
+        seasonKey: CURRENT_SEASON_KEY,
+        updatedAt: Date.now(),
+        players: {
+          [safeId]: {
+            id: safeId,
+            name: String(player.name || "Jugador").slice(0, 60),
+            url: String(player.url || ""),
+            isManual: Boolean(player.isManual),
+            order: idx >= 0 ? idx : state.players.length
+          }
+        }
+      }, { merge: true });
+      updateSyncStatusUI("live", activeRoomId);
+    } catch (err) {
+      console.warn("Error sincronizando jugador en Firestore:", err);
+      await syncFullRoomToCloud();
+    }
+  }
+
+  function saveState(options = {}) {
+    saveLocalOnly();
+    if (options.skipCloud) return;
+    if (options.player) {
+      syncPlayerToCloud(options.player);
+    } else {
+      syncFullRoomToCloud();
+    }
+  }
+
   function loadSavedState() {
-    let fromUrl = loadRoomFromUrl();
+    let fromUrl = loadLegacyRoomFromUrl();
     if (fromUrl) {
       return fromUrl;
     }
@@ -463,7 +610,158 @@
     return DEFAULT_PLAYERS;
   }
 
+  async function applyRemotePlayersSnapshot(playersMap) {
+    const entries = Object.values(playersMap || {})
+      .filter(item => item && typeof item === "object" && item.id)
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+
+    if (entries.length === 0) return;
+
+    const sameStructure =
+      entries.length === state.players.length &&
+      entries.every((item, i) => state.players[i] && state.players[i].id === item.id);
+
+    const hasAnyDiff = !sameStructure || entries.some((item, i) => {
+      const cur = state.players[i];
+      return !cur || cur.name !== item.name || cur.url !== item.url || Boolean(cur.isManual) !== Boolean(item.isManual);
+    });
+
+    if (!hasAnyDiff) return;
+
+    if (sameStructure) {
+      // Actualización suave en sitio sin destruir inputs activos
+      for (let i = 0; i < entries.length; i++) {
+        const remote = entries[i];
+        const local = state.players[i];
+        const urlChanged = local.url !== (remote.url || "");
+        const nameChanged = local.name !== (remote.name || "Jugador");
+
+        local.name = remote.name || "Jugador";
+        local.url = remote.url || "";
+        local.isManual = Boolean(remote.isManual);
+
+        if (urlChanged) {
+          await updatePlayer(local, true);
+        }
+        if (urlChanged || nameChanged) {
+          updatePlayerCardUI(local);
+          const card = document.getElementById(`card_${local.id}`);
+          const nameInput = card?.querySelector(".player-name-input");
+          if (nameInput && document.activeElement !== nameInput) {
+            nameInput.value = local.name;
+          }
+        }
+      }
+      saveLocalOnly();
+      renderActiveTab();
+      return;
+    }
+
+    // Si se agregaron o eliminaron jugadores en la sala remota
+    const prevById = {};
+    state.players.forEach(p => { prevById[p.id] = p; });
+
+    state.players = entries.map(item => ({
+      id: item.id,
+      name: item.name || "Jugador",
+      url: item.url || "",
+      isManual: Boolean(item.isManual),
+      data: prevById[item.id]?.data || null,
+      error: null,
+      lastUpdated: new Date()
+    }));
+
+    for (let p of state.players) {
+      const prev = prevById[p.id];
+      const showDiff = Boolean(prev && prev.url !== p.url);
+      await updatePlayer(p, showDiff);
+    }
+
+    if (state.players.length >= 2) {
+      if (!state.versusA || !state.players.some(p => p.id === state.versusA)) {
+        state.versusA = state.players[0].id;
+      }
+      if (!state.versusB || !state.players.some(p => p.id === state.versusB)) {
+        state.versusB = state.players[1].id;
+      }
+    }
+
+    saveLocalOnly();
+    renderLobby();
+    renderActiveTab();
+  }
+
+  async function connectToRoom(roomId, forceUploadLocal = false) {
+    if (!isValidRoomId(roomId)) return;
+    activeRoomId = roomId;
+    cloudRoomReady = false;
+    try {
+      localStorage.setItem(ROOM_ID_STORAGE_KEY, roomId);
+    } catch (_) {}
+    setRoomHashInUrl(roomId);
+    updateSyncStatusUI("connecting", roomId);
+
+    if (unsubscribeRoom) {
+      try { unsubscribeRoom(); } catch (_) {}
+      unsubscribeRoom = null;
+    }
+
+    if (!fb) {
+      try {
+        const [appMod, fsMod] = await Promise.all([
+          import("https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js"),
+          import("https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js")
+        ]);
+        const app = appMod.initializeApp(FIREBASE_CONFIG);
+        const db = fsMod.getFirestore(app);
+        fb = {
+          db,
+          doc: fsMod.doc,
+          setDoc: fsMod.setDoc,
+          updateDoc: fsMod.updateDoc,
+          onSnapshot: fsMod.onSnapshot,
+          deleteField: fsMod.deleteField
+        };
+      } catch (err) {
+        console.warn("No se pudo cargar Firebase SDK, operando en modo local:", err);
+        updateSyncStatusUI("offline", roomId);
+        return;
+      }
+    }
+
+    const roomRef = fb.doc(fb.db, "rooms", roomId);
+    let isFirstSnapshot = true;
+
+    unsubscribeRoom = fb.onSnapshot(
+      roomRef,
+      async (snapshot) => {
+        updateSyncStatusUI("live", roomId);
+        if (!snapshot.exists() || forceUploadLocal) {
+          forceUploadLocal = false;
+          cloudRoomReady = true;
+          await syncFullRoomToCloud();
+          isFirstSnapshot = false;
+          return;
+        }
+
+        const data = snapshot.data();
+        cloudRoomReady = true;
+        if (data && data.players && Object.keys(data.players).length > 0) {
+          await applyRemotePlayersSnapshot(data.players);
+        } else if (isFirstSnapshot) {
+          await syncFullRoomToCloud();
+        }
+        isFirstSnapshot = false;
+      },
+      (err) => {
+        console.warn("Error en suscripción de sala Firestore:", err);
+        updateSyncStatusUI("offline", roomId);
+      }
+    );
+  }
+
   async function initPlayers() {
+    const hadLegacyRoomUrl = Boolean(window.location.hash && window.location.hash.includes("room="));
     let rawList = loadSavedState();
     state.players = rawList.map(p => ({
       id: p.id || "p_" + Math.random().toString(36).substr(2, 9),
@@ -478,12 +776,15 @@
     for (let p of state.players) {
       await updatePlayer(p);
     }
-    saveState();
+    saveLocalOnly();
 
     if (state.players.length >= 2) {
       state.versusA = state.players[0].id;
       state.versusB = state.players[1].id;
     }
+
+    const initialRoomId = getOrInitRoomId();
+    connectToRoom(initialRoomId, hadLegacyRoomUrl);
   }
 
   // --- INTERFAZ / RENDERIZADO ---
@@ -549,7 +850,7 @@
       const nameInput = card.querySelector(".player-name-input");
       nameInput.addEventListener("change", (e) => {
         player.name = e.target.value.trim() || "Jugador";
-        saveState();
+        saveState({ player });
         renderActiveTab();
       });
 
@@ -565,7 +866,7 @@
         player.url = newVal;
         player.isManual = false;
         await updatePlayer(player, true);
-        saveState();
+        saveState({ player });
         updatePlayerCardUI(player);
         renderActiveTab();
       };
@@ -583,7 +884,7 @@
           : (player.url || encodeCollection({ owned: {} }));
         player.url = ownLink;
         linkInput.value = ownLink;
-        saveState();
+        saveState({ player });
         try {
           await navigator.clipboard.writeText(ownLink);
           showToast(`📋 ¡Link de ${player.name} copiado!`);
@@ -1049,7 +1350,7 @@
     player.isLive = false;
 
     await updatePlayer(player, false);
-    saveState();
+    saveState({ player });
     renderLobby();
     renderActiveTab();
 
@@ -1197,7 +1498,7 @@
     player.isLive = false;
 
     await updatePlayer(player, false);
-    saveState();
+    saveState({ player });
     renderLobby();
     renderActiveTab();
 
@@ -1290,7 +1591,7 @@
     };
     await updatePlayer(newPlayer, false);
     state.players.push(newPlayer);
-    saveState();
+    saveState({ player: newPlayer });
     renderLobby();
     renderActiveTab();
 
@@ -1374,13 +1675,53 @@
       saveLockerModalToPlayer(false);
     });
 
-    // Compartir Sala por URL
+    // Cambiar o crear Sala en Vivo
+    document.getElementById("btnRoomSyncStatus")?.addEventListener("click", () => {
+      const currentCode = activeRoomId || "";
+      const input = prompt(
+        `Estás en la sala en vivo #${currentCode}.\n\n` +
+        `• Escribe otro código de sala (ej. escuadron-1) para unirte a ella.\n` +
+        `• Escribe NUEVA para crear una sala nueva con tus jugadores actuales.`,
+        currentCode
+      );
+      if (input === null) return;
+      const trimmed = input.trim();
+      if (!trimmed || trimmed === currentCode) return;
+
+      if (trimmed.toUpperCase() === "NUEVA") {
+        const newId = generateRoomId();
+        connectToRoom(newId, true);
+        showToast(`🟢 ¡Nueva sala #${newId} creada! Compártela con el botón Compartir Sala.`);
+        return;
+      }
+
+      const normalized = trimmed.replace(/^#?(?:sala=)?/i, "").replace(/[^a-zA-Z0-9_-]/g, "-");
+      if (!isValidRoomId(normalized)) {
+        showToast("⚠️ El código de sala debe tener entre 4 y 40 letras, números o guiones.");
+        return;
+      }
+      connectToRoom(normalized, false);
+      showToast(`🔄 Conectando a la sala #${normalized}...`);
+    });
+
+    // Detectar cambios manuales en el hash de la URL (#sala=...)
+    window.addEventListener("hashchange", () => {
+      const hashRoomId = extractRoomIdFromHash();
+      if (hashRoomId && hashRoomId !== activeRoomId) {
+        connectToRoom(hashRoomId, false);
+      }
+    });
+
+    // Compartir Sala por URL (en vivo con Firebase)
     document.getElementById("btnShareRoom")?.addEventListener("click", () => {
+      if (cloudRoomReady) {
+        syncFullRoomToCloud();
+      }
       let shareUrl = getShareableRoomUrl();
       navigator.clipboard.writeText(shareUrl).then(() => {
-        showToast("¡Enlace de la sala copiado! Tus amigos verán la sala completa al abrirlo.");
+        showToast("🟢 ¡Link de Sala en Vivo copiado! Lo que edite cualquiera se reflejará al instante.");
       }).catch(() => {
-        prompt("Copia este enlace para compartir la sala con tus amigos:", shareUrl);
+        prompt("Copia este enlace para compartir la sala en vivo con tus amigos:", shareUrl);
       });
     });
   }

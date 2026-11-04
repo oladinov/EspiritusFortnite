@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Organizador de Espíritus Fortnite — Intercambios de Sala (Cap. 7 Minitemporada)</title>
-  <link rel="stylesheet" href="style.css?v=c7ms.3">
+  <link rel="stylesheet" href="style.css?v=c7ms.4">
 </head>
 <body>
 
@@ -18,6 +18,10 @@
       </div>
     </div>
     <div class="header-actions">
+      <button type="button" class="room-sync-badge" id="btnRoomSyncStatus" title="Sala sincronizada en tiempo real. Haz clic para cambiar de sala o crear una nueva.">
+        <span class="room-sync-dot is-connecting" id="roomSyncDot"></span>
+        <span id="roomSyncLabel">Conectando sala...</span>
+      </button>
       <button class="btn btn-primary btn-sm" id="btnShareRoom">🔗 Compartir Sala</button>
     </div>
   </header>
@@ -108,7 +112,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="db.js?v=c7ms.3"></script>
-  <script src="app.js?v=c7ms.3"></script>
+  <script src="db.js?v=c7ms.4"></script>
+  <script src="app.js?v=c7ms.4"></script>
 </body>
 </html>
