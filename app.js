@@ -16,20 +16,61 @@
     return window.location.href.split("#")[0].split("?")[0];
   }
 
-  // Clave para guardar en LocalStorage (Temporada actual: Cap. 7 Minitemporada)
-  const STORAGE_KEY = "fortnite_sprites_players_c7ms_v1";
+  // --- CATÁLOGO DE AVATARES DISPONIBLES (Capítulo 7: Minitemporada + Bóveda C7S4) ---
+  function getAvatarCatalog() {
+    const list = [];
+    const seen = new Set();
 
-  // Jugadores iniciales por defecto (Cap. 7 Minitemporada - v5)
+    // 1. Minitemporada actual
+    (DB.sprites || []).forEach(s => {
+      const normCell = (DB.cells || []).find(c => c.spriteKey === s.key && c.variantKey === 'NORMAL')
+        || (DB.cells || []).find(c => c.spriteKey === s.key);
+      const img = normCell?.imageUrl || (normCell?.image ? `https://spritelocker.com${normCell.image}` : '');
+      list.push({
+        key: s.key,
+        name: s.name_es || s.name_en || s.key,
+        img,
+        season: "Minitemporada actual",
+        seasonKey: "c7ms"
+      });
+      seen.add(s.key);
+    });
+
+    // 2. Bóveda Cap. 7 Temp. 4
+    const vaultC7S4 = DB.vault && DB.vault.c7s4 ? DB.vault.c7s4 : null;
+    if (vaultC7S4 && Array.isArray(vaultC7S4.sprites)) {
+      vaultC7S4.sprites.forEach(s => {
+        if (seen.has(s.key)) return;
+        const normCell = (vaultC7S4.cells || []).find(c => c.spriteKey === s.key && c.variantKey === 'NORMAL')
+          || (vaultC7S4.cells || []).find(c => c.spriteKey === s.key);
+        const img = normCell?.imageUrl || (normCell?.image ? `https://spritelocker.com${normCell.image}` : '');
+        list.push({
+          key: s.key,
+          name: s.name_es || s.name_en || s.key,
+          img,
+          season: "Bóveda Cap. 7 (T4)",
+          seasonKey: "c7s4"
+        });
+        seen.add(s.key);
+      });
+    }
+
+    return list;
+  }
+
+  function getAvatarInfo(avatarKey) {
+    const catalog = getAvatarCatalog();
+    if (!avatarKey) return catalog[0] || null;
+    return catalog.find(a => a.key === avatarKey) || catalog[0] || null;
+  }
+
+  // Jugadores iniciales por defecto: Sala inicial limpia con un solo jugador editable
   const DEFAULT_PLAYERS = [
     {
       id: "p1",
-      name: "Canito",
-      url: `${getOwnBaseUrl()}#c=5.313jAAAAAAAAAAAAAAAAAAAA`
-    },
-    {
-      id: "p2",
-      name: "Roberto",
-      url: `${getOwnBaseUrl()}#c=5.dQcMAAAAAAAAAAAAAAAAAAAA`
+      name: "Jugador 1",
+      avatar: "HALFPEELD",
+      url: `${getOwnBaseUrl()}#c=5.AAAAAAAAAAAAAAAAAAAA`
     }
   ];
 
@@ -472,6 +513,7 @@
     let simpleList = state.players.map(p => ({
       n: p.name,
       u: p.url,
+      a: p.avatar || "HALFPEELD",
       m: p.isManual ? 1 : 0
     }));
     try {
@@ -498,6 +540,7 @@
           return list.map(item => ({
             id: "p_" + Math.random().toString(36).substr(2, 9),
             name: item.n || "Jugador",
+            avatar: item.a || "HALFPEELD",
             url: item.u || "",
             isManual: !!item.m
           }));
@@ -514,6 +557,7 @@
     let payload = state.players.map(p => ({
       id: p.id,
       name: p.name,
+      avatar: p.avatar || "HALFPEELD",
       url: p.url,
       isManual: !!p.isManual
     }));
@@ -531,6 +575,7 @@
       map[safeId] = {
         id: safeId,
         name: String(p.name || "Jugador").slice(0, 60),
+        avatar: String(p.avatar || "HALFPEELD").slice(0, 40),
         url: String(p.url || ""),
         isManual: Boolean(p.isManual),
         order: idx
@@ -568,6 +613,7 @@
           [safeId]: {
             id: safeId,
             name: String(player.name || "Jugador").slice(0, 60),
+            avatar: String(player.avatar || "HALFPEELD").slice(0, 40),
             url: String(player.url || ""),
             isManual: Boolean(player.isManual),
             order: idx >= 0 ? idx : state.players.length
@@ -623,7 +669,7 @@
 
     const hasAnyDiff = !sameStructure || entries.some((item, i) => {
       const cur = state.players[i];
-      return !cur || cur.name !== item.name || cur.url !== item.url || Boolean(cur.isManual) !== Boolean(item.isManual);
+      return !cur || cur.name !== item.name || cur.url !== item.url || (cur.avatar || "HALFPEELD") !== (item.avatar || "HALFPEELD") || Boolean(cur.isManual) !== Boolean(item.isManual);
     });
 
     if (!hasAnyDiff) return;
@@ -635,15 +681,17 @@
         const local = state.players[i];
         const urlChanged = local.url !== (remote.url || "");
         const nameChanged = local.name !== (remote.name || "Jugador");
+        const avatarChanged = (local.avatar || "HALFPEELD") !== (remote.avatar || "HALFPEELD");
 
         local.name = remote.name || "Jugador";
+        local.avatar = remote.avatar || "HALFPEELD";
         local.url = remote.url || "";
         local.isManual = Boolean(remote.isManual);
 
         if (urlChanged) {
           await updatePlayer(local, true);
         }
-        if (urlChanged || nameChanged) {
+        if (urlChanged || nameChanged || avatarChanged) {
           updatePlayerCardUI(local);
           const card = document.getElementById(`card_${local.id}`);
           const nameInput = card?.querySelector(".player-name-input");
@@ -664,6 +712,7 @@
     state.players = entries.map(item => ({
       id: item.id,
       name: item.name || "Jugador",
+      avatar: item.avatar || "HALFPEELD",
       url: item.url || "",
       isManual: Boolean(item.isManual),
       data: prevById[item.id]?.data || null,
@@ -766,6 +815,7 @@
     state.players = rawList.map(p => ({
       id: p.id || "p_" + Math.random().toString(36).substr(2, 9),
       name: p.name || "Jugador",
+      avatar: p.avatar || "HALFPEELD",
       url: p.url || "",
       isManual: !!p.isManual,
       data: null,
@@ -815,9 +865,21 @@
         ? `⚠️ Enlace de Cap. 7 Temp. 4 (Bóveda: ${player.data.vaultedCount}/162). Actualiza el link para la Minitemporada.`
         : "";
 
+      const isDefaultPlaceholderName = /^Jugador\s*\d*$/i.test(player.name.trim());
+      const avatarInfo = getAvatarInfo(player.avatar);
+
       card.innerHTML = `
         <div class="player-card-header">
-          <input type="text" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Nombre del jugador" data-id="${player.id}">
+          <div class="player-identity-group">
+            <button type="button" class="player-avatar-btn btn-change-avatar" data-id="${player.id}" title="Cambiar avatar de ${escapeHtml(player.name)}">
+              ${avatarInfo?.img ? `<img src="${escapeHtml(avatarInfo.img)}" alt="${escapeHtml(avatarInfo.name)}" class="player-avatar-img" referrerpolicy="no-referrer">` : `<span class="player-avatar-fallback">👻</span>`}
+              <span class="player-avatar-edit-badge" title="Cambiar">✏️</span>
+            </button>
+            <div class="player-name-wrapper">
+              <input type="text" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Escribe tu nombre" data-id="${player.id}">
+              ${isDefaultPlaceholderName ? `<div class="player-name-hint-ribbon">✍️ Haz clic para poner tu nombre</div>` : ''}
+            </div>
+          </div>
           <div class="player-header-badges">
             ${player.changeBadge ? `<span class="badge-change">${player.changeBadge}</span>` : ''}
             <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Sin Link' : `${count}/${totalC} (${pct}%)`}</span>
@@ -851,7 +913,13 @@
       nameInput.addEventListener("change", (e) => {
         player.name = e.target.value.trim() || "Jugador";
         saveState({ player });
+        renderLobby();
         renderActiveTab();
+      });
+
+      // Evento: Abrir Selector de Avatar
+      card.querySelector(".btn-change-avatar")?.addEventListener("click", () => {
+        openAvatarModal(player.id);
       });
 
       // Evento: Editar Casillero
@@ -937,6 +1005,15 @@
 
     const count = player.data ? player.data.ownedCount : 0;
     const pct = player.data ? player.data.percentage : 0;
+
+    const avatarBtn = card.querySelector(".player-avatar-btn");
+    const avatarInfo = getAvatarInfo(player.avatar);
+    if (avatarBtn) {
+      avatarBtn.innerHTML = `
+        ${avatarInfo?.img ? `<img src="${escapeHtml(avatarInfo.img)}" alt="${escapeHtml(avatarInfo.name)}" class="player-avatar-img" referrerpolicy="no-referrer">` : `<span class="player-avatar-fallback">👻</span>`}
+        <span class="player-avatar-edit-badge" title="Cambiar">✏️</span>
+      `;
+    }
 
     const badge = card.querySelector(`.stats-badge-${player.id}`);
     if (badge) {
@@ -1578,11 +1655,91 @@
       .replace(/'/g, "&#039;");
   }
 
+  // --- MODAL SELECTOR DE AVATAR ---
+  let avatarPickerPlayerId = null;
+
+  function renderAvatarGrid() {
+    const gridEl = document.getElementById("avatarGrid");
+    if (!gridEl) return;
+
+    const player = state.players.find(p => p.id === avatarPickerPlayerId);
+    const currentAvatarKey = player?.avatar || "HALFPEELD";
+
+    const q = (document.getElementById("avatarSearchInput")?.value || "").trim().toLowerCase();
+    const seasonFilter = document.getElementById("avatarSeasonFilter")?.value || "all";
+
+    const catalog = getAvatarCatalog();
+    const filtered = catalog.filter(item => {
+      if (seasonFilter !== "all" && item.seasonKey !== seasonFilter) return false;
+      if (q && !item.name.toLowerCase().includes(q)) return false;
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      gridEl.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">No se encontraron avatares con ese nombre.</div>`;
+      return;
+    }
+
+    gridEl.innerHTML = filtered.map(item => {
+      const isSelected = item.key === currentAvatarKey;
+      return `
+        <div class="avatar-option-card ${isSelected ? 'is-selected' : ''}" data-key="${escapeHtml(item.key)}">
+          ${isSelected ? `<span class="avatar-option-badge-selected">✓ Actual</span>` : ''}
+          <div class="avatar-option-frame">
+            <img src="${escapeHtml(item.img)}" alt="${escapeHtml(item.name)}" class="avatar-option-img" loading="lazy" referrerpolicy="no-referrer">
+          </div>
+          <div class="avatar-option-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</div>
+          <div class="avatar-option-season">${escapeHtml(item.season)}</div>
+        </div>
+      `;
+    }).join("");
+
+    gridEl.querySelectorAll(".avatar-option-card").forEach(cardEl => {
+      cardEl.addEventListener("click", () => {
+        const key = cardEl.getAttribute("data-key");
+        if (!key || !player) return;
+        player.avatar = key;
+        saveState({ player });
+        updatePlayerCardUI(player);
+        document.getElementById("avatarDialog")?.close();
+        const avatarInfo = getAvatarInfo(key);
+        showToast(`🎭 ¡Avatar cambiado a "${avatarInfo?.name || key}"!`);
+      });
+    });
+  }
+
+  function openAvatarModal(playerId) {
+    const player = state.players.find(p => p.id === playerId);
+    if (!player) return;
+    avatarPickerPlayerId = playerId;
+
+    const titleEl = document.getElementById("avatarDialogTitle");
+    if (titleEl) {
+      titleEl.innerHTML = `<span>🎭</span> Elige tu Avatar para <strong>${escapeHtml(player.name)}</strong>`;
+    }
+
+    const searchInput = document.getElementById("avatarSearchInput");
+    if (searchInput) searchInput.value = "";
+    const seasonFilter = document.getElementById("avatarSeasonFilter");
+    if (seasonFilter) seasonFilter.value = "all";
+
+    renderAvatarGrid();
+
+    const dialog = document.getElementById("avatarDialog");
+    if (dialog && typeof dialog.showModal === "function") {
+      dialog.showModal();
+    }
+  }
+
   // Crear nuevo jugador (con casillero 0/24 por defecto para que entre al grupo sin tener link)
   async function createNewPlayer(openVisualLocker = false) {
+    const defaultAvatars = ["HALFPEELD", "RE-PETE", "BARRY OFISH", "WAYFINDER", "CHESTER", "KELPER", "EXMARKS", "TRANSPONDER SNAIL", "LIL FLACKO", "PLUNDARRGH"];
+    const avatarChoice = defaultAvatars[state.players.length % defaultAvatars.length] || "HALFPEELD";
+
     const newPlayer = {
       id: "p_" + Math.random().toString(36).substr(2, 9),
-      name: "Amigo " + (state.players.length + 1),
+      name: "Jugador " + (state.players.length + 1),
+      avatar: avatarChoice,
       url: encodeCollection({ owned: {} }),
       isManual: true,
       data: null,
@@ -1598,7 +1755,7 @@
     if (openVisualLocker) {
       openLockerModal(newPlayer.id);
     } else {
-      showToast(`➕ ¡${newPlayer.name} unido al grupo! Edita su casillero o pega su link.`);
+      showToast(`➕ ¡${newPlayer.name} añadido a la sala! Edita su nombre o casillero.`);
     }
   }
 
@@ -1619,10 +1776,31 @@
       createNewPlayer(false);
     });
 
-    // Añadir amigo sin link y abrir su casillero visual directamente
-    document.getElementById("btnAddGuestPlayer")?.addEventListener("click", () => {
-      createNewPlayer(true);
+    // Controles del Dialog Selector de Avatar
+    const avatarDialog = document.getElementById("avatarDialog");
+    if (avatarDialog && !("closedBy" in HTMLDialogElement.prototype)) {
+      avatarDialog.addEventListener("click", (event) => {
+        if (event.target !== avatarDialog) return;
+        const rect = avatarDialog.getBoundingClientRect();
+        const isDialogContent = (
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width
+        );
+        if (isDialogContent) return;
+        avatarDialog.close();
+      });
+    }
+
+    document.getElementById("avatarDialogClose")?.addEventListener("click", () => {
+      avatarDialog?.close();
     });
+    document.getElementById("btnAvatarCancel")?.addEventListener("click", () => {
+      avatarDialog?.close();
+    });
+    document.getElementById("avatarSearchInput")?.addEventListener("input", renderAvatarGrid);
+    document.getElementById("avatarSeasonFilter")?.addEventListener("change", renderAvatarGrid);
 
     // Controles del Dialog Editor Visual de Casillero
     const lockerDialog = document.getElementById("lockerDialog");

@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Organizador de Espíritus Fortnite — Intercambios de Sala (Cap. 7 Minitemporada)</title>
-  <link rel="stylesheet" href="style.css?v=c7ms.4">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css?v=c7ms.5">
 </head>
 <body>
 
@@ -36,7 +37,6 @@
           <p class="panel-desc">Edita el casillero de cada jugador o copia y pega su link para organizar los intercambios.</p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button class="btn btn-secondary btn-sm" id="btnAddGuestPlayer" title="Añadir un amigo y abrir su casillero">Añadir Amigo</button>
           <button class="btn btn-primary btn-sm" id="btnAddPlayer">➕ Añadir Jugador</button>
         </div>
       </div>
@@ -105,6 +105,43 @@
     </div>
   </dialog>
 
+  <!-- Modal Selector de Avatar del Jugador -->
+  <dialog id="avatarDialog" closedby="any" class="avatar-dialog" aria-labelledby="avatarDialogTitle">
+    <div class="avatar-dialog-inner">
+      <div class="modal-header">
+        <div>
+          <h3 id="avatarDialogTitle" style="font-size: 1.1rem; color: #ffd070; display: flex; align-items: center; gap: 0.5rem;">
+            <span>🎭</span> Elige tu Avatar de Jugador
+          </h3>
+          <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem;">
+            Selecciona cualquier espíritu del Capítulo 7 (Minitemporada o Bóveda T4). Esto es tu <strong>icono de perfil</strong> en la sala.
+          </p>
+        </div>
+        <button type="button" class="modal-close" id="avatarDialogClose" aria-label="Cerrar">&times;</button>
+      </div>
+
+      <div class="avatar-toolbar">
+        <input type="search" id="avatarSearchInput" class="locker-filter-input" placeholder="🔎 Buscar por nombre de espíritu (ej. Bananin, Gatisoro, Klombo, Arbusto)...">
+        <select id="avatarSeasonFilter" class="locker-filter-select">
+          <option value="all">🌟 Todos los espíritus del Cap. 7 (40)</option>
+          <option value="c7ms">✨ Minitemporada actual (13)</option>
+          <option value="c7s4">🗄️ Bóveda Cap. 7 Temp. 4 (27)</option>
+        </select>
+      </div>
+
+      <div class="modal-body avatar-grid-body">
+        <div id="avatarGrid" class="avatar-grid"></div>
+      </div>
+
+      <div class="avatar-footer">
+        <div class="avatar-footer-hint">
+          💡 Tu avatar no altera los espíritus que tienes en tu casillero; solo te identifica en la sala.
+        </div>
+        <button type="button" class="btn btn-secondary btn-sm" id="btnAvatarCancel">Cancelar</button>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Toast de notificación para copiado -->
   <div class="toast" id="toast">
     <span>📋</span>
@@ -112,7 +149,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="db.js?v=c7ms.4"></script>
-  <script src="app.js?v=c7ms.4"></script>
+  <script src="db.js?v=c7ms.5"></script>
+  <script src="app.js?v=c7ms.5"></script>
 </body>
 </html>

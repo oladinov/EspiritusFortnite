@@ -288,6 +288,112 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 0.65rem;
+}
+
+.player-identity-group {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex: 1;
+  min-width: 0;
+}
+
+/* Avatar del jugador: marco distintivo tipo medallón/perfil */
+.player-avatar-btn {
+  position: relative;
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #2a3d7c 0%, #0d163d 70%, #060a1e 100%);
+  border: 2px solid #ffbe2e;
+  box-shadow:
+    inset 0 0 10px rgba(255, 190, 46, 0.4),
+    0 3px 10px rgba(0, 0, 0, 0.6),
+    0 0 12px rgba(63, 208, 255, 0.35);
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.player-avatar-btn:hover {
+  transform: scale(1.08);
+  border-color: #ffd070;
+  box-shadow:
+    inset 0 0 14px rgba(255, 208, 112, 0.6),
+    0 4px 14px rgba(0, 0, 0, 0.8),
+    0 0 18px rgba(255, 190, 46, 0.6);
+}
+
+.player-avatar-btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+.player-avatar-img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  border-radius: 50%;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+.player-avatar-fallback {
+  font-size: 1.6rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+.player-avatar-edit-badge {
+  position: absolute;
+  bottom: -3px;
+  right: -3px;
+  background: #111a47;
+  border: 1.5px solid #ffbe2e;
+  color: #ffd070;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  font-size: 0.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.player-name-wrapper {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Banner / Cinta temporal invitando a poner nombre */
+.player-name-hint-ribbon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #ffd070;
+  background: rgba(255, 190, 46, 0.15);
+  border: 1px dashed rgba(255, 190, 46, 0.5);
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  margin-top: 0.2rem;
+  width: fit-content;
+  animation: pulseHint 2s infinite ease-in-out;
+}
+
+@keyframes pulseHint {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.55; }
 }
 
 .player-header-badges {
@@ -368,7 +474,7 @@ body {
   font-weight: 800;
   padding: 0.2rem 0.4rem;
   border-radius: var(--radius-sm);
-  width: 70%;
+  width: 100%;
 }
 
 .player-name-input:focus {
@@ -1082,4 +1188,150 @@ body {
 .btn-spirit-action.secondary:hover {
   background: var(--accent-cyan);
   color: #041936;
+}
+
+/* --- MODAL SELECTOR DE AVATAR --- */
+.avatar-dialog {
+  margin: auto;
+  padding: 0;
+  border: 1px solid var(--accent-gold);
+  border-radius: var(--radius-lg);
+  background: #090f2b;
+  color: var(--text-primary);
+  max-width: 820px;
+  width: min(95vw, 820px);
+  max-height: 88vh;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.9), 0 0 25px rgba(255, 190, 46, 0.25);
+}
+
+.avatar-dialog::backdrop {
+  background-color: rgba(3, 6, 20, 0.85);
+  backdrop-filter: blur(5px);
+}
+
+.avatar-dialog-inner {
+  display: flex;
+  flex-direction: column;
+  max-height: 88vh;
+}
+
+.avatar-toolbar {
+  padding: 0.85rem 1.25rem;
+  background: rgba(6, 10, 28, 0.8);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.avatar-grid-body {
+  padding: 1.25rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.avatar-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.85rem;
+}
+
+/* Tarjeta de avatar en el modal con look de medallón */
+.avatar-option-card {
+  background: rgba(12, 19, 52, 0.7);
+  border: 1px solid rgba(120, 170, 255, 0.25);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.16s ease;
+  user-select: none;
+  position: relative;
+}
+
+.avatar-option-card:hover {
+  transform: translateY(-3px);
+  border-color: #ffd070;
+  background: rgba(22, 33, 80, 0.9);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5), 0 0 14px rgba(255, 190, 46, 0.3);
+}
+
+.avatar-option-card.is-selected {
+  border-color: #ffd070;
+  background: radial-gradient(circle, rgba(255, 190, 46, 0.18) 0%, rgba(12, 19, 52, 0.9) 100%);
+  box-shadow: 0 0 18px rgba(255, 190, 46, 0.5);
+}
+
+.avatar-option-badge-selected {
+  position: absolute;
+  top: 0.35rem;
+  right: 0.35rem;
+  background: #ffbe2e;
+  color: #111a47;
+  font-size: 0.65rem;
+  font-weight: 900;
+  border-radius: 99px;
+  padding: 0.1rem 0.4rem;
+}
+
+/* Marco circular del espíritu */
+.avatar-option-frame {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2a3d7c 0%, #0c1538 75%);
+  border: 2px solid rgba(255, 190, 46, 0.6);
+  box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+.avatar-option-card:hover .avatar-option-frame {
+  border-color: #ffd070;
+  box-shadow: inset 0 0 10px rgba(255, 190, 46, 0.4), 0 0 12px rgba(255, 190, 46, 0.4);
+}
+
+.avatar-option-img {
+  width: 82%;
+  height: 82%;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+}
+
+.avatar-option-name {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+  margin-bottom: 0.2rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.avatar-option-season {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.avatar-footer {
+  padding: 0.85rem 1.25rem;
+  border-top: 1px solid var(--border-color);
+  background: rgba(8, 13, 36, 0.95);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.avatar-footer-hint {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
 }
