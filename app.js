@@ -16,7 +16,35 @@
     return window.location.href.split("#")[0].split("?")[0];
   }
 
-  // --- CATÁLOGO DE AVATARES DISPONIBLES (Capítulo 7: Minitemporada + Bóveda C7S4) ---
+  // --- CATÁLOGO DE AVATARES DISPONIBLES (Capítulo 7: Minitemporada + Bóveda C7S4 + Bóveda C7S3) ---
+  const C7S3_AVATARS = [
+    { key: "C7S3_WATER", name: "Agua (Water)", img: "https://spritelocker.com/sprites/c7s3/water_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_EARTH", name: "Tierra (Earth)", img: "https://spritelocker.com/sprites/c7s3/earth_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_FIRE", name: "Fuego (Fire)", img: "https://spritelocker.com/sprites/c7s3/fire_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_FISHY", name: "Pescadito (Fishy)", img: "https://spritelocker.com/sprites/c7s3/fishy_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_AIR", name: "Aire (Air)", img: "https://spritelocker.com/sprites/c7s3/air_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_DUCK", name: "Pato (Duck)", img: "https://spritelocker.com/sprites/c7s3/duck_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_GHOST", name: "Fantasma (Ghost)", img: "https://spritelocker.com/sprites/c7s3/ghost_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_DEMON", name: "Demonio (Demon)", img: "https://spritelocker.com/sprites/c7s3/demon_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_KING", name: "Rey (King)", img: "https://spritelocker.com/sprites/c7s3/king_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_AURA", name: "Aura (Drifter)", img: "https://spritelocker.com/sprites/c7s3/drifter_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_STRIKER", name: "Delantero (Striker)", img: "https://spritelocker.com/sprites/c7s3/soccer_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_DREAM", name: "Sueño (Dream)", img: "https://spritelocker.com/sprites/c7s3/dream_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_PUNK", name: "Punk", img: "https://spritelocker.com/sprites/c7s3/punk_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_BOSS", name: "Jefe (Boss)", img: "https://spritelocker.com/sprites/c7s3/boss_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_SEVEN", name: "Los Siete (Seven)", img: "https://spritelocker.com/sprites/c7s3/seven_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_PEELY", name: "Bananín Espía (Peeky Peely)", img: "https://spritelocker.com/sprites/c7s3/peely_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_LLAMA", name: "Llama de Botín (Lootin' Llama)", img: "https://spritelocker.com/sprites/c7s3/llama_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_BATMAN", name: "Batman", img: "https://spritelocker.com/sprites/c7s3/fossilmeal_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_GRIMREAPER", name: "Parca (Grim Reaper)", img: "https://spritelocker.com/sprites/c7s3/grimreaper_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_ZEROPOINT", name: "Punto Cero (Zero Point)", img: "https://spritelocker.com/sprites/c7s3/zeropoint_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_BURNTPEANUT", name: "Cacahuate Quemado (Burnt Peanut)", img: "https://spritelocker.com/sprites/c7s3/theburntpeanut_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_VINIJR", name: "Vini Jr.", img: "https://spritelocker.com/sprites/c7s3/cokeparmesan_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_POLLO", name: "Pollo", img: "https://spritelocker.com/sprites/c7s3/companystargazer_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_JOHNWICK", name: "John Wick", img: "https://spritelocker.com/sprites/c7s3/fillergrunt_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" },
+    { key: "C7S3_IRONMOUSE", name: "Ironmouse", img: "https://spritelocker.com/sprites/c7s3/pedicureantacid_basic.webp", season: "Cap. 7 Temp. 3", seasonKey: "c7s3" }
+  ];
+
   function getAvatarCatalog() {
     const list = [];
     const seen = new Set();
@@ -54,6 +82,13 @@
         seen.add(s.key);
       });
     }
+
+    // 3. Bóveda Cap. 7 Temp. 3
+    C7S3_AVATARS.forEach(s => {
+      if (seen.has(s.key)) return;
+      list.push(s);
+      seen.add(s.key);
+    });
 
     return list;
   }
