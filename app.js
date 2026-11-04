@@ -1,5 +1,5 @@
 // =============================================================================
-//  FORTNITE ESPÍRITUS - GESTOR DE INTERCAMBIOS DE SALA (SPRITE LOCKER)
+//  FORTNITE ESPÍRITUS - GESTOR DE INTERCAMBIOS DE SALA
 // =============================================================================
 
 (function () {
@@ -7,6 +7,13 @@
   if (!DB) {
     console.error("No se encontró SPRITES_DB en window.");
     return;
+  }
+
+  function getOwnBaseUrl() {
+    if (window.location.origin && window.location.origin !== "null") {
+      return window.location.origin + window.location.pathname;
+    }
+    return window.location.href.split("#")[0].split("?")[0];
   }
 
   // Clave para guardar en LocalStorage (Temporada actual: Cap. 7 Minitemporada)
@@ -17,12 +24,12 @@
     {
       id: "p1",
       name: "Canito",
-      url: "https://spritelocker.com/compare#vs=5.313jAAAAAAAAAAAAAAAAAAAA"
+      url: `${getOwnBaseUrl()}#c=5.313jAAAAAAAAAAAAAAAAAAAA`
     },
     {
       id: "p2",
       name: "Roberto",
-      url: "https://spritelocker.com/#c=5.dQcMAAAAAAAAAAAAAAAAAAAA"
+      url: `${getOwnBaseUrl()}#c=5.dQcMAAAAAAAAAAAAAAAAAAAA`
     }
   ];
 
@@ -133,7 +140,7 @@
     }
 
     let ver = DB.shareVersion || "5";
-    return `https://spritelocker.com/#c=${ver}.` + b64UrlEncode(bytes);
+    return `${getOwnBaseUrl()}#c=${ver}.` + b64UrlEncode(bytes);
   }
 
   function decodeCollection(codeStr) {
@@ -322,6 +329,11 @@
       }
 
       player.data = decodeCollection(codeToDecode);
+      if (!player.data.isVaultedLink) {
+        player.url = encodeCollection(player.data);
+      } else {
+        player.url = `${getOwnBaseUrl()}#c=${player.data.rawCode}`;
+      }
       player.lastUpdated = new Date();
       player.error = null;
 
@@ -379,7 +391,7 @@
     try {
       let jsonStr = JSON.stringify(simpleList);
       let b64 = btoa(unescape(encodeURIComponent(jsonStr))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-      let base = window.location.origin + window.location.pathname;
+      let base = getOwnBaseUrl();
       return `${base}#room=${b64}`;
     } catch (e) {
       console.warn("Error generando enlace de sala:", e);
@@ -466,6 +478,7 @@
     for (let p of state.players) {
       await updatePlayer(p);
     }
+    saveState();
 
     if (state.players.length >= 2) {
       state.versusA = state.players[0].id;
@@ -506,7 +519,6 @@
           <input type="text" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Nombre del jugador" data-id="${player.id}">
           <div class="player-header-badges">
             ${player.changeBadge ? `<span class="badge-change">${player.changeBadge}</span>` : ''}
-            ${player.isLive ? `<span class="badge-live">🟢 LIVE</span>` : (player.isManual ? `<span class="badge-manual">✏️ MANUAL</span>` : '')}
             <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Sin Link' : `${count}/${totalC} (${pct}%)`}</span>
           </div>
         </div>
@@ -519,18 +531,17 @@
             <div class="progress-bar-fill progress-fill-${player.id}" style="width: ${pct}%;"></div>
           </div>
         </div>
-        <div class="quick-presets-bar">
-          <span class="quick-presets-label">¿Sin link?</span>
-          <button type="button" class="btn btn-locker-open btn-xs btn-open-locker" data-id="${player.id}" title="Abrir selector visual de espíritus en español">✏️ Casillero Manual</button>
-        </div>
-        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="O pega enlace de Sprite Locker (#vs=5..., #c=5... o ?p=)" data-id="${player.id}">
+        <button type="button" class="btn btn-edit-locker btn-open-locker" data-id="${player.id}" title="Abrir y editar el casillero de espíritus">
+          <span>✏️ Editar Casillero</span>
+        </button>
+        <input type="text" class="player-link-input" value="${escapeHtml(player.url)}" placeholder="Pega aquí el link del jugador (#c=5...)" data-id="${player.id}">
         <div class="player-meta-row">
           <span class="error-msg-${player.id}" style="color: ${player.error ? '#ff8585' : '#ffd070'};">${player.error ? escapeHtml(player.error) : escapeHtml(vaultedNote)}</span>
         </div>
         <div class="player-actions">
-          <button class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Pega el nuevo link de este jugador">📋 Pegar Link</button>
-          <button class="btn btn-secondary btn-sm btn-clear" data-id="${player.id}" title="Limpiar enlace">Limpiar</button>
-          <button class="btn btn-danger btn-sm btn-remove" data-id="${player.id}" title="Eliminar jugador">Eliminar</button>
+          <button type="button" class="btn btn-secondary btn-sm btn-copy" data-id="${player.id}" title="Copiar el link de este jugador">📋 Copiar Link</button>
+          <button type="button" class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Pegar el link de este jugador">📥 Pegar Link</button>
+          <button type="button" class="btn btn-danger btn-sm btn-remove" data-id="${player.id}" title="Eliminar jugador de la sala">Eliminar Jugador</button>
         </div>
       `;
 
@@ -542,7 +553,7 @@
         renderActiveTab();
       });
 
-      // Evento: Casillero Manual
+      // Evento: Editar Casillero
       card.querySelector(".btn-open-locker").addEventListener("click", () => {
         openLockerModal(player.id);
       });
@@ -565,31 +576,45 @@
         setTimeout(() => handleLinkChange(linkInput.value), 50);
       });
 
+      // Botón: Copiar link propio
+      card.querySelector(".btn-copy").addEventListener("click", async () => {
+        const ownLink = player.data
+          ? encodeCollection(player.data)
+          : (player.url || encodeCollection({ owned: {} }));
+        player.url = ownLink;
+        linkInput.value = ownLink;
+        saveState();
+        try {
+          await navigator.clipboard.writeText(ownLink);
+          showToast(`📋 ¡Link de ${player.name} copiado!`);
+        } catch (_) {
+          prompt(`Copia el link de ${player.name}:`, ownLink);
+        }
+      });
+
       // Botón: Pegar nuevo link
       card.querySelector(".btn-paste").addEventListener("click", async () => {
-        let manual = prompt(`Pega el nuevo enlace de Sprite Locker para ${player.name}:`, "");
-        if (manual !== null && manual.trim() !== "") {
-          linkInput.value = manual.trim();
-          await handleLinkChange(manual.trim());
+        let pasted = "";
+        if (navigator.clipboard && typeof navigator.clipboard.readText === "function") {
+          try {
+            pasted = (await navigator.clipboard.readText()) || "";
+          } catch (_) {
+            pasted = "";
+          }
+        }
+        if (!pasted.trim()) {
+          let manual = prompt(`Pega el link para ${player.name}:`, "");
+          if (manual !== null) pasted = manual;
+        }
+        if (pasted && pasted.trim() !== "") {
+          linkInput.value = pasted.trim();
+          await handleLinkChange(pasted.trim());
           card.classList.add("is-updated");
           setTimeout(() => card.classList.remove("is-updated"), 1200);
         }
       });
 
-      // Botón: Limpiar
-      card.querySelector(".btn-clear").addEventListener("click", () => {
-        player.url = "";
-        player.isManual = false;
-        linkInput.value = "";
-        player.data = null;
-        player.error = null;
-        player.changeBadge = null;
-        saveState();
-        updatePlayerCardUI(player);
-        renderActiveTab();
-      });
-
-      // Botón: Eliminar
+      // Botón: Eliminar Jugador
       card.querySelector(".btn-remove").addEventListener("click", () => {
         if (state.players.length <= 1) {
           showToast("Debe haber al menos un jugador en la sala.");
@@ -664,7 +689,7 @@
         <div class="panel" style="text-align: center; padding: 2.5rem;">
           <h3 style="color: #ffd070; margin-bottom: 0.5rem;">⚠️ Se necesitan al menos 2 jugadores con enlaces válidos</h3>
           <p style="color: var(--text-secondary); font-size: 0.9rem;">
-            Pega los enlaces de Sprite Locker en las tarjetas superiores para calcular la fila de intercambios.
+            Edita el casillero o pega los enlaces en las tarjetas superiores para calcular la fila de intercambios.
           </p>
         </div>
       `;
@@ -1177,12 +1202,11 @@
     renderActiveTab();
 
     if (copyForGroup) {
-      const shareLine = `${player.name}: ${encodedUrl}`;
       try {
-        await navigator.clipboard.writeText(shareLine);
-        showToast(`📋 ¡Código de ${player.name} copiado! Pégalo en WhatsApp o Discord.`);
+        await navigator.clipboard.writeText(encodedUrl);
+        showToast(`📋 ¡Link de ${player.name} copiado!`);
       } catch (_) {
-        prompt("Copia esta línea y envíala al grupo de WhatsApp o Discord:", shareLine);
+        prompt(`Copia el link de ${player.name}:`, encodedUrl);
       }
     } else {
       const dialog = document.getElementById("lockerDialog");
@@ -1273,7 +1297,7 @@
     if (openVisualLocker) {
       openLockerModal(newPlayer.id);
     } else {
-      showToast(`➕ ¡${newPlayer.name} unido al grupo! Usa Casillero Manual o pega su link.`);
+      showToast(`➕ ¡${newPlayer.name} unido al grupo! Edita su casillero o pega su link.`);
     }
   }
 
@@ -1334,6 +1358,14 @@
         delete lockerEditorState.owned[cell.key];
       }
       renderLockerGrid();
+    });
+    document.getElementById("btnLockerClear")?.addEventListener("click", () => {
+      lockerEditorState.owned = {};
+      lockerEditorState.mastered = {};
+      lockerEditorState.lost = {};
+      lockerEditorState.levels = {};
+      renderLockerGrid();
+      showToast("🧹 Casillero limpiado (0/24).");
     });
     document.getElementById("btnLockerCopyShare")?.addEventListener("click", () => {
       saveLockerModalToPlayer(true);

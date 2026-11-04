@@ -786,56 +786,46 @@ body {
   color: #fff;
 }
 
-/* --- SOLUCIÓN 2: PLANTILLAS RÁPIDAS Y BADGE MANUAL EN TARJETA --- */
-.badge-manual {
-  font-size: 0.68rem;
+/* --- BOTÓN PRINCIPAL DE EDITAR CASILLERO EN TARJETA --- */
+.btn-edit-locker {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  font-size: 0.88rem;
   font-weight: 800;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
-  background: rgba(255, 190, 46, 0.16);
-  color: #ffbe2e;
-  border: 1px solid rgba(255, 190, 46, 0.45);
-  border-radius: 99px;
-  padding: 0.15rem 0.45rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.quick-presets-bar {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.35rem;
-  background: rgba(15, 25, 68, 0.65);
-  border: 1px dashed rgba(120, 170, 255, 0.28);
   border-radius: var(--radius-sm);
-  padding: 0.45rem 0.55rem;
+  background: linear-gradient(180deg, #ffce4b 0%, #f59e0b 100%);
+  color: #1f1200;
+  border: 1px solid #ffe28a;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.55),
+    0 3px 0 #b46900,
+    0 6px 14px rgba(245, 158, 11, 0.28);
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, filter 0.12s ease;
 }
 
-.quick-presets-label {
-  font-size: 0.7rem;
-  font-weight: 800;
-  color: var(--text-secondary);
-  margin-right: 0.15rem;
+.btn-edit-locker:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    0 4px 0 #b46900,
+    0 8px 18px rgba(245, 158, 11, 0.4);
 }
 
-.btn-xs {
-  padding: 0.24rem 0.5rem;
-  font-size: 0.7rem;
-  border-radius: 5px;
-  text-transform: none;
-  font-weight: 700;
+.btn-edit-locker:active {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 1px 0 #b46900,
+    0 3px 8px rgba(245, 158, 11, 0.25);
 }
 
-.btn-locker-open {
-  background: linear-gradient(135deg, rgba(255, 190, 46, 0.22), rgba(255, 140, 26, 0.22));
-  color: #ffd070;
-  border-color: rgba(255, 190, 46, 0.5);
-}
-
-.btn-locker-open:hover {
-  background: linear-gradient(135deg, rgba(255, 190, 46, 0.38), rgba(255, 140, 26, 0.35));
-  color: #fff;
+.btn-edit-locker:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 /* --- SOLUCIÓN 1: DIALOG EDITOR VISUAL DE CASILLERO --- */

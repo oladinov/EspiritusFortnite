@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Organizador de Espíritus Fortnite — Intercambios de Sala (Cap. 7 Minitemporada)</title>
-  <link rel="stylesheet" href="style.css?v=c7ms.2">
+  <link rel="stylesheet" href="style.css?v=c7ms.3">
 </head>
 <body>
 
@@ -29,10 +29,10 @@
       <div class="panel-header">
         <div>
           <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
-          <p class="panel-desc">Pega el link de Sprite Locker de cada miembro o usa <strong>✏️ Casillero Manual</strong> si tu amigo no usa Sprite Locker.</p>
+          <p class="panel-desc">Edita el casillero de cada jugador o copia y pega su link para organizar los intercambios.</p>
         </div>
         <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button class="btn btn-secondary btn-sm" id="btnAddGuestPlayer" title="Añade un amigo sin link de Sprite Locker y abre su selector visual">✏️ Añadir Amigo sin Link</button>
+          <button class="btn btn-secondary btn-sm" id="btnAddGuestPlayer" title="Añadir un amigo y abrir su casillero">Añadir Amigo</button>
           <button class="btn btn-primary btn-sm" id="btnAddPlayer">➕ Añadir Jugador</button>
         </div>
       </div>
@@ -54,12 +54,12 @@
 
   </main>
 
-  <!-- Modal Editor Visual de Casillero (Para jugadores sin Sprite Locker) -->
+  <!-- Modal Editor Visual de Casillero -->
   <dialog id="lockerDialog" closedby="any" class="locker-dialog" aria-labelledby="lockerDialogTitle">
     <div class="locker-dialog-inner">
       <div class="modal-header">
         <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-          <h3 id="lockerDialogTitle" style="font-size: 1.05rem; color: #3fd0ff;">✏️ Casillero Manual:</h3>
+          <h3 id="lockerDialogTitle" style="font-size: 1.05rem; color: #3fd0ff;">✏️ Editar Casillero:</h3>
           <input type="text" id="lockerPlayerNameInput" class="locker-name-input" placeholder="Nombre del jugador">
           <span id="lockerCountBadge" class="player-stats-badge">0/24 (0%)</span>
         </div>
@@ -68,7 +68,7 @@
 
       <div class="locker-toolbar">
         <div class="locker-filters-row">
-          <input type="search" id="lockerSearchInput" class="locker-filter-input" placeholder="🔎 Buscar espíritu (ej. Plundarrgh, Dulces sueños, Caracol, Buscarrutas)...">
+          <input type="search" id="lockerSearchInput" class="locker-filter-input" placeholder="🔎 Buscar espíritu (ej. Bananin Huesudo, Plumitas, Saqueacofres, Buscarrutas)...">
           <select id="lockerVariantFilter" class="locker-filter-select">
             <option value="all">🎨 Todas las variantes (24)</option>
             <option value="NORMAL">Normal (13)</option>
@@ -93,7 +93,8 @@
           💡 Haz clic en cada espíritu para marcar si <strong>✅ Lo tiene</strong> o <strong>❌ Le falta</strong>.
         </div>
         <div class="locker-footer-actions">
-          <button type="button" class="btn btn-secondary btn-sm" id="btnLockerCopyShare" title="Si eres invitado, copia tu código y pégalo en el WhatsApp/Discord del grupo">📋 Copiar mi Código para el Grupo</button>
+          <button type="button" class="btn btn-danger btn-sm" id="btnLockerClear" title="Vaciar todos los espíritus del casillero">Limpiar</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnLockerCopyShare" title="Copiar el link del casillero de este jugador">📋 Copiar Link</button>
           <button type="button" class="btn btn-primary btn-sm" id="btnLockerSave">💾 Guardar en la Sala</button>
         </div>
       </div>
@@ -107,7 +108,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="db.js?v=c7ms.2"></script>
-  <script src="app.js?v=c7ms.2"></script>
+  <script src="db.js?v=c7ms.3"></script>
+  <script src="app.js?v=c7ms.3"></script>
 </body>
 </html>
