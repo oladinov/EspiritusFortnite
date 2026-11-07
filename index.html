@@ -5,56 +5,174 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Organizador de Espíritus Fortnite — Intercambios de Sala (Cap. 7 Minitemporada)</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="stylesheet" href="style.css?v=c7ms.5">
+  <link rel="stylesheet" href="style.css?v=c7ms.6">
 </head>
 <body>
 
   <!-- Encabezado Principal -->
   <header class="app-header">
     <div class="brand">
-      <span class="brand-icon">✨</span>
+      <span class="brand-icon" aria-hidden="true">✨</span>
       <div>
-        <h1 class="brand-title">Espíritus Fortnite</h1>
-        <div class="brand-subtitle">Organizador de Intercambios en Cadena · Cap. 7 Minitemporada</div>
+        <h1 class="brand-title" id="appMainHeading">Espíritus Fortnite</h1>
+        <div class="brand-subtitle" id="appSubtitle">Organizador de Intercambios en Cadena · Cap. 7 Minitemporada</div>
       </div>
     </div>
-    <div class="header-actions">
+
+    <!-- Acciones del Header en Modo Sala -->
+    <div class="header-actions" id="roomHeaderActions">
       <button type="button" class="room-sync-badge" id="btnRoomSyncStatus" title="Sala sincronizada en tiempo real. Haz clic para cambiar de sala o crear una nueva.">
         <span class="room-sync-dot is-connecting" id="roomSyncDot"></span>
         <span id="roomSyncLabel">Conectando sala...</span>
       </button>
-      <button class="btn btn-primary btn-sm" id="btnShareRoom">🔗 Compartir Sala</button>
+      <button type="button" class="btn btn-primary btn-sm" id="btnShareRoom">🔗 Compartir Sala</button>
+    </div>
+
+    <!-- Acciones del Header en Modo Casillero Personal Exclusivo -->
+    <div class="header-actions" id="personalHeaderActions" hidden>
+      <div class="room-sync-badge is-static" id="personalSyncBadge" title="Estado de sincronización de tu casillero personal">
+        <span class="room-sync-dot is-connecting" id="personalSyncDot"></span>
+        <span id="personalSyncLabel">Sincronizando casillero...</span>
+      </div>
+      <button type="button" class="btn btn-primary btn-sm" id="btnHeaderCopyPersonalLink">📋 Copiar Mi Link Personal</button>
+      <button type="button" class="btn btn-secondary btn-sm" id="btnBackToRoom" title="Ir a la sala grupal de intercambios">👥 Ir a Sala de Intercambios</button>
     </div>
   </header>
 
   <main class="container">
 
-    <!-- Panel de Sala / Jugadores -->
-    <section class="panel">
-      <div class="panel-header">
-        <div>
-          <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
-          <p class="panel-desc">Edita el casillero de cada jugador o copia y pega su link para organizar los intercambios.</p>
+    <!-- ===================================================================== -->
+    <!-- VISTA 1: MODO EXCLUSIVO DE CASILLERO PERSONAL (#casillero=...)        -->
+    <!-- ===================================================================== -->
+    <section id="personalLockerView" class="panel personal-locker-panel" hidden>
+      <div class="personal-hero">
+        <div class="personal-hero-top">
+          <div class="personal-identity">
+            <button type="button" class="player-avatar-btn personal-avatar-btn" id="btnPersonalAvatar" aria-label="Cambiar avatar de mi casillero">
+              <span class="player-avatar-fallback">👻</span>
+              <span class="player-avatar-edit-badge" aria-hidden="true">✏️</span>
+            </button>
+            <div class="personal-name-group">
+              <div class="personal-mode-pill">🎒 PÁGINA EXCLUSIVA DE MI CASILLERO PERSONAL</div>
+              <label for="personalPlayerNameInput" class="personal-field-label">Nombre del jugador</label>
+              <input
+                type="text"
+                id="personalPlayerNameInput"
+                class="personal-name-input"
+                placeholder="Escribe tu nombre o nick"
+                maxlength="60"
+                autocomplete="nickname"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+              >
+            </div>
+          </div>
+
+          <div class="personal-stats-card">
+            <div class="personal-stats-header">
+              <span class="personal-stats-title">Progreso de Colección</span>
+              <span id="personalCountBadge" class="player-stats-badge">0/24 (0%)</span>
+            </div>
+            <div class="progress-bar-bg personal-progress-bar">
+              <div id="personalProgressFill" class="progress-bar-fill" style="width: 0%;"></div>
+            </div>
+            <div class="personal-AutoSave-note" id="personalAutoSaveNote">
+              ☁️ Los cambios se guardan automáticamente y actualizan tus salas.
+            </div>
+          </div>
         </div>
-        <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-          <button class="btn btn-primary btn-sm" id="btnAddPlayer">➕ Añadir Jugador</button>
+
+        <div class="personal-link-bar">
+          <label for="personalLinkInput" class="personal-link-label">
+            🔗 <strong>Tu Link Personal</strong> (cópialo y pégalo para entrar a cualquier sala con tus espíritus):
+          </label>
+          <div class="personal-link-controls">
+            <input
+              type="text"
+              id="personalLinkInput"
+              class="player-link-input personal-link-input"
+              readonly
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
+            >
+            <button type="button" class="btn btn-primary btn-sm" id="btnPersonalCopyLink">📋 Copiar Link</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnPersonalReload" title="Recargar datos de este casillero desde la nube">🔄 Recargar</button>
+          </div>
         </div>
       </div>
 
-      <!-- Grid donde se renderizan las tarjetas de cada jugador -->
-      <div class="lobby-grid" id="lobbyGrid"></div>
+      <div class="locker-toolbar personal-locker-toolbar">
+        <div class="locker-filters-row">
+          <label for="personalSearchInput" class="visually-hidden">Buscar espíritu en tu casillero</label>
+          <input
+            type="search"
+            id="personalSearchInput"
+            class="locker-filter-input"
+            placeholder="🔎 Buscar espíritu (ej. Bananin Huesudo, Plumitas, Saqueacofres, Buscarrutas)..."
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+          >
+          <label for="personalVariantFilter" class="visually-hidden">Filtrar por variante</label>
+          <select id="personalVariantFilter" class="locker-filter-select">
+            <option value="all">🎨 Todas las variantes (24)</option>
+            <option value="NORMAL">Normal (13)</option>
+            <option value="JEWELED">Fortuna (11)</option>
+          </select>
+          <label for="personalStatusFilter" class="visually-hidden">Filtrar por estado en colección</label>
+          <select id="personalStatusFilter" class="locker-filter-select">
+            <option value="all">👁️ Todos (24)</option>
+            <option value="owned">✅ Solo los que TIENE</option>
+            <option value="missing">❌ Solo los que LE FALTAN</option>
+          </select>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPersonalMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar visibles</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPersonalUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Limpiar visibles</button>
+          <button type="button" class="btn btn-danger btn-sm" id="btnPersonalClearAll" title="Vaciar todos los espíritus de este casillero">🧹 Vaciar todo</button>
+        </div>
+      </div>
+
+      <div class="personal-grid-hint">
+        💡 Haz clic en cada espíritu para marcar si <strong>✅ Lo tienes</strong> o <strong>❌ Te falta</strong>. Todo cambio se sincroniza con tu link personal.
+      </div>
+
+      <div id="personalSpritesGrid" class="locker-sprites-grid personal-sprites-grid"></div>
     </section>
 
-    <!-- Navegación por Pestañas -->
-    <nav class="tabs-nav" aria-label="Modos de análisis">
-      <button class="tab-btn is-active" data-tab="chain">🤝 Fila de Compartir (Recomendado)</button>
-      <button class="tab-btn" data-tab="versus">⚔️ 1 vs 1 Detallado</button>
-      <button class="tab-btn" data-tab="missing">🔍 Faltantes del Escuadrón</button>
-      <button class="tab-btn" data-tab="vault">🗄️ Bóveda (C7S4)</button>
-    </nav>
+    <!-- ===================================================================== -->
+    <!-- VISTA 2: MODO SALA DE JUGADORES (#sala=...)                           -->
+    <!-- ===================================================================== -->
+    <div id="roomModeContainer">
+      <!-- Panel de Sala / Jugadores -->
+      <section class="panel">
+        <div class="panel-header">
+          <div>
+            <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
+            <p class="panel-desc">Cada jugador tiene un <strong>Link Personal</strong>. Cópialo para abrir tu página de casillero o pégalo en otra sala para entrar con tu perfil.</p>
+          </div>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnReloadAllLockers" title="Recargar todos los casilleros personales de la sala">🔄 Recargar Sala</button>
+            <button type="button" class="btn btn-secondary btn-sm" id="btnJoinWithPersonalLink" title="Entrar a esta sala pegando un link personal de casillero">📥 Entrar con Link Personal</button>
+            <button type="button" class="btn btn-primary btn-sm" id="btnAddPlayer">➕ Añadir Jugador</button>
+          </div>
+        </div>
 
-    <!-- Contenido dinámico según la pestaña activa -->
-    <section id="mainContent"></section>
+        <!-- Grid donde se renderizan las tarjetas de cada jugador -->
+        <div class="lobby-grid" id="lobbyGrid"></div>
+      </section>
+
+      <!-- Navegación por Pestañas -->
+      <nav class="tabs-nav" aria-label="Modos de análisis">
+        <button type="button" class="tab-btn is-active" data-tab="chain">🤝 Fila de Compartir (Recomendado)</button>
+        <button type="button" class="tab-btn" data-tab="versus">⚔️ 1 vs 1 Detallado</button>
+        <button type="button" class="tab-btn" data-tab="missing">🔍 Faltantes del Escuadrón</button>
+        <button type="button" class="tab-btn" data-tab="vault">🗄️ Bóveda (C7S4)</button>
+      </nav>
+
+      <!-- Contenido dinámico según la pestaña activa -->
+      <section id="mainContent"></section>
+    </div>
 
   </main>
 
@@ -144,13 +262,13 @@
   </dialog>
 
   <!-- Toast de notificación para copiado -->
-  <div class="toast" id="toast">
-    <span>📋</span>
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span aria-hidden="true">📋</span>
     <span class="toast-text">¡Copiado con éxito!</span>
   </div>
 
   <!-- Scripts -->
-  <script src="db.js?v=c7ms.5"></script>
-  <script src="app.js?v=c7ms.5"></script>
+  <script src="db.js?v=c7ms.6"></script>
+  <script src="app.js?v=c7ms.6"></script>
 </body>
 </html>

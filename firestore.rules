@@ -15,6 +15,19 @@ rules_version = '2';
 //   - players: map (required, max 30 entries) - Map of player entries keyed by normalized player key
 //   - updatedAt: number (required, > 0) - Epoch millisecond timestamp of last update
 //
+// Collection: lockers
+// Document ID: {lockerId} matching ^[a-zA-Z0-9_-]{4,40}$ (capability token for persistent player locker)
+// Access Pattern: Unauthenticated capability-based single-document access (get, create, update).
+//                 Listing all lockers and deleting lockers are explicitly denied.
+// Fields:
+//   - id: string (optional, max length 40) - Locker identifier
+//   - name: string (required, length 1..60) - Player display name
+//   - avatar: string (required, length 1..40) - Player avatar identifier
+//   - url: string (required, max length 500) - Encoded collection URL
+//   - code: string (optional, max length 300) - Encoded collection code
+//   - seasonKey: string (required, length 1..20) - Active season identifier for the locker
+//   - updatedAt: number (required, > 0) - Epoch millisecond timestamp of last update
+//
 // ===============================================================
 
 service cloud.firestore {
@@ -61,6 +74,11 @@ service cloud.firestore {
       return roomId.matches('^[a-zA-Z0-9_-]{4,40}$');
     }
 
+    // Validate lockerId format (4 to 40 alphanumeric, underscore, or hyphen characters)
+    function isValidLockerId(lockerId) {
+      return lockerId.matches('^[a-zA-Z0-9_-]{4,40}$');
+    }
+
     // ===============================================================
     // Domain Validators (Used in both create and update)
     // ===============================================================
@@ -75,6 +93,26 @@ service cloud.firestore {
              data.updatedAt > 0 &&
              data.players is map &&
              data.players.size() <= 30;
+    }
+
+    function isValidLocker(data) {
+      return hasOnlyAllowedFields(['id', 'name', 'avatar', 'url', 'code', 'seasonKey', 'updatedAt']) &&
+             hasRequiredFields(['name', 'avatar', 'url', 'seasonKey', 'updatedAt']) &&
+             data.name is string &&
+             data.name.size() >= 1 &&
+             data.name.size() <= 60 &&
+             data.avatar is string &&
+             data.avatar.size() >= 1 &&
+             data.avatar.size() <= 40 &&
+             data.url is string &&
+             data.url.size() <= 500 &&
+             data.seasonKey is string &&
+             data.seasonKey.size() >= 1 &&
+             data.seasonKey.size() <= 20 &&
+             data.updatedAt is number &&
+             data.updatedAt > 0 &&
+             (!('id' in data) || (data.id is string && data.id.size() <= 40)) &&
+             (!('code' in data) || (data.code is string && data.code.size() <= 300));
     }
 
     // ===============================================================
@@ -92,6 +130,20 @@ service cloud.firestore {
       allow create, update: if isValidRoomId(roomId) && isValidRoom(request.resource.data);
 
       // Explicitly deny deleting rooms
+      allow delete: if false;
+    }
+
+    match /lockers/{lockerId} {
+      // Allow reading a specific locker by its capability lockerId via getDoc / onSnapshot
+      allow get: if isValidLockerId(lockerId);
+
+      // Explicitly deny listing/enumerating all lockers
+      allow list: if false;
+
+      // Allow creating or updating a locker if the lockerId and payload pass strict validation
+      allow create, update: if isValidLockerId(lockerId) && isValidLocker(request.resource.data);
+
+      // Explicitly deny deleting lockers
       allow delete: if false;
     }
 

@@ -1335,3 +1335,238 @@ body {
   font-size: 0.78rem;
   color: var(--text-secondary);
 }
+
+/* --- UTILIDAD ACCESIBILIDAD: OCULTO VISUALMENTE --- */
+.visually-hidden:where(:not(:focus-within, :active)) {
+  position: absolute !important;
+  clip-path: inset(50%) !important;
+  overflow: hidden !important;
+  width: 1px !important;
+  height: 1px !important;
+  margin: -1px !important;
+  padding: 0 !important;
+  border: 0 !important;
+  white-space: nowrap !important;
+}
+
+.room-sync-badge.is-static {
+  cursor: default;
+}
+
+.room-sync-badge.is-static:hover {
+  border-color: rgba(120, 170, 255, 0.3);
+  background: rgba(14, 24, 62, 0.85);
+}
+
+/* --- VISTA EXCLUSIVA DE CASILLERO PERSONAL (#casillero=...) --- */
+.personal-locker-panel {
+  border-color: rgba(63, 208, 255, 0.45);
+  box-shadow: 0 15px 45px rgba(0, 0, 0, 0.65), 0 0 25px rgba(63, 208, 255, 0.14);
+}
+
+.personal-hero {
+  background: linear-gradient(135deg, rgba(16, 26, 68, 0.95), rgba(8, 13, 36, 0.95));
+  border: 1px solid rgba(120, 170, 255, 0.28);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  margin-bottom: 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.personal-hero-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.personal-identity {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1 1 320px;
+}
+
+.personal-avatar-btn {
+  width: 72px;
+  height: 72px;
+  min-width: 72px;
+}
+
+.personal-name-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.personal-mode-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.18rem 0.55rem;
+  border-radius: 99px;
+  background: rgba(255, 190, 46, 0.16);
+  color: #ffd070;
+  border: 1px solid rgba(255, 190, 46, 0.45);
+}
+
+.personal-field-label {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.personal-name-input {
+  background: var(--bg-input);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  width: 100%;
+  max-width: 360px;
+}
+
+.personal-name-input:focus-visible {
+  border-color: var(--border-active);
+  outline: 2px solid var(--accent-cyan);
+  outline-offset: 2px;
+}
+
+.personal-stats-card {
+  background: rgba(5, 9, 25, 0.75);
+  border: 1px solid rgba(120, 170, 255, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 0.85rem 1rem;
+  flex: 1 1 280px;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.personal-stats-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.personal-stats-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.personal-progress-bar {
+  height: 10px;
+}
+
+.personal-AutoSave-note {
+  font-size: 0.75rem;
+  color: #8ee8dc;
+  font-weight: 600;
+}
+
+.personal-link-bar {
+  background: rgba(4, 8, 22, 0.8);
+  border: 1px dashed rgba(63, 208, 255, 0.4);
+  border-radius: var(--radius-sm);
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.personal-link-label {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.personal-link-controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.personal-link-input {
+  flex: 1 1 260px;
+  color: #8ce2ff;
+  font-weight: 700;
+}
+
+.personal-locker-toolbar {
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  margin-bottom: 0.85rem;
+}
+
+.personal-grid-hint {
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.85rem;
+}
+
+.personal-sprites-grid {
+  grid-template-columns: repeat(auto-fill, minmax(155px, 1fr));
+  gap: 0.75rem;
+}
+
+/* --- ELEMENTOS EXTRA DE LINK PERSONAL EN TARJETA DE SALA --- */
+.player-link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+}
+
+.player-link-label-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.player-personal-id-pill {
+  font-family: monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #8ce2ff;
+  background: rgba(63, 208, 255, 0.12);
+  border: 1px solid rgba(63, 208, 255, 0.28);
+  padding: 0.08rem 0.42rem;
+  border-radius: 99px;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  transition: all 0.14s ease;
+}
+
+.player-personal-id-pill:hover {
+  background: rgba(63, 208, 255, 0.25);
+  border-color: var(--accent-cyan);
+  color: #fff;
+}
+
+.player-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.25rem;
+}
+
