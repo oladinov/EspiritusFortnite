@@ -72,7 +72,7 @@
           <div class="personal-stats-card">
             <div class="personal-stats-header">
               <span class="personal-stats-title">Progreso de Colección</span>
-              <span id="personalCountBadge" class="player-stats-badge">0/24 (0%)</span>
+              <span id="personalCountBadge" class="player-stats-badge">0/34 (0%)</span>
             </div>
             <div class="progress-bar-bg personal-progress-bar">
               <div id="personalProgressFill" class="progress-bar-fill" style="width: 0%;"></div>
@@ -117,13 +117,14 @@
           >
           <label for="personalVariantFilter" class="visually-hidden">Filtrar por variante</label>
           <select id="personalVariantFilter" class="locker-filter-select">
-            <option value="all">🎨 Todas las variantes (24)</option>
+            <option value="all">🎨 Todas las variantes (34)</option>
             <option value="NORMAL">Normal (13)</option>
+            <option value="CURSED">Maldito (10)</option>
             <option value="JEWELED">Fortuna (11)</option>
           </select>
           <label for="personalStatusFilter" class="visually-hidden">Filtrar por estado en colección</label>
           <select id="personalStatusFilter" class="locker-filter-select">
-            <option value="all">👁️ Todos (24)</option>
+            <option value="all">👁️ Todos (34)</option>
             <option value="owned">✅ Solo los que TIENE</option>
             <option value="missing">❌ Solo los que LE FALTAN</option>
           </select>
@@ -183,7 +184,7 @@
         <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
           <h3 id="lockerDialogTitle" style="font-size: 1.05rem; color: #3fd0ff;">✏️ Editar Casillero:</h3>
           <input type="text" id="lockerPlayerNameInput" class="locker-name-input" placeholder="Nombre del jugador">
-          <span id="lockerCountBadge" class="player-stats-badge">0/24 (0%)</span>
+          <span id="lockerCountBadge" class="player-stats-badge">0/34 (0%)</span>
         </div>
         <button type="button" class="modal-close" id="lockerDialogClose" aria-label="Cerrar">&times;</button>
       </div>
@@ -192,12 +193,13 @@
         <div class="locker-filters-row">
           <input type="search" id="lockerSearchInput" class="locker-filter-input" placeholder="🔎 Buscar espíritu (ej. Bananin Huesudo, Plumitas, Saqueacofres, Buscarrutas)...">
           <select id="lockerVariantFilter" class="locker-filter-select">
-            <option value="all">🎨 Todas las variantes (24)</option>
+            <option value="all">🎨 Todas las variantes (34)</option>
             <option value="NORMAL">Normal (13)</option>
+            <option value="CURSED">Maldito (10)</option>
             <option value="JEWELED">Fortuna (11)</option>
           </select>
           <select id="lockerStatusFilter" class="locker-filter-select">
-            <option value="all">👁️ Todos (24)</option>
+            <option value="all">👁️ Todos (34)</option>
             <option value="owned">✅ Solo los que TIENE</option>
             <option value="missing">❌ Solo los que LE FALTAN</option>
           </select>

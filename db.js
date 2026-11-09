@@ -1,6 +1,6 @@
 /**
  * FORTNITE ESPÍRITUS - BASE DE DATOS LOCAL
- * Capítulo 7 — Minitemporada (c7ms): 13 espíritus nuevos, 24 variantes activas (Normal y Fortuna)
+ * Capítulo 7 — Minitemporada (c7ms): 13 espíritus nuevos, 34 variantes activas (Normal, Maldito y Fortuna)
  * Incluye Bóveda (Vault) con todo el roster anterior de Cap. 7 Temp. 4 (27 espíritus, 162 variantes)
  */
 window.SPRITES_DB = {
@@ -9,7 +9,7 @@ window.SPRITES_DB = {
   "seasonNameEn": "Chapter 7 — Mini Season",
   "shareVersion": "5",
   "totalSprites": 13,
-  "totalCells": 24,
+  "totalCells": 34,
   "sprites": [
     {
       "key": "HALFPEELD",
@@ -20,6 +20,7 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -45,6 +46,7 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -70,6 +72,7 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -95,6 +98,7 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -120,10 +124,12 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "trade": "always",
@@ -169,6 +175,7 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -194,6 +201,7 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -241,6 +249,7 @@ window.SPRITES_DB = {
       "rarity_es": "Legendario",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -266,6 +275,7 @@ window.SPRITES_DB = {
       "rarity_es": "Legendario",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -291,6 +301,7 @@ window.SPRITES_DB = {
       "rarity_es": "Mítico",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -341,6 +352,15 @@ window.SPRITES_DB = {
       "to": "#586a8c"
     },
     {
+      "key": "CURSED",
+      "slug": "cursed",
+      "name_en": "Cursed",
+      "name_es": "Maldito",
+      "color": "#3fb8a8",
+      "from": "#8ee8dc",
+      "to": "#1d6b62"
+    },
+    {
       "key": "JEWELED",
       "slug": "jeweled",
       "name_en": "Fortune",
@@ -369,7 +389,7 @@ window.SPRITES_DB = {
       "color": "#3fb8a8",
       "from": "#8ee8dc",
       "to": "#1d6b62",
-      "released": false
+      "released": true
     },
     {
       "key": "JEWELED",
@@ -405,6 +425,26 @@ window.SPRITES_DB = {
     },
     {
       "index": 1,
+      "key": "HALFPEELD::CURSED",
+      "spriteKey": "HALFPEELD",
+      "spriteSlug": "halfpeeld",
+      "spriteNameEn": "Halfpeel'd",
+      "spriteNameEs": "Bananin Huesudo",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Rare",
+      "rarityEs": "Raro",
+      "dust": 1500,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/halfpeeld_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/halfpeeld_cursed.webp",
+      "rarityColor": "#3aa0ff"
+    },
+    {
+      "index": 2,
       "key": "HALFPEELD::JEWELED",
       "spriteKey": "HALFPEELD",
       "spriteSlug": "halfpeeld",
@@ -424,7 +464,7 @@ window.SPRITES_DB = {
       "rarityColor": "#3aa0ff"
     },
     {
-      "index": 2,
+      "index": 3,
       "key": "RE-PETE::NORMAL",
       "spriteKey": "RE-PETE",
       "spriteSlug": "repete",
@@ -444,7 +484,27 @@ window.SPRITES_DB = {
       "rarityColor": "#3aa0ff"
     },
     {
-      "index": 3,
+      "index": 4,
+      "key": "RE-PETE::CURSED",
+      "spriteKey": "RE-PETE",
+      "spriteSlug": "repete",
+      "spriteNameEn": "Re-Pete",
+      "spriteNameEs": "Plumitas",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Rare",
+      "rarityEs": "Raro",
+      "dust": 1500,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/repete_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/repete_cursed.webp",
+      "rarityColor": "#3aa0ff"
+    },
+    {
+      "index": 5,
       "key": "RE-PETE::JEWELED",
       "spriteKey": "RE-PETE",
       "spriteSlug": "repete",
@@ -464,7 +524,7 @@ window.SPRITES_DB = {
       "rarityColor": "#3aa0ff"
     },
     {
-      "index": 4,
+      "index": 6,
       "key": "BARRY OFISH::NORMAL",
       "spriteKey": "BARRY OFISH",
       "spriteSlug": "barryofish",
@@ -484,7 +544,27 @@ window.SPRITES_DB = {
       "rarityColor": "#3aa0ff"
     },
     {
-      "index": 5,
+      "index": 7,
+      "key": "BARRY OFISH::CURSED",
+      "spriteKey": "BARRY OFISH",
+      "spriteSlug": "barryofish",
+      "spriteNameEn": "Barry O'Fish",
+      "spriteNameEs": "Barry",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Rare",
+      "rarityEs": "Raro",
+      "dust": 1500,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/barryofish_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/barryofish_cursed.webp",
+      "rarityColor": "#3aa0ff"
+    },
+    {
+      "index": 8,
       "key": "BARRY OFISH::JEWELED",
       "spriteKey": "BARRY OFISH",
       "spriteSlug": "barryofish",
@@ -504,7 +584,7 @@ window.SPRITES_DB = {
       "rarityColor": "#3aa0ff"
     },
     {
-      "index": 6,
+      "index": 9,
       "key": "WAYFINDER::NORMAL",
       "spriteKey": "WAYFINDER",
       "spriteSlug": "wayfinder",
@@ -524,7 +604,27 @@ window.SPRITES_DB = {
       "rarityColor": "#3aa0ff"
     },
     {
-      "index": 7,
+      "index": 10,
+      "key": "WAYFINDER::CURSED",
+      "spriteKey": "WAYFINDER",
+      "spriteSlug": "wayfinder",
+      "spriteNameEn": "Wayfinder",
+      "spriteNameEs": "Orientador",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Rare",
+      "rarityEs": "Raro",
+      "dust": 1500,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/wayfinder_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/wayfinder_cursed.webp",
+      "rarityColor": "#3aa0ff"
+    },
+    {
+      "index": 11,
       "key": "WAYFINDER::JEWELED",
       "spriteKey": "WAYFINDER",
       "spriteSlug": "wayfinder",
@@ -544,7 +644,7 @@ window.SPRITES_DB = {
       "rarityColor": "#3aa0ff"
     },
     {
-      "index": 8,
+      "index": 12,
       "key": "CHESTER::NORMAL",
       "spriteKey": "CHESTER",
       "spriteSlug": "chester",
@@ -564,7 +664,27 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 9,
+      "index": 13,
+      "key": "CHESTER::CURSED",
+      "spriteKey": "CHESTER",
+      "spriteSlug": "chester",
+      "spriteNameEn": "Chester",
+      "spriteNameEs": "Gatisoro",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1800,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/chester_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/chester_cursed.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 14,
       "key": "CHESTER::JEWELED",
       "spriteKey": "CHESTER",
       "spriteSlug": "chester",
@@ -584,7 +704,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 10,
+      "index": 15,
       "key": "KELPER::NORMAL",
       "spriteKey": "KELPER",
       "spriteSlug": "kelper",
@@ -604,7 +724,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 11,
+      "index": 16,
       "key": "KELPER::JEWELED",
       "spriteKey": "KELPER",
       "spriteSlug": "kelper",
@@ -624,7 +744,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 12,
+      "index": 17,
       "key": "EXMARKS::NORMAL",
       "spriteKey": "EXMARKS",
       "spriteSlug": "exmarks",
@@ -644,7 +764,27 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 13,
+      "index": 18,
+      "key": "EXMARKS::CURSED",
+      "spriteKey": "EXMARKS",
+      "spriteSlug": "exmarks",
+      "spriteNameEn": "Exmarks",
+      "spriteNameEs": "Buscarrutas",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1800,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/exmarks_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/exmarks_cursed.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 19,
       "key": "EXMARKS::JEWELED",
       "spriteKey": "EXMARKS",
       "spriteSlug": "exmarks",
@@ -664,7 +804,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 14,
+      "index": 20,
       "key": "LIL SQUIBBLY::NORMAL",
       "spriteKey": "LIL SQUIBBLY",
       "spriteSlug": "lilsquibbly",
@@ -684,7 +824,27 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 15,
+      "index": 21,
+      "key": "LIL SQUIBBLY::CURSED",
+      "spriteKey": "LIL SQUIBBLY",
+      "spriteSlug": "lilsquibbly",
+      "spriteNameEn": "Lil' Squibbly",
+      "spriteNameEs": "Tintonio",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1800,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/lilsquibbly_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/lilsquibbly_cursed.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 22,
       "key": "LIL SQUIBBLY::JEWELED",
       "spriteKey": "LIL SQUIBBLY",
       "spriteSlug": "lilsquibbly",
@@ -704,7 +864,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 16,
+      "index": 23,
       "key": "TRANSPONDER SNAIL::NORMAL",
       "spriteKey": "TRANSPONDER SNAIL",
       "spriteSlug": "transpondersnail",
@@ -724,7 +884,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 17,
+      "index": 24,
       "key": "LIL FLACKO::NORMAL",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -744,7 +904,27 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 18,
+      "index": 25,
+      "key": "LIL FLACKO::CURSED",
+      "spriteKey": "LIL FLACKO",
+      "spriteSlug": "lilflacko",
+      "spriteNameEn": "Lil' Flacko",
+      "spriteNameEs": "Lil' Flacko",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Legendary",
+      "rarityEs": "Legendario",
+      "dust": 2100,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/lilflacko_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/lilflacko_cursed.webp",
+      "rarityColor": "#f5a623"
+    },
+    {
+      "index": 26,
       "key": "LIL FLACKO::JEWELED",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -764,7 +944,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 19,
+      "index": 27,
       "key": "LIL UZI VERT JR.::NORMAL",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -784,7 +964,27 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 20,
+      "index": 28,
+      "key": "LIL UZI VERT JR.::CURSED",
+      "spriteKey": "LIL UZI VERT JR.",
+      "spriteSlug": "liluzivertjr",
+      "spriteNameEn": "Lil' Uzi Vert Jr.",
+      "spriteNameEs": "Lil' Uzi Vert Jr.",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Legendary",
+      "rarityEs": "Legendario",
+      "dust": 2100,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/liluzivertjr_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/liluzivertjr_cursed.webp",
+      "rarityColor": "#f5a623"
+    },
+    {
+      "index": 29,
       "key": "LIL UZI VERT JR.::JEWELED",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -804,7 +1004,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 21,
+      "index": 30,
       "key": "PLUNDARRGH::NORMAL",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -824,7 +1024,27 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 22,
+      "index": 31,
+      "key": "PLUNDARRGH::CURSED",
+      "spriteKey": "PLUNDARRGH",
+      "spriteSlug": "plundarrgh",
+      "spriteNameEn": "Plundarrgh",
+      "spriteNameEs": "Saqueacofres",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Mythic",
+      "rarityEs": "Mítico",
+      "dust": 2400,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/plundarrgh_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/plundarrgh_cursed.webp",
+      "rarityColor": "#ff4d4d"
+    },
+    {
+      "index": 32,
       "key": "PLUNDARRGH::JEWELED",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -844,7 +1064,7 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 23,
+      "index": 33,
       "key": "SWEET DREAMS::NORMAL",
       "spriteKey": "SWEET DREAMS",
       "spriteSlug": "sweetdreams",
@@ -1609,6 +1829,26 @@ window.SPRITES_DB = {
     },
     {
       "index": 13,
+      "key": "CHESTER::CURSED",
+      "spriteKey": "CHESTER",
+      "spriteSlug": "chester",
+      "spriteNameEn": "Chester",
+      "spriteNameEs": "Gatisoro",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1800,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/chester_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/chester_cursed.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 14,
       "key": "CHESTER::JEWELED",
       "spriteKey": "CHESTER",
       "spriteSlug": "chester",
@@ -1628,7 +1868,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 14,
+      "index": 15,
       "key": "KELPER::NORMAL",
       "spriteKey": "KELPER",
       "spriteSlug": "kelper",
@@ -1645,26 +1885,6 @@ window.SPRITES_DB = {
       "maxLevel": 5,
       "image": "/sprites/c7ms/kelper_basic.webp",
       "imageUrl": "https://spritelocker.com/sprites/c7ms/kelper_basic.webp",
-      "rarityColor": "#b34dff"
-    },
-    {
-      "index": 15,
-      "key": "KELPER::CURSED",
-      "spriteKey": "KELPER",
-      "spriteSlug": "kelper",
-      "spriteNameEn": "Kelper",
-      "spriteNameEs": "Mar",
-      "variantKey": "CURSED",
-      "variantSlug": "cursed",
-      "variantNameEn": "Cursed",
-      "variantNameEs": "Maldito",
-      "rarity": "Epic",
-      "rarityEs": "Épico",
-      "dust": 1800,
-      "tradable": true,
-      "maxLevel": 5,
-      "image": "/sprites/c7ms/kelper_cursed.webp",
-      "imageUrl": "https://spritelocker.com/sprites/c7ms/kelper_cursed.webp",
       "rarityColor": "#b34dff"
     },
     {

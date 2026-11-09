@@ -126,12 +126,12 @@ def decode_collection(code_or_url: str, db: Dict[str, Any]) -> Dict[str, Any]:
             'percentage': 0.0
         }
 
-    if len(raw_bytes) == 26 and 'cells_v5_34' in db:
-        cells = db['cells_v5_34']
-    elif len(raw_bytes) >= 27 and 'cells_v5_35' in db:
+    if len(raw_bytes) <= 24 and 'cells_v5_24' in db:
+        cells = db['cells_v5_24']
+    elif len(raw_bytes) >= 35 and 'cells_v5_35' in db:
         cells = db['cells_v5_35']
     else:
-        cells = db.get('cells_v5_24', db['cells'])
+        cells = db['cells']
     num_cells = len(cells)
 
     owned = {}
@@ -242,14 +242,14 @@ def run_analysis(players: List[Player], db: Dict[str, Any]):
 
     print_separator("=")
     print("      🎮 FORTNITE ESPÍRITUS - ORGANIZADOR DE INTERCAMBIOS DE SALA")
-    print(f"          Capítulo 7 — Minitemporada ({db.get('totalCells', 24)} Espíritus / Variantes)")
+    print(f"          Capítulo 7 — Minitemporada ({db.get('totalCells', 34)} Espíritus / Variantes)")
     print_separator("=")
 
     # 1. ORDENAR DE MAYOR A MENOR COLECCIÓN
     players_sorted = sorted(players, key=lambda p: p.owned_count, reverse=True)
 
     print("\n📊 CLASIFICACIÓN DE LA SALA (De más a menos espíritus):")
-    total_db_cells = db.get('totalCells', 24)
+    total_db_cells = db.get('totalCells', 34)
     for i, p in enumerate(players_sorted, 1):
         bar_len = int(p.percentage / 5)
         bar = "█" * bar_len + "░" * (20 - bar_len)
@@ -385,7 +385,7 @@ def main():
         try:
             p = Player(name, url, db)
             players.append(p)
-            print(f"✔️ {name} agregado con éxito ({p.owned_count}/{p.data.get('total_cells', 24)} espíritus, {p.percentage}%).")
+            print(f"✔️ {name} agregado con éxito ({p.owned_count}/{p.data.get('total_cells', 34)} espíritus, {p.percentage}%).")
         except Exception as e:
             print(f"❌ Error al procesar el enlace de {name}: {e}")
 
