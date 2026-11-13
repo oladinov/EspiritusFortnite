@@ -81,8 +81,8 @@ function decodeCollection(urlOrCode) {
   let cells = DB.cells;
   if (bytes.length <= 24 && DB.cells_v5_24) {
     cells = DB.cells_v5_24;
-  } else if (bytes.length >= 35 && DB.cells_v5_35) {
-    cells = DB.cells_v5_35;
+  } else if ((bytes.length === 26 || (bytes.length >= 28 && bytes.length <= 34)) && DB.cells_v5_34) {
+    cells = DB.cells_v5_34;
   }
   let numCells = cells.length;
 
@@ -169,7 +169,7 @@ console.log('='.repeat(70));
 console.log('  🎮 FORTNITE ESPÍRITUS - CADENA DE INTERCAMBIO (CAP. 7 MINITEMPORADA)');
 console.log('='.repeat(70));
 console.log('\n📊 CLASIFICACIÓN DE LA SALA:');
-let totalCells = DB.totalCells || 34;
+let totalCells = DB.totalCells || 35;
 players.forEach((p, idx) => {
   console.log(`  ${idx + 1}. ${p.name.padEnd(12)}: ${p.data.ownedCount}/${totalCells} espíritus (${p.data.percentage}%)`);
 });

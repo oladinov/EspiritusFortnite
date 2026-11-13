@@ -1,6 +1,6 @@
 /**
  * FORTNITE ESPÍRITUS - BASE DE DATOS LOCAL
- * Capítulo 7 — Minitemporada (c7ms): 13 espíritus nuevos, 34 variantes activas (Normal, Maldito y Fortuna)
+ * Capítulo 7 — Minitemporada (c7ms): 13 espíritus nuevos, 35 variantes activas (Normal, Maldito y Fortuna)
  * Incluye Bóveda (Vault) con todo el roster anterior de Cap. 7 Temp. 4 (27 espíritus, 162 variantes)
  */
 window.SPRITES_DB = {
@@ -9,7 +9,7 @@ window.SPRITES_DB = {
   "seasonNameEn": "Chapter 7 — Mini Season",
   "shareVersion": "5",
   "totalSprites": 13,
-  "totalCells": 34,
+  "totalCells": 35,
   "sprites": [
     {
       "key": "HALFPEELD",
@@ -150,6 +150,7 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
+        "CURSED",
         "JEWELED"
       ],
       "allVariants": [
@@ -725,6 +726,26 @@ window.SPRITES_DB = {
     },
     {
       "index": 16,
+      "key": "KELPER::CURSED",
+      "spriteKey": "KELPER",
+      "spriteSlug": "kelper",
+      "spriteNameEn": "Kelper",
+      "spriteNameEs": "Mar",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1800,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/kelper_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/kelper_cursed.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 17,
       "key": "KELPER::JEWELED",
       "spriteKey": "KELPER",
       "spriteSlug": "kelper",
@@ -744,7 +765,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 17,
+      "index": 18,
       "key": "EXMARKS::NORMAL",
       "spriteKey": "EXMARKS",
       "spriteSlug": "exmarks",
@@ -764,7 +785,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 18,
+      "index": 19,
       "key": "EXMARKS::CURSED",
       "spriteKey": "EXMARKS",
       "spriteSlug": "exmarks",
@@ -784,7 +805,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 19,
+      "index": 20,
       "key": "EXMARKS::JEWELED",
       "spriteKey": "EXMARKS",
       "spriteSlug": "exmarks",
@@ -804,7 +825,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 20,
+      "index": 21,
       "key": "LIL SQUIBBLY::NORMAL",
       "spriteKey": "LIL SQUIBBLY",
       "spriteSlug": "lilsquibbly",
@@ -824,7 +845,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 21,
+      "index": 22,
       "key": "LIL SQUIBBLY::CURSED",
       "spriteKey": "LIL SQUIBBLY",
       "spriteSlug": "lilsquibbly",
@@ -844,7 +865,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 22,
+      "index": 23,
       "key": "LIL SQUIBBLY::JEWELED",
       "spriteKey": "LIL SQUIBBLY",
       "spriteSlug": "lilsquibbly",
@@ -864,7 +885,7 @@ window.SPRITES_DB = {
       "rarityColor": "#b34dff"
     },
     {
-      "index": 23,
+      "index": 24,
       "key": "TRANSPONDER SNAIL::NORMAL",
       "spriteKey": "TRANSPONDER SNAIL",
       "spriteSlug": "transpondersnail",
@@ -884,7 +905,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 24,
+      "index": 25,
       "key": "LIL FLACKO::NORMAL",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -904,7 +925,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 25,
+      "index": 26,
       "key": "LIL FLACKO::CURSED",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -924,7 +945,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 26,
+      "index": 27,
       "key": "LIL FLACKO::JEWELED",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -944,7 +965,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 27,
+      "index": 28,
       "key": "LIL UZI VERT JR.::NORMAL",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -964,7 +985,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 28,
+      "index": 29,
       "key": "LIL UZI VERT JR.::CURSED",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -984,7 +1005,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 29,
+      "index": 30,
       "key": "LIL UZI VERT JR.::JEWELED",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -1004,7 +1025,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 30,
+      "index": 31,
       "key": "PLUNDARRGH::NORMAL",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -1024,7 +1045,7 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 31,
+      "index": 32,
       "key": "PLUNDARRGH::CURSED",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -1044,7 +1065,7 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 32,
+      "index": 33,
       "key": "PLUNDARRGH::JEWELED",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -1064,7 +1085,7 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 33,
+      "index": 34,
       "key": "SWEET DREAMS::NORMAL",
       "spriteKey": "SWEET DREAMS",
       "spriteSlug": "sweetdreams",

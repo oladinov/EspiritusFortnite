@@ -66,7 +66,7 @@ node compartir.mjs
 - [`style.css`](file:///d:/Oscar/repos/EspiritusFortnite/style.css): Estilos visuales con temática oscura de Fortnite.
 - [`app.js`](file:///d:/Oscar/repos/EspiritusFortnite/app.js): Lógica de la aplicación web y decodificación.
 - [`db.js`](file:///d:/Oscar/repos/EspiritusFortnite/db.js): Base de datos de espíritus para la web sin restricciones CORS.
-- [`sprites_db.json`](file:///d:/Oscar/repos/EspiritusFortnite/sprites_db.json): Datos de los 13 espíritus y 34 variantes activas de la Minitemporada del Capítulo 7 (`Normal`, `Maldito` y `Fortuna`), además de la Bóveda (`vault.c7s4`) con los 27 espíritus / 162 variantes de la Temporada 4.
+- [`sprites_db.json`](file:///d:/Oscar/repos/EspiritusFortnite/sprites_db.json): Datos de los 13 espíritus y 35 variantes activas de la Minitemporada del Capítulo 7 (`Normal`, `Maldito` y `Fortuna`), además de la Bóveda (`vault.c7s4`) con los 27 espíritus / 162 variantes de la Temporada 4.
 - [`compartir.py`](file:///d:/Oscar/repos/EspiritusFortnite/compartir.py): Script CLI en Python.
 - [`compartir.mjs`](file:///d:/Oscar/repos/EspiritusFortnite/compartir.mjs): Script CLI en Node.js.
 - [`abrir_app.bat`](file:///d:/Oscar/repos/EspiritusFortnite/abrir_app.bat): Lanzador rápido para Windows.
