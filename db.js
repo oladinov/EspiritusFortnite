@@ -1,6 +1,6 @@
 /**
  * FORTNITE ESPÍRITUS - BASE DE DATOS LOCAL
- * Capítulo 7 — Minitemporada (c7ms): 13 espíritus nuevos, 35 variantes activas (Normal, Maldito y Fortuna)
+ * Capítulo 7 — Minitemporada (c7ms): 16 espíritus nuevos, 42 variantes activas (Normal, Maldito y Fortuna)
  * Incluye Bóveda (Vault) con todo el roster anterior de Cap. 7 Temp. 4 (27 espíritus, 162 variantes)
  */
 window.SPRITES_DB = {
@@ -8,8 +8,8 @@ window.SPRITES_DB = {
   "seasonNameEs": "Capítulo 7 — Minitemporada",
   "seasonNameEn": "Chapter 7 — Mini Season",
   "shareVersion": "5",
-  "totalSprites": 13,
-  "totalCells": 35,
+  "totalSprites": 16,
+  "totalCells": 42,
   "sprites": [
     {
       "key": "HALFPEELD",
@@ -220,6 +220,32 @@ window.SPRITES_DB = {
       "ability_es": "Saltar a un banco de pesca lo pesca y te da algo de botín extra. Consigues más botín al subir de nivel."
     },
     {
+      "key": "SQUIPLASH",
+      "slug": "squiplash",
+      "name_en": "Squiplash",
+      "name_es": "Squiplash",
+      "rarity": "Epic",
+      "rarity_es": "Épico",
+      "variants": [
+        "NORMAL",
+        "CURSED",
+        "JEWELED"
+      ],
+      "allVariants": [
+        "NORMAL",
+        "CURSED",
+        "JEWELED"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 1500,
+        "variant": 1800
+      },
+      "ability_en": "Deploys a Healing Smoke Bomb at low health. Decreased cooldown and increased duration and healing with each Level Up!",
+      "ability_es": "Despliega una bomba de humo curativa cuando tienes poca salud. ¡Menor tiempo de recarga y mayor duración y curación con cada subida de nivel!"
+    },
+    {
       "key": "TRANSPONDER SNAIL",
       "slug": "transpondersnail",
       "name_en": "Transponder Snail",
@@ -340,6 +366,54 @@ window.SPRITES_DB = {
       },
       "ability_en": "Grants a random item at each level, exploding with Mythic loot at Max Level. Loot value increases at each Level Up!",
       "ability_es": "Otorga un objeto aleatorio en cada nivel y explota con botín mítico al nivel máximo. ¡El valor del botín aumenta con cada subida de nivel!"
+    },
+    {
+      "key": "MINI MIKU",
+      "slug": "minimiku",
+      "name_en": "Mini Miku",
+      "name_es": "Mini Miku",
+      "rarity": "Mythic",
+      "rarity_es": "Mítico",
+      "variants": [
+        "NORMAL",
+        "CURSED",
+        "JEWELED"
+      ],
+      "allVariants": [
+        "NORMAL",
+        "CURSED",
+        "JEWELED"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 2000,
+        "variant": 2400
+      },
+      "ability_en": "Grants a Friendship Bubble when emoting with other players. Decreased cooldown with each Level Up!",
+      "ability_es": "Otorga una burbuja de amistad al usar gestos con otros jugadores. ¡Menor tiempo de recarga con cada subida de nivel!"
+    },
+    {
+      "key": "ZEE",
+      "slug": "zee",
+      "name_en": "Zee",
+      "name_es": "Zee",
+      "rarity": "Mythic",
+      "rarity_es": "Mítico",
+      "variants": [
+        "NORMAL"
+      ],
+      "allVariants": [
+        "NORMAL"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 2000,
+        "variant": 2400
+      },
+      "ability_en": "Grants regenerating Zero Point dash charges. Max charges increase and recharge time decrease with Level Up!",
+      "ability_es": "Otorga cargas de impulso del Punto cero que se regeneran. ¡Más cargas máximas y menos tiempo de recarga al subir de nivel!"
     }
   ],
   "variants": [
@@ -886,6 +960,66 @@ window.SPRITES_DB = {
     },
     {
       "index": 24,
+      "key": "SQUIPLASH::NORMAL",
+      "spriteKey": "SQUIPLASH",
+      "spriteSlug": "squiplash",
+      "spriteNameEn": "Squiplash",
+      "spriteNameEs": "Squiplash",
+      "variantKey": "NORMAL",
+      "variantSlug": "basic",
+      "variantNameEn": "Normal",
+      "variantNameEs": "Normal",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1500,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/squiplash_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/squiplash_basic.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 25,
+      "key": "SQUIPLASH::CURSED",
+      "spriteKey": "SQUIPLASH",
+      "spriteSlug": "squiplash",
+      "spriteNameEn": "Squiplash",
+      "spriteNameEs": "Squiplash",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1800,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/squiplash_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/squiplash_cursed.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 26,
+      "key": "SQUIPLASH::JEWELED",
+      "spriteKey": "SQUIPLASH",
+      "spriteSlug": "squiplash",
+      "spriteNameEn": "Squiplash",
+      "spriteNameEs": "Squiplash",
+      "variantKey": "JEWELED",
+      "variantSlug": "jeweled",
+      "variantNameEn": "Fortune",
+      "variantNameEs": "Fortuna",
+      "rarity": "Epic",
+      "rarityEs": "Épico",
+      "dust": 1800,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/squiplash_jeweled.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/squiplash_jeweled.webp",
+      "rarityColor": "#b34dff"
+    },
+    {
+      "index": 27,
       "key": "TRANSPONDER SNAIL::NORMAL",
       "spriteKey": "TRANSPONDER SNAIL",
       "spriteSlug": "transpondersnail",
@@ -905,7 +1039,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 25,
+      "index": 28,
       "key": "LIL FLACKO::NORMAL",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -925,7 +1059,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 26,
+      "index": 29,
       "key": "LIL FLACKO::CURSED",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -945,7 +1079,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 27,
+      "index": 30,
       "key": "LIL FLACKO::JEWELED",
       "spriteKey": "LIL FLACKO",
       "spriteSlug": "lilflacko",
@@ -965,7 +1099,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 28,
+      "index": 31,
       "key": "LIL UZI VERT JR.::NORMAL",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -985,7 +1119,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 29,
+      "index": 32,
       "key": "LIL UZI VERT JR.::CURSED",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -1005,7 +1139,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 30,
+      "index": 33,
       "key": "LIL UZI VERT JR.::JEWELED",
       "spriteKey": "LIL UZI VERT JR.",
       "spriteSlug": "liluzivertjr",
@@ -1025,7 +1159,7 @@ window.SPRITES_DB = {
       "rarityColor": "#f5a623"
     },
     {
-      "index": 31,
+      "index": 34,
       "key": "PLUNDARRGH::NORMAL",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -1045,7 +1179,7 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 32,
+      "index": 35,
       "key": "PLUNDARRGH::CURSED",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -1065,7 +1199,7 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 33,
+      "index": 36,
       "key": "PLUNDARRGH::JEWELED",
       "spriteKey": "PLUNDARRGH",
       "spriteSlug": "plundarrgh",
@@ -1085,7 +1219,7 @@ window.SPRITES_DB = {
       "rarityColor": "#ff4d4d"
     },
     {
-      "index": 34,
+      "index": 37,
       "key": "SWEET DREAMS::NORMAL",
       "spriteKey": "SWEET DREAMS",
       "spriteSlug": "sweetdreams",
@@ -1102,6 +1236,86 @@ window.SPRITES_DB = {
       "maxLevel": 5,
       "image": "/sprites/c7ms/sweetdreams_basic.webp",
       "imageUrl": "https://spritelocker.com/sprites/c7ms/sweetdreams_basic.webp",
+      "rarityColor": "#ff4d4d"
+    },
+    {
+      "index": 38,
+      "key": "MINI MIKU::NORMAL",
+      "spriteKey": "MINI MIKU",
+      "spriteSlug": "minimiku",
+      "spriteNameEn": "Mini Miku",
+      "spriteNameEs": "Mini Miku",
+      "variantKey": "NORMAL",
+      "variantSlug": "basic",
+      "variantNameEn": "Normal",
+      "variantNameEs": "Normal",
+      "rarity": "Mythic",
+      "rarityEs": "Mítico",
+      "dust": 2000,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/minimiku_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/minimiku_basic.webp",
+      "rarityColor": "#ff4d4d"
+    },
+    {
+      "index": 39,
+      "key": "MINI MIKU::CURSED",
+      "spriteKey": "MINI MIKU",
+      "spriteSlug": "minimiku",
+      "spriteNameEn": "Mini Miku",
+      "spriteNameEs": "Mini Miku",
+      "variantKey": "CURSED",
+      "variantSlug": "cursed",
+      "variantNameEn": "Cursed",
+      "variantNameEs": "Maldito",
+      "rarity": "Mythic",
+      "rarityEs": "Mítico",
+      "dust": 2400,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/minimiku_cursed.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/minimiku_cursed.webp",
+      "rarityColor": "#ff4d4d"
+    },
+    {
+      "index": 40,
+      "key": "MINI MIKU::JEWELED",
+      "spriteKey": "MINI MIKU",
+      "spriteSlug": "minimiku",
+      "spriteNameEn": "Mini Miku",
+      "spriteNameEs": "Mini Miku",
+      "variantKey": "JEWELED",
+      "variantSlug": "jeweled",
+      "variantNameEn": "Fortune",
+      "variantNameEs": "Fortuna",
+      "rarity": "Mythic",
+      "rarityEs": "Mítico",
+      "dust": 2400,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/minimiku_jeweled.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/minimiku_jeweled.webp",
+      "rarityColor": "#ff4d4d"
+    },
+    {
+      "index": 41,
+      "key": "ZEE::NORMAL",
+      "spriteKey": "ZEE",
+      "spriteSlug": "zee",
+      "spriteNameEn": "Zee",
+      "spriteNameEs": "Zee",
+      "variantKey": "NORMAL",
+      "variantSlug": "basic",
+      "variantNameEn": "Normal",
+      "variantNameEs": "Normal",
+      "rarity": "Mythic",
+      "rarityEs": "Mítico",
+      "dust": 2000,
+      "tradable": true,
+      "maxLevel": 5,
+      "image": "/sprites/c7ms/zee_basic.webp",
+      "imageUrl": "https://spritelocker.com/sprites/c7ms/zee_basic.webp",
       "rarityColor": "#ff4d4d"
     }
   ],
