@@ -1,6 +1,6 @@
 /**
  * FORTNITE ESPÍRITUS - BASE DE DATOS LOCAL
- * Capítulo 7 — Minitemporada (c7ms): 16 espíritus nuevos, 42 variantes activas (Normal, Maldito y Fortuna)
+ * Capítulo 7 — Minitemporada (c7ms): 16 espíritus nuevos, 42 variantes activas (Normal, Fortuna y Maldito)
  * Incluye Bóveda (Vault) con todo el roster anterior de Cap. 7 Temp. 4 (27 espíritus, 162 variantes)
  */
 window.SPRITES_DB = {
@@ -20,13 +20,13 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -46,13 +46,13 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -72,13 +72,13 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -98,13 +98,13 @@ window.SPRITES_DB = {
       "rarity_es": "Raro",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -124,13 +124,13 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -150,13 +150,13 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -176,13 +176,13 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -202,13 +202,13 @@ window.SPRITES_DB = {
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -223,18 +223,18 @@ window.SPRITES_DB = {
       "key": "SQUIPLASH",
       "slug": "squiplash",
       "name_en": "Squiplash",
-      "name_es": "Squiplash",
+      "name_es": "Calamarín",
       "rarity": "Epic",
       "rarity_es": "Épico",
       "variants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "allVariants": [
         "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "JEWELED",
+        "CURSED"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -244,6 +244,110 @@ window.SPRITES_DB = {
       },
       "ability_en": "Deploys a Healing Smoke Bomb at low health. Decreased cooldown and increased duration and healing with each Level Up!",
       "ability_es": "Despliega una bomba de humo curativa cuando tienes poca salud. ¡Menor tiempo de recarga y mayor duración y curación con cada subida de nivel!"
+    },
+    {
+      "key": "LIL FLACKO",
+      "slug": "lilflacko",
+      "name_en": "Lil' Flacko",
+      "name_es": "Lil' Flacko",
+      "rarity": "Legendary",
+      "rarity_es": "Legendario",
+      "variants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "allVariants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 1750,
+        "variant": 2100
+      },
+      "ability_en": "Creates a small shockwave on landing, knocking back enemies. Increased knockback strength with each Level Up!",
+      "ability_es": "Crea una pequeña onda expansiva al aterrizar que empuja a los enemigos. ¡Más fuerza de empuje con cada subida de nivel!"
+    },
+    {
+      "key": "LIL UZI VERT JR.",
+      "slug": "liluzivertjr",
+      "name_en": "Lil' Uzi Vert Jr.",
+      "name_es": "Lil' Uzi Vert Jr.",
+      "rarity": "Legendary",
+      "rarity_es": "Legendario",
+      "variants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "allVariants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 1750,
+        "variant": 2100
+      },
+      "ability_en": "Generates a Chug Splash effect when restoring shields. Decreased cooldown with each Level Up!",
+      "ability_es": "Genera un efecto de Chug Splash al restaurar escudos. ¡Menos tiempo de recarga con cada subida de nivel!"
+    },
+    {
+      "key": "PLUNDARRGH",
+      "slug": "plundarrgh",
+      "name_en": "Plundarrgh",
+      "name_es": "Saqueacofres",
+      "rarity": "Mythic",
+      "rarity_es": "Mítico",
+      "variants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "allVariants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 2000,
+        "variant": 2400
+      },
+      "ability_en": "Opening Chest grants increased pickaxe speed and movement speed.",
+      "ability_es": "Abrir un cofre otorga más velocidad de pico y de movimiento."
+    },
+    {
+      "key": "MINI MIKU",
+      "slug": "minimiku",
+      "name_en": "Mini Miku",
+      "name_es": "Mini Miku",
+      "rarity": "Mythic",
+      "rarity_es": "Mítico",
+      "variants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "allVariants": [
+        "NORMAL",
+        "JEWELED",
+        "CURSED"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 2000,
+        "variant": 2400
+      },
+      "ability_en": "Grants a Friendship Bubble when emoting with other players. Decreased cooldown with each Level Up!",
+      "ability_es": "Otorga una burbuja de amistad al usar gestos con otros jugadores. ¡Menor tiempo de recarga con cada subida de nivel!"
     },
     {
       "key": "TRANSPONDER SNAIL",
@@ -268,73 +372,17 @@ window.SPRITES_DB = {
       "ability_es": "Otorga recursos extra al recogerlos, ¡y los compañeros que también lleven este Sprite equipado reciben algunos recursos extra! ¡Más recursos recibidos con cada subida de nivel!"
     },
     {
-      "key": "LIL FLACKO",
-      "slug": "lilflacko",
-      "name_en": "Lil' Flacko",
-      "name_es": "Lil' Flacko",
-      "rarity": "Legendary",
-      "rarity_es": "Legendario",
-      "variants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
-      ],
-      "allVariants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
-      ],
-      "trade": "always",
-      "maxLevel": 5,
-      "dust": {
-        "base": 1750,
-        "variant": 2100
-      },
-      "ability_en": "Creates a small shockwave on landing, knocking back enemies. Increased knockback strength with each Level Up!",
-      "ability_es": "Crea una pequeña onda expansiva al aterrizar que empuja a los enemigos. ¡Más fuerza de empuje con cada subida de nivel!"
-    },
-    {
-      "key": "LIL UZI VERT JR.",
-      "slug": "liluzivertjr",
-      "name_en": "Lil' Uzi Vert Jr.",
-      "name_es": "Lil' Uzi Vert Jr.",
-      "rarity": "Legendary",
-      "rarity_es": "Legendario",
-      "variants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
-      ],
-      "allVariants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
-      ],
-      "trade": "always",
-      "maxLevel": 5,
-      "dust": {
-        "base": 1750,
-        "variant": 2100
-      },
-      "ability_en": "Generates a Chug Splash effect when restoring shields. Decreased cooldown with each Level Up!",
-      "ability_es": "Genera un efecto de Chug Splash al restaurar escudos. ¡Menos tiempo de recarga con cada subida de nivel!"
-    },
-    {
-      "key": "PLUNDARRGH",
-      "slug": "plundarrgh",
-      "name_en": "Plundarrgh",
-      "name_es": "Saqueacofres",
+      "key": "ZEE",
+      "slug": "zee",
+      "name_en": "Zee",
+      "name_es": "Zee",
       "rarity": "Mythic",
       "rarity_es": "Mítico",
       "variants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "NORMAL"
       ],
       "allVariants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
+        "NORMAL"
       ],
       "trade": "always",
       "maxLevel": 5,
@@ -342,8 +390,8 @@ window.SPRITES_DB = {
         "base": 2000,
         "variant": 2400
       },
-      "ability_en": "Opening Chest grants increased pickaxe speed and movement speed.",
-      "ability_es": "Abrir un cofre otorga más velocidad de pico y de movimiento."
+      "ability_en": "Grants regenerating Zero Point dash charges. Max charges increase and recharge time decrease with Level Up!",
+      "ability_es": "Otorga cargas de impulso del Punto cero que se regeneran. ¡Más cargas máximas y menos tiempo de recarga al subir de nivel!"
     },
     {
       "key": "SWEET DREAMS",
@@ -366,54 +414,6 @@ window.SPRITES_DB = {
       },
       "ability_en": "Grants a random item at each level, exploding with Mythic loot at Max Level. Loot value increases at each Level Up!",
       "ability_es": "Otorga un objeto aleatorio en cada nivel y explota con botín mítico al nivel máximo. ¡El valor del botín aumenta con cada subida de nivel!"
-    },
-    {
-      "key": "MINI MIKU",
-      "slug": "minimiku",
-      "name_en": "Mini Miku",
-      "name_es": "Mini Miku",
-      "rarity": "Mythic",
-      "rarity_es": "Mítico",
-      "variants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
-      ],
-      "allVariants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED"
-      ],
-      "trade": "always",
-      "maxLevel": 5,
-      "dust": {
-        "base": 2000,
-        "variant": 2400
-      },
-      "ability_en": "Grants a Friendship Bubble when emoting with other players. Decreased cooldown with each Level Up!",
-      "ability_es": "Otorga una burbuja de amistad al usar gestos con otros jugadores. ¡Menor tiempo de recarga con cada subida de nivel!"
-    },
-    {
-      "key": "ZEE",
-      "slug": "zee",
-      "name_en": "Zee",
-      "name_es": "Zee",
-      "rarity": "Mythic",
-      "rarity_es": "Mítico",
-      "variants": [
-        "NORMAL"
-      ],
-      "allVariants": [
-        "NORMAL"
-      ],
-      "trade": "always",
-      "maxLevel": 5,
-      "dust": {
-        "base": 2000,
-        "variant": 2400
-      },
-      "ability_en": "Grants regenerating Zero Point dash charges. Max charges increase and recharge time decrease with Level Up!",
-      "ability_es": "Otorga cargas de impulso del Punto cero que se regeneran. ¡Más cargas máximas y menos tiempo de recarga al subir de nivel!"
     }
   ],
   "variants": [
@@ -427,15 +427,6 @@ window.SPRITES_DB = {
       "to": "#586a8c"
     },
     {
-      "key": "CURSED",
-      "slug": "cursed",
-      "name_en": "Cursed",
-      "name_es": "Maldito",
-      "color": "#3fb8a8",
-      "from": "#8ee8dc",
-      "to": "#1d6b62"
-    },
-    {
       "key": "JEWELED",
       "slug": "jeweled",
       "name_en": "Fortune",
@@ -443,6 +434,15 @@ window.SPRITES_DB = {
       "color": "#e0344f",
       "from": "#ff8a9c",
       "to": "#9c1030"
+    },
+    {
+      "key": "CURSED",
+      "slug": "cursed",
+      "name_en": "Cursed",
+      "name_es": "Maldito",
+      "color": "#3fb8a8",
+      "from": "#8ee8dc",
+      "to": "#1d6b62"
     }
   ],
   "allVariants": [
@@ -457,16 +457,6 @@ window.SPRITES_DB = {
       "released": true
     },
     {
-      "key": "CURSED",
-      "slug": "cursed",
-      "name_en": "Cursed",
-      "name_es": "Maldito",
-      "color": "#3fb8a8",
-      "from": "#8ee8dc",
-      "to": "#1d6b62",
-      "released": true
-    },
-    {
       "key": "JEWELED",
       "slug": "jeweled",
       "name_en": "Fortune",
@@ -474,6 +464,16 @@ window.SPRITES_DB = {
       "color": "#e0344f",
       "from": "#ff8a9c",
       "to": "#9c1030",
+      "released": true
+    },
+    {
+      "key": "CURSED",
+      "slug": "cursed",
+      "name_en": "Cursed",
+      "name_es": "Maldito",
+      "color": "#3fb8a8",
+      "from": "#8ee8dc",
+      "to": "#1d6b62",
       "released": true
     }
   ],
@@ -964,7 +964,7 @@ window.SPRITES_DB = {
       "spriteKey": "SQUIPLASH",
       "spriteSlug": "squiplash",
       "spriteNameEn": "Squiplash",
-      "spriteNameEs": "Squiplash",
+      "spriteNameEs": "Calamarín",
       "variantKey": "NORMAL",
       "variantSlug": "basic",
       "variantNameEn": "Normal",
@@ -984,7 +984,7 @@ window.SPRITES_DB = {
       "spriteKey": "SQUIPLASH",
       "spriteSlug": "squiplash",
       "spriteNameEn": "Squiplash",
-      "spriteNameEs": "Squiplash",
+      "spriteNameEs": "Calamarín",
       "variantKey": "CURSED",
       "variantSlug": "cursed",
       "variantNameEn": "Cursed",
@@ -1004,7 +1004,7 @@ window.SPRITES_DB = {
       "spriteKey": "SQUIPLASH",
       "spriteSlug": "squiplash",
       "spriteNameEn": "Squiplash",
-      "spriteNameEs": "Squiplash",
+      "spriteNameEs": "Calamarín",
       "variantKey": "JEWELED",
       "variantSlug": "jeweled",
       "variantNameEn": "Fortune",

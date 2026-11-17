@@ -9,6 +9,25 @@
     return;
   }
 
+  const SPIRIT_DISPLAY_ORDER = new Map((DB.sprites || []).map((s, idx) => [s.key, idx]));
+  const VARIANT_DISPLAY_ORDER = new Map(
+    (DB.variants && DB.variants.length ? DB.variants.map(v => v.key) : ["NORMAL", "JEWELED", "CURSED"])
+      .map((k, idx) => [k, idx])
+  );
+
+  function compareCellsDisplayOrder(a, b) {
+    const sA = SPIRIT_DISPLAY_ORDER.has(a.spriteKey) ? SPIRIT_DISPLAY_ORDER.get(a.spriteKey) : 999;
+    const sB = SPIRIT_DISPLAY_ORDER.has(b.spriteKey) ? SPIRIT_DISPLAY_ORDER.get(b.spriteKey) : 999;
+    if (sA !== sB) return sA - sB;
+    const vA = VARIANT_DISPLAY_ORDER.has(a.variantKey) ? VARIANT_DISPLAY_ORDER.get(a.variantKey) : 999;
+    const vB = VARIANT_DISPLAY_ORDER.has(b.variantKey) ? VARIANT_DISPLAY_ORDER.get(b.variantKey) : 999;
+    return vA - vB;
+  }
+
+  function normalizeSearchText(str) {
+    return String(str || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  }
+
   function getOwnBaseUrl() {
     if (window.location.origin && window.location.origin !== "null") {
       return window.location.origin + window.location.pathname;
@@ -561,7 +580,7 @@
     results.sort((a, b) => {
       let diff = (rarityOrder[b.rarity] || 0) - (rarityOrder[a.rarity] || 0);
       if (diff !== 0) return diff;
-      return b.dust - a.dust || a.spriteNameEs.localeCompare(b.spriteNameEs);
+      return b.dust - a.dust || compareCellsDisplayOrder(a, b);
     });
 
     return results;
@@ -1411,7 +1430,7 @@
   }
 
   function getFilteredPersonalCells() {
-    const searchVal = (document.getElementById("personalSearchInput")?.value || "").trim().toLowerCase();
+    const searchVal = normalizeSearchText((document.getElementById("personalSearchInput")?.value || "").trim());
     const variantVal = document.getElementById("personalVariantFilter")?.value || "all";
     const statusVal = document.getElementById("personalStatusFilter")?.value || "all";
 
@@ -1421,11 +1440,11 @@
       if (statusVal === "owned" && !isOwned) return false;
       if (statusVal === "missing" && isOwned) return false;
       if (searchVal) {
-        const haystack = `${cell.spriteNameEs} ${cell.spriteNameEn} ${cell.variantNameEs} ${cell.variantNameEn} ${cell.rarityEs}`.toLowerCase();
+        const haystack = normalizeSearchText(`${cell.spriteNameEs} ${cell.spriteNameEn} ${cell.variantNameEs} ${cell.variantNameEn} ${cell.rarityEs}`);
         if (!haystack.includes(searchVal)) return false;
       }
       return true;
-    });
+    }).sort(compareCellsDisplayOrder);
   }
 
   function renderPersonalLockerView() {
@@ -2209,7 +2228,7 @@
     missingList.sort((a, b) => {
       let diff = (rarityOrder[b.rarity] || 0) - (rarityOrder[a.rarity] || 0);
       if (diff !== 0) return diff;
-      return b.dust - a.dust || a.spriteNameEs.localeCompare(b.spriteNameEs);
+      return b.dust - a.dust || compareCellsDisplayOrder(a, b);
     });
 
     let html = `
@@ -2388,7 +2407,7 @@
   };
 
   function getFilteredLockerCells() {
-    const searchVal = (document.getElementById("lockerSearchInput")?.value || "").trim().toLowerCase();
+    const searchVal = normalizeSearchText((document.getElementById("lockerSearchInput")?.value || "").trim());
     const variantVal = document.getElementById("lockerVariantFilter")?.value || "all";
     const statusVal = document.getElementById("lockerStatusFilter")?.value || "all";
 
@@ -2398,11 +2417,11 @@
       if (statusVal === "owned" && !isOwned) return false;
       if (statusVal === "missing" && isOwned) return false;
       if (searchVal) {
-        const haystack = `${cell.spriteNameEs} ${cell.spriteNameEn} ${cell.variantNameEs} ${cell.variantNameEn} ${cell.rarityEs}`.toLowerCase();
+        const haystack = normalizeSearchText(`${cell.spriteNameEs} ${cell.spriteNameEn} ${cell.variantNameEs} ${cell.variantNameEn} ${cell.rarityEs}`);
         if (!haystack.includes(searchVal)) return false;
       }
       return true;
-    });
+    }).sort(compareCellsDisplayOrder);
   }
 
   function renderLockerGrid() {
