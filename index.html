@@ -128,9 +128,14 @@
             <option value="owned">✅ Solo los que TIENE</option>
             <option value="missing">❌ Solo los que LE FALTAN</option>
           </select>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnPersonalMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar visibles</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnPersonalUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Limpiar visibles</button>
-          <button type="button" class="btn btn-danger btn-sm" id="btnPersonalClearAll" title="Vaciar todos los espíritus de este casillero">🧹 Vaciar todo</button>
+          <details class="toolbar-more-menu">
+            <summary class="btn btn-secondary btn-sm">⋯ Más acciones</summary>
+            <div class="toolbar-more-dropdown">
+              <button type="button" class="btn btn-secondary btn-sm" id="btnPersonalMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar visibles</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnPersonalUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Limpiar visibles</button>
+              <button type="button" class="btn btn-danger btn-sm" id="btnPersonalClearAll" title="Vaciar todos los espíritus de este casillero">🧹 Vaciar todo</button>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -150,7 +155,7 @@
         <div class="panel-header">
           <div>
             <h2 class="panel-title">👥 Sala de Jugadores (Lobby)</h2>
-            <p class="panel-desc">Cada jugador tiene un <strong>Link Personal</strong>. Cópialo para abrir tu página de casillero o pégalo en otra sala para entrar con tu perfil.</p>
+            <p class="panel-desc">Tu <strong>Link Personal</strong> guarda tus espíritus; pégalo en cualquier sala para ver al instante el plan de intercambios del escuadrón.</p>
           </div>
           <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
             <button type="button" class="btn btn-secondary btn-sm" id="btnReloadAllLockers" title="Recargar todos los casilleros personales de la sala">🔄 Recargar Sala</button>
@@ -178,11 +183,11 @@
   </main>
 
   <!-- Modal Editor Visual de Casillero -->
-  <dialog id="lockerDialog" closedby="any" class="locker-dialog" aria-labelledby="lockerDialogTitle">
+  <dialog id="lockerDialog" class="locker-dialog" aria-labelledby="lockerDialogTitle">
     <div class="locker-dialog-inner">
       <div class="modal-header">
-        <div style="display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap;">
-          <h3 id="lockerDialogTitle" style="font-size: 1.05rem; color: #3fd0ff;">✏️ Editar Casillero:</h3>
+        <div style="display: flex; align-items: center; gap: 0.65rem; flex-wrap: wrap; flex: 1; min-width: 0;">
+          <h3 id="lockerDialogTitle" style="font-size: 1rem; color: #3fd0ff;">✏️ Editar Casillero:</h3>
           <input type="text" id="lockerPlayerNameInput" class="locker-name-input" placeholder="Nombre del jugador">
           <span id="lockerCountBadge" class="player-stats-badge">0/42 (0%)</span>
         </div>
@@ -203,8 +208,13 @@
             <option value="owned">✅ Solo los que TIENE</option>
             <option value="missing">❌ Solo los que LE FALTAN</option>
           </select>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar visibles</button>
-          <button type="button" class="btn btn-secondary btn-sm" id="btnUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Limpiar visibles</button>
+          <details class="toolbar-more-menu">
+            <summary class="btn btn-secondary btn-sm">⋯ Más acciones</summary>
+            <div class="toolbar-more-dropdown">
+              <button type="button" class="btn btn-secondary btn-sm" id="btnMarkFiltered" title="Marcar todos los espíritus visibles con el filtro actual">☑️ Marcar visibles</button>
+              <button type="button" class="btn btn-secondary btn-sm" id="btnUnmarkFiltered" title="Desmarcar todos los espíritus visibles con el filtro actual">⬜ Limpiar visibles</button>
+            </div>
+          </details>
         </div>
       </div>
 
@@ -230,7 +240,7 @@
     <div class="avatar-dialog-inner">
       <div class="modal-header">
         <div>
-          <h3 id="avatarDialogTitle" style="font-size: 1.1rem; color: #ffd070; display: flex; align-items: center; gap: 0.5rem;">
+          <h3 id="avatarDialogTitle" style="font-size: 1rem; color: #ffd070; display: flex; align-items: center; gap: 0.5rem;">
             <span>🎭</span> Elige tu Avatar de Jugador
           </h3>
           <p style="font-size: 0.78rem; color: var(--text-secondary); margin-top: 0.2rem;">
@@ -263,10 +273,94 @@
     </div>
   </dialog>
 
+  <!-- Modal Cambiar / Crear Sala en Vivo -->
+  <dialog id="roomSwitchDialog" class="compact-dialog" aria-labelledby="roomSwitchTitle">
+    <div class="compact-dialog-inner">
+      <div class="modal-header">
+        <h3 id="roomSwitchTitle" class="compact-dialog-title">🌐 Sala en Vivo</h3>
+        <button type="button" class="modal-close" id="roomSwitchClose" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="compact-dialog-body">
+        <p class="compact-dialog-desc">
+          Sala actual: <strong id="roomSwitchCurrentCode">#...</strong>. Escribe el código de otra sala para unirte o crea una sala nueva con tus jugadores actuales.
+        </p>
+        <label for="roomSwitchInput" class="personal-field-label">Código de sala</label>
+        <input
+          type="text"
+          id="roomSwitchInput"
+          class="locker-filter-input"
+          placeholder="Ej. escuadron-1"
+          maxlength="40"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+        <div class="compact-dialog-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnRoomCreateNew">➕ Crear Nueva Sala</button>
+          <button type="button" class="btn btn-primary btn-sm" id="btnRoomJoinSubmit">🔄 Conectar a Sala</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal Compartir / Vincular Casillero de Jugador -->
+  <dialog id="playerLinkDialog" class="compact-dialog" aria-labelledby="playerLinkTitle">
+    <div class="compact-dialog-inner">
+      <div class="modal-header">
+        <h3 id="playerLinkTitle" class="compact-dialog-title">🔗 Compartir / Vincular</h3>
+        <button type="button" class="modal-close" id="playerLinkClose" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="compact-dialog-body">
+        <div class="player-link-modal-meta">
+          <span id="playerLinkNameLabel" class="player-link-modal-name">Jugador</span>
+          <a id="playerLinkExclusiveAnchor" href="#" class="player-personal-id-pill" title="Abrir página exclusiva para editar solo este casillero">
+            #... ↗️
+          </a>
+        </div>
+        <label for="playerLinkModalInput" class="personal-field-label">Link Personal (úsalo en otra sala o navegador)</label>
+        <input
+          type="text"
+          id="playerLinkModalInput"
+          class="player-link-input"
+          placeholder="Pega aquí tu link personal (#casillero=...)"
+          autocorrect="off"
+          autocapitalize="off"
+          spellcheck="false"
+        >
+        <div class="compact-dialog-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPlayerLinkCopy">📋 Copiar Link</button>
+          <button type="button" class="btn btn-primary btn-sm" id="btnPlayerLinkPaste">📥 Pegar Link</button>
+          <button type="button" class="btn btn-secondary btn-sm" id="btnPlayerLinkReload">🔄 Recargar</button>
+        </div>
+        <div class="compact-dialog-danger-zone">
+          <button type="button" class="btn btn-danger btn-sm" id="btnPlayerLinkRemove">🗑️ Quitar jugador de la sala</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Modal de Confirmación para Acciones Destructivas -->
+  <dialog id="confirmDialog" class="compact-dialog" aria-labelledby="confirmDialogTitle">
+    <div class="compact-dialog-inner">
+      <div class="modal-header">
+        <h3 id="confirmDialogTitle" class="compact-dialog-title">⚠️ Confirmar acción</h3>
+        <button type="button" class="modal-close" id="confirmDialogClose" aria-label="Cerrar">&times;</button>
+      </div>
+      <div class="compact-dialog-body">
+        <p id="confirmDialogMessage" class="compact-dialog-desc"></p>
+        <div class="compact-dialog-actions">
+          <button type="button" class="btn btn-secondary btn-sm" id="btnConfirmCancel">Cancelar</button>
+          <button type="button" class="btn btn-danger btn-sm" id="btnConfirmAccept">Confirmar</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
   <!-- Toast de notificación para copiado -->
   <div class="toast" id="toast" role="status" aria-live="polite">
     <span aria-hidden="true">📋</span>
     <span class="toast-text">¡Copiado con éxito!</span>
+    <button type="button" class="btn btn-secondary btn-sm toast-undo-btn" id="toastUndoBtn" hidden>↩️ Deshacer</button>
   </div>
 
   <!-- Scripts -->

@@ -1447,6 +1447,31 @@
     }).sort(compareCellsDisplayOrder);
   }
 
+  const RARITY_COLORS = {
+    Rare: '#3aa0ff',
+    Epic: '#b34dff',
+    Legendary: '#f5a623',
+    Mythic: '#ff4d4d'
+  };
+
+  function renderSpriteToggleCard(cell, isOwned, imgSizePx = 56) {
+    const rarityColor = RARITY_COLORS[cell.rarity] || '#fff';
+    const imgSrc = cell.imageUrl || (cell.image ? `https://spritelocker.com${cell.image}` : '');
+    return `
+      <button type="button" class="locker-cell-card ${isOwned ? 'is-owned' : ''}" data-key="${escapeHtml(cell.key)}" style="border-bottom: 3px solid ${rarityColor};" aria-pressed="${isOwned ? 'true' : 'false'}">
+        <span class="locker-cell-status">${isOwned ? '✅ TIENE' : '❌ FALTA'}</span>
+        <div class="spirit-img-wrap" style="width: ${imgSizePx}px; height: ${imgSizePx}px; margin-top: 0.5rem;">
+          <img src="${imgSrc}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.hidden=true; if (this.nextElementSibling) this.nextElementSibling.hidden=false;">
+          <span class="spirit-img-fallback" aria-hidden="true" hidden>👻</span>
+        </div>
+        <div class="spirit-name" title="${escapeHtml(cell.spriteNameEs)}">${escapeHtml(cell.spriteNameEs)}</div>
+        <div class="spirit-tags" style="margin-bottom: 0;">
+          <span class="variant-pill" style="border-color: ${rarityColor}; color: #eaf4ff;">${escapeHtml(cell.variantNameEs)}</span>
+        </div>
+      </button>
+    `;
+  }
+
   function renderPersonalLockerView() {
     const nameInput = document.getElementById("personalPlayerNameInput");
     if (nameInput && document.activeElement !== nameInput) {
@@ -1484,37 +1509,13 @@
     const gridEl = document.getElementById("personalSpritesGrid");
     if (!gridEl) return;
 
-    const rarityColors = {
-      Rare: '#3aa0ff',
-      Epic: '#b34dff',
-      Legendary: '#f5a623',
-      Mythic: '#ff4d4d'
-    };
-
     const filtered = getFilteredPersonalCells();
     if (filtered.length === 0) {
       gridEl.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">No se encontraron espíritus con ese filtro.</div>`;
       return;
     }
 
-    gridEl.innerHTML = filtered.map(cell => {
-      const isOwned = !!personalViewState.owned[cell.key];
-      const rarityColor = rarityColors[cell.rarity] || '#fff';
-      const imgSrc = cell.imageUrl || (cell.image ? `https://spritelocker.com${cell.image}` : '');
-
-      return `
-        <div class="locker-cell-card ${isOwned ? 'is-owned' : ''}" data-key="${escapeHtml(cell.key)}" style="border-bottom: 3px solid ${rarityColor};" role="button" tabindex="0" aria-pressed="${isOwned ? 'true' : 'false'}">
-          <span class="locker-cell-status">${isOwned ? '✅ TIENE' : '❌ FALTA'}</span>
-          <div class="spirit-img-wrap" style="width: 58px; height: 58px; margin-top: 0.5rem;">
-            <img src="${imgSrc}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-          </div>
-          <div class="spirit-name" title="${escapeHtml(cell.spriteNameEs)}">${escapeHtml(cell.spriteNameEs)}</div>
-          <div class="spirit-tags" style="margin-bottom: 0;">
-            <span class="variant-pill" style="border-color: ${rarityColor}; color: #eaf4ff;">${escapeHtml(cell.variantNameEs)}</span>
-          </div>
-        </div>
-      `;
-    }).join("");
+    gridEl.innerHTML = filtered.map(cell => renderSpriteToggleCard(cell, !!personalViewState.owned[cell.key], 58)).join("");
 
     const togglePersonalCell = (key) => {
       if (!key) return;
@@ -1532,18 +1533,6 @@
     gridEl.querySelectorAll(".locker-cell-card").forEach(cardEl => {
       cardEl.addEventListener("click", () => {
         togglePersonalCell(cardEl.getAttribute("data-key"));
-      });
-      cardEl.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") {
-          togglePersonalCell(cardEl.getAttribute("data-key"));
-        } else if (e.key === " ") {
-          e.preventDefault();
-        }
-      });
-      cardEl.addEventListener("keyup", (e) => {
-        if (e.key === " ") {
-          togglePersonalCell(cardEl.getAttribute("data-key"));
-        }
       });
     });
   }
@@ -1743,13 +1732,49 @@
   const elMainContent = document.getElementById("mainContent");
   const elToast = document.getElementById("toast");
 
-  function showToast(msg) {
+  let toastTimer = null;
+  function showToast(msg, options = {}) {
     if (!elToast) return;
     elToast.querySelector(".toast-text").textContent = msg;
+    const undoBtn = document.getElementById("toastUndoBtn");
+    if (undoBtn) {
+      if (typeof options.onUndo === "function") {
+        undoBtn.hidden = false;
+        undoBtn.textContent = options.undoLabel || "↩️ Deshacer";
+        undoBtn.onclick = () => {
+          undoBtn.hidden = true;
+          elToast.classList.remove("show");
+          options.onUndo();
+        };
+      } else {
+        undoBtn.hidden = true;
+        undoBtn.onclick = null;
+      }
+    }
     elToast.classList.add("show");
-    setTimeout(() => {
+    if (toastTimer) clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
       elToast.classList.remove("show");
-    }, 3200);
+      if (undoBtn) {
+        undoBtn.hidden = true;
+        undoBtn.onclick = null;
+      }
+    }, options.durationMs || 3600);
+  }
+
+  let activeConfirmAction = null;
+  function showConfirmDialog({ title, message, confirmLabel = "Confirmar", onConfirm }) {
+    const dialog = document.getElementById("confirmDialog");
+    if (!dialog || typeof dialog.showModal !== "function") {
+      if (window.confirm(message)) onConfirm?.();
+      return;
+    }
+    document.getElementById("confirmDialogTitle").textContent = title || "⚠️ Confirmar acción";
+    document.getElementById("confirmDialogMessage").textContent = message || "";
+    const acceptBtn = document.getElementById("btnConfirmAccept");
+    if (acceptBtn) acceptBtn.textContent = confirmLabel;
+    activeConfirmAction = onConfirm || null;
+    dialog.showModal();
   }
 
   async function applyPersonalLinkToPlayerCard(player, newVal) {
@@ -1793,12 +1818,37 @@
     renderActiveTab();
   }
 
+  let activeLinkModalPlayerId = null;
+  function openPlayerLinkModal(playerId) {
+    const player = state.players.find(p => p.id === playerId);
+    if (!player) return;
+    ensurePlayerLockerId(player);
+    activeLinkModalPlayerId = player.id;
+
+    const personalLink = getPersonalLockerUrl(player.lockerId);
+    const nameLabel = document.getElementById("playerLinkNameLabel");
+    if (nameLabel) nameLabel.textContent = player.name || "Jugador";
+
+    const anchor = document.getElementById("playerLinkExclusiveAnchor");
+    if (anchor) {
+      anchor.href = `#casillero=${player.lockerId}`;
+      anchor.textContent = `#${player.lockerId} ↗️`;
+    }
+
+    const input = document.getElementById("playerLinkModalInput");
+    if (input) input.value = personalLink;
+
+    const dialog = document.getElementById("playerLinkDialog");
+    if (dialog && typeof dialog.showModal === "function") {
+      dialog.showModal();
+    }
+  }
+
   function renderLobby() {
     if (!elLobbyGrid) return;
     elLobbyGrid.innerHTML = "";
     state.players.forEach((player) => {
       ensurePlayerLockerId(player);
-      const personalLink = getPersonalLockerUrl(player.lockerId);
 
       const card = document.createElement("div");
       card.className = "player-card" + (player.error ? " has-error" : "");
@@ -1813,6 +1863,7 @@
 
       const isDefaultPlaceholderName = /^Jugador\s*\d*$/i.test(player.name.trim());
       const avatarInfo = getAvatarInfo(player.avatar);
+      const statusNote = player.error ? escapeHtml(player.error) : escapeHtml(vaultedNote);
 
       card.innerHTML = `
         <div class="player-card-header">
@@ -1833,35 +1884,19 @@
           </div>
         </div>
         <div class="progress-container">
-          <div class="progress-labels">
-            <span>Colección</span>
-            <span class="progress-pct-${player.id}">${pct}%</span>
-          </div>
           <div class="progress-bar-bg">
             <div class="progress-bar-fill progress-fill-${player.id}" style="width: ${pct}%;"></div>
           </div>
         </div>
-        <button type="button" class="btn btn-edit-locker btn-open-locker" data-id="${player.id}" title="Abrir y editar el casillero de espíritus">
-          <span>✏️ Editar Casillero</span>
-        </button>
-        <div class="player-link-group">
-          <div class="player-link-label-row">
-            <label for="link_input_${player.id}">🔗 Link Personal (úsalo en otra sala o navegador):</label>
-            <a href="#casillero=${escapeHtml(player.lockerId)}" class="player-personal-id-pill pill-id-${player.id}" title="Abrir página exclusiva para editar solo este casillero">
-              #${escapeHtml(player.lockerId)} ↗️
-            </a>
-          </div>
-          <input type="text" id="link_input_${player.id}" class="player-link-input" value="${escapeHtml(personalLink)}" placeholder="Pega aquí tu link personal (#casillero=...)" data-id="${player.id}" autocorrect="off" autocapitalize="off" spellcheck="false">
+        <div class="player-card-actions-row">
+          <button type="button" class="btn btn-edit-locker btn-open-locker" data-id="${player.id}" title="Abrir y editar el casillero de espíritus">
+            <span>✏️ Editar Casillero</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm btn-link-cta" data-id="${player.id}" title="Compartir o vincular link personal y opciones de jugador">
+            🔗 Vincular
+          </button>
         </div>
-        <div class="player-meta-row">
-          <span class="error-msg-${player.id}" style="color: ${player.error ? '#ff8585' : '#ffd070'};">${player.error ? escapeHtml(player.error) : escapeHtml(vaultedNote)}</span>
-        </div>
-        <div class="player-actions">
-          <button type="button" class="btn btn-secondary btn-sm btn-copy" data-id="${player.id}" title="Copiar el link personal de este casillero">📋 Copiar Link</button>
-          <button type="button" class="btn btn-primary btn-sm btn-paste" data-id="${player.id}" title="Pegar un link personal de casillero en esta tarjeta">📥 Pegar Link</button>
-          <button type="button" class="btn btn-secondary btn-sm btn-reload" data-id="${player.id}" title="Recargar este casillero desde la nube">🔄 Recargar</button>
-          <button type="button" class="btn btn-danger btn-sm btn-remove" data-id="${player.id}" title="Quitar jugador de esta sala">Eliminar</button>
-        </div>
+        ${statusNote ? `<div class="player-meta-row"><span class="error-msg-${player.id}" style="color: ${player.error ? '#ff8585' : '#ffd070'};">${statusNote}</span></div>` : `<span class="error-msg-${player.id}" hidden></span>`}
       `;
 
       // Evento: Nombre
@@ -1883,68 +1918,9 @@
         openLockerModal(player.id);
       });
 
-      // Evento: Input del Link Personal
-      const linkInput = card.querySelector(".player-link-input");
-      linkInput.addEventListener("focus", () => linkInput.select());
-      linkInput.addEventListener("change", (e) => applyPersonalLinkToPlayerCard(player, e.target.value));
-      linkInput.addEventListener("paste", () => {
-        setTimeout(() => applyPersonalLinkToPlayerCard(player, linkInput.value), 50);
-      });
-
-      // Botón: Copiar Link Personal
-      card.querySelector(".btn-copy").addEventListener("click", async () => {
-        ensurePlayerLockerId(player);
-        const ownPersonalLink = getPersonalLockerUrl(player.lockerId);
-        linkInput.value = ownPersonalLink;
-        saveState({ player });
-        try {
-          await navigator.clipboard.writeText(ownPersonalLink);
-          showToast(`📋 ¡Link personal de ${player.name} copiado! Pégalo en otra sala o en tu navegador.`);
-        } catch (_) {
-          prompt(`Copia el link personal de ${player.name}:`, ownPersonalLink);
-        }
-      });
-
-      // Botón: Pegar Link Personal
-      card.querySelector(".btn-paste").addEventListener("click", async () => {
-        let pasted = "";
-        if (navigator.clipboard && typeof navigator.clipboard.readText === "function") {
-          try {
-            pasted = (await navigator.clipboard.readText()) || "";
-          } catch (_) {
-            pasted = "";
-          }
-        }
-        if (!pasted.trim()) {
-          let manual = prompt(`Pega el Link Personal de Casillero para ${player.name}:`, "");
-          if (manual !== null) pasted = manual;
-        }
-        if (pasted && pasted.trim() !== "") {
-          await applyPersonalLinkToPlayerCard(player, pasted.trim());
-          const updatedCard = document.getElementById(`card_${player.id}`);
-          if (updatedCard) {
-            updatedCard.classList.add("is-updated");
-            setTimeout(() => updatedCard.classList.remove("is-updated"), 1200);
-          }
-        }
-      });
-
-      // Botón: Recargar Casillero
-      card.querySelector(".btn-reload").addEventListener("click", async () => {
-        await reloadPlayerLocker(player, true);
-      });
-
-      // Botón: Eliminar Jugador
-      card.querySelector(".btn-remove").addEventListener("click", () => {
-        if (state.players.length <= 1) {
-          showToast("Debe haber al menos un jugador en la sala.");
-          return;
-        }
-        state.players = state.players.filter(p => p.id !== player.id);
-        syncRoomLockerSubscriptions();
-        saveState();
-        renderLobby();
-        renderActiveTab();
+      // Evento: Compartir / Vincular
+      card.querySelector(".btn-link-cta").addEventListener("click", () => {
+        openPlayerLinkModal(player.id);
       });
 
       elLobbyGrid.appendChild(card);
@@ -2053,9 +2029,8 @@
             <div class="panel-title">🤝 Fila Principal de Compartir (Cascada de Mayor a Menor)</div>
             <div class="panel-desc">Organiza a los jugadores de mayor a menor y calcula la fila de entregas paso a paso.</div>
           </div>
-          <div>
-            <button class="btn btn-secondary btn-sm" id="btnCopyChainDiscord">📋 Copiar para Discord</button>
-            <button class="btn btn-secondary btn-sm" id="btnCopyChainWhatsapp">💬 Copiar para WhatsApp</button>
+          <div class="chain-header-actions">
+            <button type="button" class="btn btn-secondary btn-sm" id="btnCopyChainPlan">📋 Copiar Plan de Intercambio</button>
           </div>
         </div>
 
@@ -2130,11 +2105,8 @@
     html += `</div>`;
     elMainContent.innerHTML = html;
 
-    // Listeners para copiar
-    document.getElementById("btnCopyChainDiscord")?.addEventListener("click", () => {
-      copyChainText(players, "discord");
-    });
-    document.getElementById("btnCopyChainWhatsapp")?.addEventListener("click", () => {
+    // Listener para copiar plan
+    document.getElementById("btnCopyChainPlan")?.addEventListener("click", () => {
       copyChainText(players, "whatsapp");
     });
   }
@@ -2388,6 +2360,7 @@
     player.isLive = false;
 
     await updatePlayer(player, false);
+    lockerEditorDirty = false;
     saveState({ player });
     renderLobby();
     renderActiveTab();
@@ -2424,6 +2397,8 @@
     }).sort(compareCellsDisplayOrder);
   }
 
+  let lockerEditorDirty = false;
+
   function renderLockerGrid() {
     const gridEl = document.getElementById("lockerSpritesGrid");
     const badgeEl = document.getElementById("lockerCountBadge");
@@ -2437,37 +2412,13 @@
       badgeEl.textContent = `${ownedCount}/${totalCells} (${pct}%)`;
     }
 
-    const rarityColors = {
-      Rare: '#3aa0ff',
-      Epic: '#b34dff',
-      Legendary: '#f5a623',
-      Mythic: '#ff4d4d'
-    };
-
     const filtered = getFilteredLockerCells();
     if (filtered.length === 0) {
       gridEl.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">No se encontraron espíritus con ese filtro.</div>`;
       return;
     }
 
-    gridEl.innerHTML = filtered.map(cell => {
-      const isOwned = !!lockerEditorState.owned[cell.key];
-      const rarityColor = rarityColors[cell.rarity] || '#fff';
-      const imgSrc = cell.imageUrl || (cell.image ? `https://spritelocker.com${cell.image}` : '');
-
-      return `
-        <div class="locker-cell-card ${isOwned ? 'is-owned' : ''}" data-key="${escapeHtml(cell.key)}" style="border-bottom: 3px solid ${rarityColor};">
-          <span class="locker-cell-status">${isOwned ? '✅ TIENE' : '❌ FALTA'}</span>
-          <div class="spirit-img-wrap" style="width: 54px; height: 54px; margin-top: 0.5rem;">
-            <img src="${imgSrc}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
-          </div>
-          <div class="spirit-name" title="${escapeHtml(cell.spriteNameEs)}">${escapeHtml(cell.spriteNameEs)}</div>
-          <div class="spirit-tags" style="margin-bottom: 0;">
-            <span class="variant-pill" style="border-color: ${rarityColor}; color: #eaf4ff;">${escapeHtml(cell.variantNameEs)}</span>
-          </div>
-        </div>
-      `;
-    }).join("");
+    gridEl.innerHTML = filtered.map(cell => renderSpriteToggleCard(cell, !!lockerEditorState.owned[cell.key], 54)).join("");
 
     gridEl.querySelectorAll(".locker-cell-card").forEach(cardEl => {
       cardEl.addEventListener("click", () => {
@@ -2480,6 +2431,7 @@
         } else {
           lockerEditorState.owned[key] = true;
         }
+        lockerEditorDirty = true;
         renderLockerGrid();
       });
     });
@@ -2489,6 +2441,7 @@
     const player = state.players.find(p => p.id === playerId);
     if (!player) return;
 
+    lockerEditorDirty = false;
     lockerEditorState = {
       playerId: player.id,
       owned: player.data ? { ...player.data.owned } : {},
@@ -2536,6 +2489,7 @@
     player.isLive = false;
 
     await updatePlayer(player, false);
+    lockerEditorDirty = false;
     saveState({ player });
     renderLobby();
     renderActiveTab();
@@ -2902,13 +2856,42 @@
       schedulePersonalLockerSave();
     });
     document.getElementById("btnPersonalClearAll")?.addEventListener("click", () => {
-      personalViewState.owned = {};
-      personalViewState.mastered = {};
-      personalViewState.lost = {};
-      personalViewState.levels = {};
-      renderPersonalLockerView();
-      schedulePersonalLockerSave();
-      showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 42}).`);
+      const ownedCount = Object.keys(personalViewState.owned).filter(k => personalViewState.owned[k]).length;
+      if (ownedCount === 0) {
+        showToast(`Tu casillero ya está vacío (0/${DB.totalCells || 42}).`);
+        return;
+      }
+      const backup = {
+        owned: { ...personalViewState.owned },
+        mastered: { ...personalViewState.mastered },
+        lost: { ...personalViewState.lost },
+        levels: { ...personalViewState.levels }
+      };
+      showConfirmDialog({
+        title: "🧹 Vaciar casillero personal",
+        message: `Se quitarán tus ${ownedCount} espíritus marcados y se sincronizará el cambio en la nube. ¿Continuar?`,
+        confirmLabel: "Sí, vaciar todo",
+        onConfirm: () => {
+          personalViewState.owned = {};
+          personalViewState.mastered = {};
+          personalViewState.lost = {};
+          personalViewState.levels = {};
+          renderPersonalLockerView();
+          schedulePersonalLockerSave();
+          showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 42}).`, {
+            durationMs: 6500,
+            onUndo: () => {
+              personalViewState.owned = backup.owned;
+              personalViewState.mastered = backup.mastered;
+              personalViewState.lost = backup.lost;
+              personalViewState.levels = backup.levels;
+              renderPersonalLockerView();
+              schedulePersonalLockerSave();
+              showToast(`↩️ Casillero restaurado (${ownedCount}/${DB.totalCells || 42}).`);
+            }
+          });
+        }
+      });
     });
 
     window.addEventListener("beforeunload", () => {
@@ -2945,23 +2928,46 @@
 
     // Controles del Dialog Editor Visual de Casillero (en Sala)
     const lockerDialog = document.getElementById("lockerDialog");
-    if (lockerDialog && !("closedBy" in HTMLDialogElement.prototype)) {
-      lockerDialog.addEventListener("click", (event) => {
-        if (event.target !== lockerDialog) return;
-        const rect = lockerDialog.getBoundingClientRect();
-        const isDialogContent = (
-          rect.top <= event.clientY &&
-          event.clientY <= rect.top + rect.height &&
-          rect.left <= event.clientX &&
-          event.clientX <= rect.left + rect.width
-        );
-        if (isDialogContent) return;
+    const requestCloseLockerDialog = () => {
+      if (!lockerDialog) return;
+      if (!lockerEditorDirty) {
         lockerDialog.close();
+        return;
+      }
+      showConfirmDialog({
+        title: "💾 Cambios sin guardar",
+        message: "Tienes cambios sin guardar en este casillero. ¿Seguro que quieres cerrar y descartarlos?",
+        confirmLabel: "Descartar cambios",
+        onConfirm: () => {
+          lockerEditorDirty = false;
+          lockerDialog.close();
+        }
       });
-    }
+    };
 
-    document.getElementById("lockerDialogClose")?.addEventListener("click", () => {
-      lockerDialog?.close();
+    lockerDialog?.addEventListener("cancel", (event) => {
+      if (lockerEditorDirty) {
+        event.preventDefault();
+        requestCloseLockerDialog();
+      }
+    });
+
+    lockerDialog?.addEventListener("click", (event) => {
+      if (event.target !== lockerDialog) return;
+      const rect = lockerDialog.getBoundingClientRect();
+      const isDialogContent = (
+        rect.top <= event.clientY &&
+        event.clientY <= rect.top + rect.height &&
+        rect.left <= event.clientX &&
+        event.clientX <= rect.left + rect.width
+      );
+      if (isDialogContent) return;
+      requestCloseLockerDialog();
+    });
+
+    document.getElementById("lockerDialogClose")?.addEventListener("click", requestCloseLockerDialog);
+    document.getElementById("lockerPlayerNameInput")?.addEventListener("input", () => {
+      lockerEditorDirty = true;
     });
     document.getElementById("lockerSearchInput")?.addEventListener("input", renderLockerGrid);
     document.getElementById("lockerVariantFilter")?.addEventListener("change", renderLockerGrid);
@@ -2971,21 +2977,36 @@
       for (let cell of getFilteredLockerCells()) {
         lockerEditorState.owned[cell.key] = true;
       }
+      lockerEditorDirty = true;
       renderLockerGrid();
     });
     document.getElementById("btnUnmarkFiltered")?.addEventListener("click", () => {
       for (let cell of getFilteredLockerCells()) {
         delete lockerEditorState.owned[cell.key];
       }
+      lockerEditorDirty = true;
       renderLockerGrid();
     });
     document.getElementById("btnLockerClear")?.addEventListener("click", () => {
-      lockerEditorState.owned = {};
-      lockerEditorState.mastered = {};
-      lockerEditorState.lost = {};
-      lockerEditorState.levels = {};
-      renderLockerGrid();
-      showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 42}).`);
+      const ownedCount = Object.keys(lockerEditorState.owned).filter(k => lockerEditorState.owned[k]).length;
+      if (ownedCount === 0) {
+        showToast(`El casillero ya está vacío (0/${DB.totalCells || 42}).`);
+        return;
+      }
+      showConfirmDialog({
+        title: "🧹 Vaciar casillero",
+        message: `Se quitarán los ${ownedCount} espíritus marcados en este editor. ¿Continuar?`,
+        confirmLabel: "Sí, vaciar",
+        onConfirm: () => {
+          lockerEditorState.owned = {};
+          lockerEditorState.mastered = {};
+          lockerEditorState.lost = {};
+          lockerEditorState.levels = {};
+          lockerEditorDirty = true;
+          renderLockerGrid();
+          showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 42}). Pulsa Guardar para aplicar.`);
+        }
+      });
     });
     document.getElementById("btnLockerCopyShare")?.addEventListener("click", () => {
       saveLockerModalToPlayer(true);
@@ -2994,37 +3015,149 @@
       saveLockerModalToPlayer(false);
     });
 
-    // Cambiar o crear Sala en Vivo
-    document.getElementById("btnRoomSyncStatus")?.addEventListener("click", () => {
-      const currentCode = activeRoomId || "";
-      const input = prompt(
-        `Estás en la sala en vivo #${currentCode}.\n\n` +
-        `• Escribe otro código de sala (ej. escuadron-1) para unirte a ella.\n` +
-        `• Escribe NUEVA para crear una sala nueva con tus jugadores actuales.`,
-        currentCode
-      );
-      if (input === null) return;
-      const trimmed = input.trim();
-      if (!trimmed || trimmed === currentCode) return;
+    // Controles del Dialog de Confirmación
+    const confirmDialog = document.getElementById("confirmDialog");
+    document.getElementById("confirmDialogClose")?.addEventListener("click", () => {
+      activeConfirmAction = null;
+      confirmDialog?.close();
+    });
+    document.getElementById("btnConfirmCancel")?.addEventListener("click", () => {
+      activeConfirmAction = null;
+      confirmDialog?.close();
+    });
+    document.getElementById("btnConfirmAccept")?.addEventListener("click", () => {
+      const fn = activeConfirmAction;
+      activeConfirmAction = null;
+      confirmDialog?.close();
+      fn?.();
+    });
 
-      if (trimmed.toUpperCase() === "NUEVA") {
-        const newId = generateRoomId();
-        enterRoomMode(newId, true);
-        showToast(`🟢 ¡Nueva sala #${newId} creada! Compártela con el botón Compartir Sala.`);
+    // Controles del Dialog Compartir / Vincular Jugador
+    const playerLinkDialog = document.getElementById("playerLinkDialog");
+    document.getElementById("playerLinkClose")?.addEventListener("click", () => playerLinkDialog?.close());
+    document.getElementById("playerLinkModalInput")?.addEventListener("focus", (e) => e.target.select());
+    document.getElementById("playerLinkModalInput")?.addEventListener("change", async (e) => {
+      const player = state.players.find(p => p.id === activeLinkModalPlayerId);
+      if (!player) return;
+      await applyPersonalLinkToPlayerCard(player, e.target.value);
+    });
+    document.getElementById("btnPlayerLinkCopy")?.addEventListener("click", async () => {
+      const player = state.players.find(p => p.id === activeLinkModalPlayerId);
+      if (!player) return;
+      ensurePlayerLockerId(player);
+      const ownPersonalLink = getPersonalLockerUrl(player.lockerId);
+      const input = document.getElementById("playerLinkModalInput");
+      if (input) input.value = ownPersonalLink;
+      saveState({ player });
+      try {
+        await navigator.clipboard.writeText(ownPersonalLink);
+        showToast(`📋 ¡Link personal de ${player.name} copiado!`);
+      } catch (_) {
+        input?.select();
+        showToast("⚠️ Selecciona y copia el link manualmente.");
+      }
+    });
+    document.getElementById("btnPlayerLinkPaste")?.addEventListener("click", async () => {
+      const player = state.players.find(p => p.id === activeLinkModalPlayerId);
+      if (!player) return;
+      let pasted = "";
+      if (navigator.clipboard && typeof navigator.clipboard.readText === "function") {
+        try {
+          pasted = (await navigator.clipboard.readText()) || "";
+        } catch (_) {
+          pasted = "";
+        }
+      }
+      const input = document.getElementById("playerLinkModalInput");
+      if (!pasted.trim() && input) {
+        input.focus();
+        showToast("📋 Pega el link en el campo de texto.");
         return;
       }
+      if (pasted.trim()) {
+        if (input) input.value = pasted.trim();
+        await applyPersonalLinkToPlayerCard(player, pasted.trim());
+        playerLinkDialog?.close();
+        const updatedCard = document.getElementById(`card_${player.id}`);
+        if (updatedCard) {
+          updatedCard.classList.add("is-updated");
+          setTimeout(() => updatedCard.classList.remove("is-updated"), 1200);
+        }
+      }
+    });
+    document.getElementById("btnPlayerLinkReload")?.addEventListener("click", async () => {
+      const player = state.players.find(p => p.id === activeLinkModalPlayerId);
+      if (!player) return;
+      await reloadPlayerLocker(player, true);
+    });
+    document.getElementById("btnPlayerLinkRemove")?.addEventListener("click", () => {
+      const player = state.players.find(p => p.id === activeLinkModalPlayerId);
+      if (!player) return;
+      if (state.players.length <= 1) {
+        showToast("Debe haber al menos un jugador en la sala.");
+        return;
+      }
+      playerLinkDialog?.close();
+      showConfirmDialog({
+        title: "🗑️ Quitar jugador",
+        message: `¿Quitar a ${player.name} de esta sala? (Su casillero personal no se borra).`,
+        confirmLabel: "Quitar de la sala",
+        onConfirm: () => {
+          state.players = state.players.filter(p => p.id !== player.id);
+          syncRoomLockerSubscriptions();
+          saveState();
+          renderLobby();
+          renderActiveTab();
+          showToast(`👋 ${player.name} salió de la sala.`);
+        }
+      });
+    });
 
+    // Cambiar o crear Sala en Vivo (Modal sin window.prompt)
+    const roomSwitchDialog = document.getElementById("roomSwitchDialog");
+    const roomSwitchInput = document.getElementById("roomSwitchInput");
+    document.getElementById("roomSwitchClose")?.addEventListener("click", () => roomSwitchDialog?.close());
+    document.getElementById("btnRoomSyncStatus")?.addEventListener("click", () => {
+      const currentCode = activeRoomId || "";
+      const codeLabel = document.getElementById("roomSwitchCurrentCode");
+      if (codeLabel) codeLabel.textContent = `#${currentCode}`;
+      if (roomSwitchInput) roomSwitchInput.value = "";
+      roomSwitchDialog?.showModal();
+      roomSwitchInput?.focus();
+    });
+    document.getElementById("btnRoomCreateNew")?.addEventListener("click", () => {
+      const newId = generateRoomId();
+      roomSwitchDialog?.close();
+      enterRoomMode(newId, true);
+      showToast(`🟢 ¡Nueva sala #${newId} creada! Compártela con el botón Compartir Sala.`);
+    });
+    const submitRoomSwitch = () => {
+      const trimmed = (roomSwitchInput?.value || "").trim();
+      if (!trimmed || trimmed === activeRoomId) {
+        roomSwitchDialog?.close();
+        return;
+      }
       const normalized = trimmed.replace(/^#?(?:sala=)?/i, "").replace(/[^a-zA-Z0-9_-]/g, "-");
       if (!isValidRoomId(normalized)) {
         showToast("⚠️ El código de sala debe tener entre 4 y 40 letras, números o guiones.");
         return;
       }
+      roomSwitchDialog?.close();
       enterRoomMode(normalized, false);
       showToast(`🔄 Conectando a la sala #${normalized}...`);
+    };
+    document.getElementById("btnRoomJoinSubmit")?.addEventListener("click", submitRoomSwitch);
+    roomSwitchInput?.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        submitRoomSwitch();
+      }
     });
 
     // Detectar cambios en el hash de la URL (#casillero=... vs #sala=...)
     window.addEventListener("hashchange", () => {
+      document.querySelectorAll("dialog[open]").forEach((dlg) => dlg.close());
+      lockerEditorDirty = false;
       const lockerRoute = extractPersonalLockerRouteFromHash();
       if (lockerRoute) {
         if (state.mode !== "locker" || personalViewState.lockerId !== lockerRoute.lockerId) {
