@@ -990,6 +990,7 @@ body {
   max-width: 980px;
   width: min(94vw, 980px);
   max-height: 86vh;
+  overflow: hidden;
   box-shadow: 0 12px 24px rgba(0, 0, 0, 0.75);
 }
 
@@ -1073,6 +1074,9 @@ body {
   padding: 1rem 1.25rem;
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .locker-sprites-grid {
