@@ -11,7 +11,7 @@
 
   const SPIRIT_DISPLAY_ORDER = new Map((DB.sprites || []).map((s, idx) => [s.key, idx]));
   const VARIANT_DISPLAY_ORDER = new Map(
-    (DB.variants && DB.variants.length ? DB.variants.map(v => v.key) : ["NORMAL", "JEWELED", "CURSED"])
+    (DB.variants && DB.variants.length ? DB.variants.map(v => v.key) : ["NORMAL", "JEWELED", "CURSED", "LIQUIDGOLD"])
       .map((k, idx) => [k, idx])
   );
 
@@ -411,9 +411,10 @@
     // - 24 celdas anteriores (Normal + Fortuna): <= 24 bytes
     // - 34 celdas (sin Kelper Maldito): 26 bytes o 28..34 bytes
     // - 35 celdas (con Kelper Maldito): 27 bytes o 35 bytes
-    // - 42 celdas oficiales actuales (+ Squiplash, Mini Miku, Zee): >= 36 bytes (42 bytes)
+    // - 42 celdas (+ Squiplash, Mini Miku, Zee): 36..42 bytes
+    // - 59 celdas oficiales actuales (+ Sir Oscar II y variante Oro): >= 43 bytes (59 bytes)
     let cells = DB.cells;
-    let layoutName = "42";
+    let layoutName = "59";
     if (bytes.length <= 24 && DB.cells_v5_24) {
       cells = DB.cells_v5_24;
       layoutName = "24";
@@ -423,6 +424,9 @@
     } else if ((bytes.length === 27 || bytes.length === 35) && DB.cells_v5_35) {
       cells = DB.cells_v5_35;
       layoutName = "35";
+    } else if (bytes.length >= 36 && bytes.length <= 42 && DB.cells_v5_42) {
+      cells = DB.cells_v5_42;
+      layoutName = "42";
     }
     let numCells = cells.length;
 
@@ -543,7 +547,7 @@
       });
 
       if (notify && prevCount !== null) {
-        let total = player.data.totalCells || DB.totalCells || 42;
+        let total = player.data.totalCells || DB.totalCells || 59;
         let diff = player.data.ownedCount - prevCount;
         if (diff !== 0) {
           let sign = diff > 0 ? `+${diff}` : `${diff}`;
@@ -856,7 +860,7 @@
       await updatePlayer(player, false);
 
       const newCount = player.data ? player.data.ownedCount : 0;
-      const total = player.data?.totalCells || DB.totalCells || 42;
+      const total = player.data?.totalCells || DB.totalCells || 59;
       const diff = newCount - prevCount;
 
       if (notify) {
@@ -888,7 +892,7 @@
       await syncPlayerPersonalLocker(player);
       if (notify) {
         const count = player.data ? player.data.ownedCount : 0;
-        const total = player.data?.totalCells || DB.totalCells || 42;
+        const total = player.data?.totalCells || DB.totalCells || 59;
         showToast(`☁️ Casillero de ${player.name} sincronizado (${count}/${total}).`);
       }
     }
@@ -980,7 +984,7 @@
 
             if (!isInitialLockerSnap && prevCount !== null && player.data) {
               const diff = player.data.ownedCount - prevCount;
-              const total = player.data.totalCells || DB.totalCells || 42;
+              const total = player.data.totalCells || DB.totalCells || 59;
               if (diff !== 0) {
                 const sign = diff > 0 ? `+${diff}` : `${diff}`;
                 player.changeBadge = sign;
@@ -1492,7 +1496,7 @@
       `;
     }
 
-    const totalCells = DB.totalCells || DB.cells.length || 42;
+    const totalCells = DB.totalCells || DB.cells.length || 59;
     const ownedCount = Object.keys(personalViewState.owned).filter(k => personalViewState.owned[k]).length;
     const pct = Math.round((ownedCount / totalCells) * 1000) / 10;
 
@@ -1802,7 +1806,7 @@
 
       if (!sameLocker) {
         const count = player.data ? player.data.ownedCount : 0;
-        const total = player.data?.totalCells || DB.totalCells || 42;
+        const total = player.data?.totalCells || DB.totalCells || 59;
         showToast(`🔗 ¡Casillero personal de ${player.name} (${count}/${total}) vinculado a la sala!`);
       }
       return;
@@ -1856,7 +1860,7 @@
 
       const count = player.data ? player.data.ownedCount : 0;
       const pct = player.data ? player.data.percentage : 0;
-      const totalC = player.data?.totalCells || DB.totalCells || 42;
+      const totalC = player.data?.totalCells || DB.totalCells || 59;
       const vaultedNote = player.data?.isVaultedLink
         ? `⚠️ Enlace de Cap. 7 Temp. 4 (Bóveda: ${player.data.vaultedCount}/162). Actualiza el link para la Minitemporada.`
         : "";
@@ -1947,7 +1951,7 @@
 
     const badge = card.querySelector(`.stats-badge-${player.id}`);
     if (badge) {
-      badge.textContent = player.error ? "⚠️ Sin Link" : `${count}/${player.data?.totalCells || DB.totalCells || 42} (${pct}%)`;
+      badge.textContent = player.error ? "⚠️ Sin Link" : `${count}/${player.data?.totalCells || DB.totalCells || 59} (${pct}%)`;
     }
 
     const pillId = card.querySelector(`.pill-id-${player.id}`);
@@ -2040,7 +2044,7 @@
             <div class="chain-player-tag" style="border-color: ${idx === 0 ? '#ffd070' : 'rgba(120, 170, 255, 0.4)'};">
               <span>${idx === 0 ? '👑' : `${idx + 1}º`}</span>
               <strong>${escapeHtml(p.name)}</strong>
-              <span style="color: var(--accent-cyan); font-size: 0.75rem;">(${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 42})</span>
+              <span style="color: var(--accent-cyan); font-size: 0.75rem;">(${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 59})</span>
             </div>
           `).join('<span style="color: var(--text-muted);">➜</span>')}
         </div>
@@ -2136,11 +2140,11 @@
 
         <div class="versus-selectors">
           <select id="selVersusA" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 42})</option>`).join("")}
+            ${players.map(p => `<option value="${p.id}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 59})</option>`).join("")}
           </select>
           <div class="versus-badge">VS</div>
           <select id="selVersusB" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 42})</option>`).join("")}
+            ${players.map(p => `<option value="${p.id}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 59})</option>`).join("")}
           </select>
         </div>
 
@@ -2404,7 +2408,7 @@
     const badgeEl = document.getElementById("lockerCountBadge");
     if (!gridEl) return;
 
-    const totalCells = DB.totalCells || DB.cells.length || 42;
+    const totalCells = DB.totalCells || DB.cells.length || 59;
     const ownedCount = Object.keys(lockerEditorState.owned).filter(k => lockerEditorState.owned[k]).length;
     const pct = Math.round((ownedCount / totalCells) * 1000) / 10;
 
@@ -2505,7 +2509,7 @@
     } else {
       const dialog = document.getElementById("lockerDialog");
       dialog?.close();
-      showToast(`💾 ¡Casillero de ${player.name} guardado y sincronizado (${player.data?.ownedCount || 0}/${DB.totalCells || 42})!`);
+      showToast(`💾 ¡Casillero de ${player.name} guardado y sincronizado (${player.data?.ownedCount || 0}/${DB.totalCells || 59})!`);
     }
   }
 
@@ -2858,7 +2862,7 @@
     document.getElementById("btnPersonalClearAll")?.addEventListener("click", () => {
       const ownedCount = Object.keys(personalViewState.owned).filter(k => personalViewState.owned[k]).length;
       if (ownedCount === 0) {
-        showToast(`Tu casillero ya está vacío (0/${DB.totalCells || 42}).`);
+        showToast(`Tu casillero ya está vacío (0/${DB.totalCells || 59}).`);
         return;
       }
       const backup = {
@@ -2878,7 +2882,7 @@
           personalViewState.levels = {};
           renderPersonalLockerView();
           schedulePersonalLockerSave();
-          showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 42}).`, {
+          showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 59}).`, {
             durationMs: 6500,
             onUndo: () => {
               personalViewState.owned = backup.owned;
@@ -2887,7 +2891,7 @@
               personalViewState.levels = backup.levels;
               renderPersonalLockerView();
               schedulePersonalLockerSave();
-              showToast(`↩️ Casillero restaurado (${ownedCount}/${DB.totalCells || 42}).`);
+              showToast(`↩️ Casillero restaurado (${ownedCount}/${DB.totalCells || 59}).`);
             }
           });
         }
@@ -2990,7 +2994,7 @@
     document.getElementById("btnLockerClear")?.addEventListener("click", () => {
       const ownedCount = Object.keys(lockerEditorState.owned).filter(k => lockerEditorState.owned[k]).length;
       if (ownedCount === 0) {
-        showToast(`El casillero ya está vacío (0/${DB.totalCells || 42}).`);
+        showToast(`El casillero ya está vacío (0/${DB.totalCells || 59}).`);
         return;
       }
       showConfirmDialog({
@@ -3004,7 +3008,7 @@
           lockerEditorState.levels = {};
           lockerEditorDirty = true;
           renderLockerGrid();
-          showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 42}). Pulsa Guardar para aplicar.`);
+          showToast(`🧹 Casillero limpiado (0/${DB.totalCells || 59}). Pulsa Guardar para aplicar.`);
         }
       });
     });
