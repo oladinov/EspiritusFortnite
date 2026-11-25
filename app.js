@@ -2045,11 +2045,11 @@
               <label for="name_input_${safePid}" class="visually-hidden">Nombre del jugador</label>
               <input type="text" id="name_input_${safePid}" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Escribe tu nombre" data-id="${safePid}" autocorrect="off" autocapitalize="off" spellcheck="false">
               ${isDefaultPlaceholderName ? `<div class="player-name-hint-ribbon">✍️ Haz clic para poner tu nombre</div>` : ''}
+              <div class="player-header-badges">
+                ${player.changeBadge ? `<span class="badge-change">${escapeHtml(player.changeBadge)}</span>` : ''}
+                <span class="player-stats-badge stats-badge-${safePid}">${player.error ? '⚠️ Sin Link' : `${count}/${totalC} (${pct}%)`}</span>
+              </div>
             </div>
-          </div>
-          <div class="player-header-badges">
-            ${player.changeBadge ? `<span class="badge-change">${escapeHtml(player.changeBadge)}</span>` : ''}
-            <span class="player-stats-badge stats-badge-${safePid}">${player.error ? '⚠️ Sin Link' : `${count}/${totalC} (${pct}%)`}</span>
           </div>
         </div>
         <div class="progress-container">
