@@ -119,8 +119,9 @@
           <select id="personalVariantFilter" class="locker-filter-select">
             <option value="all">🎨 Todas las variantes (59)</option>
             <option value="NORMAL">Normal (17)</option>
-            <option value="JEWELED">Fortuna (13)</option>
+            <option value="JEWELED">Fortuna (14)</option>
             <option value="CURSED">Maldito (14)</option>
+            <option value="LIQUIDGOLD">Oro (14)</option>
           </select>
           <label for="personalStatusFilter" class="visually-hidden">Filtrar por estado en colección</label>
           <select id="personalStatusFilter" class="locker-filter-select">
@@ -200,8 +201,9 @@
           <select id="lockerVariantFilter" class="locker-filter-select">
             <option value="all">🎨 Todas las variantes (59)</option>
             <option value="NORMAL">Normal (17)</option>
-            <option value="JEWELED">Fortuna (13)</option>
+            <option value="JEWELED">Fortuna (14)</option>
             <option value="CURSED">Maldito (14)</option>
+            <option value="LIQUIDGOLD">Oro (14)</option>
           </select>
           <select id="lockerStatusFilter" class="locker-filter-select">
             <option value="all">👁️ Todos (59)</option>
@@ -274,7 +276,7 @@
   </dialog>
 
   <!-- Modal Cambiar / Crear Sala en Vivo -->
-  <dialog id="roomSwitchDialog" class="compact-dialog" aria-labelledby="roomSwitchTitle">
+  <dialog id="roomSwitchDialog" closedby="any" class="compact-dialog" aria-labelledby="roomSwitchTitle">
     <div class="compact-dialog-inner">
       <div class="modal-header">
         <h3 id="roomSwitchTitle" class="compact-dialog-title">🌐 Sala en Vivo</h3>
@@ -304,7 +306,7 @@
   </dialog>
 
   <!-- Modal Compartir / Vincular Casillero de Jugador -->
-  <dialog id="playerLinkDialog" class="compact-dialog" aria-labelledby="playerLinkTitle">
+  <dialog id="playerLinkDialog" closedby="any" class="compact-dialog" aria-labelledby="playerLinkTitle">
     <div class="compact-dialog-inner">
       <div class="modal-header">
         <h3 id="playerLinkTitle" class="compact-dialog-title">🔗 Compartir / Vincular</h3>
@@ -340,7 +342,7 @@
   </dialog>
 
   <!-- Modal de Confirmación para Acciones Destructivas -->
-  <dialog id="confirmDialog" class="compact-dialog" aria-labelledby="confirmDialogTitle">
+  <dialog id="confirmDialog" closedby="any" class="compact-dialog" aria-labelledby="confirmDialogTitle">
     <div class="compact-dialog-inner">
       <div class="modal-header">
         <h3 id="confirmDialogTitle" class="compact-dialog-title">⚠️ Confirmar acción</h3>

@@ -13,20 +13,20 @@ rules_version = '2';
 // Fields:
 //   - seasonKey: string (required, length 1..20) - Active season identifier for the room
 //   - players: map (required, max 30 entries) - Map of player entries keyed by normalized player key
-//   - updatedAt: number (required, > 0) - Epoch millisecond timestamp of last update
+//   - updatedAt: number (required, > 0 and <= request.time.toMillis() + 300000) - Epoch millisecond timestamp of last update
 //
 // Collection: lockers
 // Document ID: {lockerId} matching ^[a-zA-Z0-9_-]{4,40}$ (capability token for persistent player locker)
 // Access Pattern: Unauthenticated capability-based single-document access (get, create, update).
 //                 Listing all lockers and deleting lockers are explicitly denied.
 // Fields:
-//   - id: string (optional, max length 40) - Locker identifier
+//   - id: string (optional, must equal lockerId if present) - Locker identifier matching document ID
 //   - name: string (required, length 1..60) - Player display name
 //   - avatar: string (required, length 1..40) - Player avatar identifier
 //   - url: string (required, max length 500) - Encoded collection URL
 //   - code: string (optional, max length 300) - Encoded collection code
 //   - seasonKey: string (required, length 1..20) - Active season identifier for the locker
-//   - updatedAt: number (required, > 0) - Epoch millisecond timestamp of last update
+//   - updatedAt: number (required, > 0 and <= request.time.toMillis() + 300000) - Epoch millisecond timestamp of last update
 //
 // ===============================================================
 
@@ -37,28 +37,6 @@ service cloud.firestore {
     // Helper Functions
     // ===============================================================
 
-    // Check if the user is authenticated
-    function isAuthenticated() {
-      return request.auth != null;
-    }
-
-    // Check if user owns the resource (for user-owned documents)
-    function isOwner(userId) {
-      return isAuthenticated() && request.auth.uid == userId;
-    }
-
-    // Verify UID hasn't been tampered with on create
-    function uidUnchanged() {
-      return !('uid' in request.resource.data) ||
-        request.resource.data.uid == request.auth.uid;
-    }
-
-    // Ensure uid field is not modified on update
-    function uidNotModified() {
-      return !('uid' in request.resource.data) ||
-        request.resource.data.uid == resource.data.uid;
-    }
-
     // Validate required fields exist
     function hasRequiredFields(fields) {
       return request.resource.data.keys().hasAll(fields);
@@ -67,6 +45,13 @@ service cloud.firestore {
     // Validate that the document contains only the allowed fields
     function hasOnlyAllowedFields(fields) {
       return request.resource.data.keys().hasOnly(fields);
+    }
+
+    // Validate epoch millisecond timestamp (positive and at most 5 minutes in the future to allow client clock skew)
+    function isValidTimestamp(ts) {
+      return ts is number &&
+             ts > 0 &&
+             ts <= request.time.toMillis() + 300000;
     }
 
     // Validate roomId format (4 to 40 alphanumeric, underscore, or hyphen characters)
@@ -89,13 +74,12 @@ service cloud.firestore {
              data.seasonKey is string &&
              data.seasonKey.size() >= 1 &&
              data.seasonKey.size() <= 20 &&
-             data.updatedAt is number &&
-             data.updatedAt > 0 &&
+             isValidTimestamp(data.updatedAt) &&
              data.players is map &&
              data.players.size() <= 30;
     }
 
-    function isValidLocker(data) {
+    function isValidLocker(data, lockerId) {
       return hasOnlyAllowedFields(['id', 'name', 'avatar', 'url', 'code', 'seasonKey', 'updatedAt']) &&
              hasRequiredFields(['name', 'avatar', 'url', 'seasonKey', 'updatedAt']) &&
              data.name is string &&
@@ -109,9 +93,8 @@ service cloud.firestore {
              data.seasonKey is string &&
              data.seasonKey.size() >= 1 &&
              data.seasonKey.size() <= 20 &&
-             data.updatedAt is number &&
-             data.updatedAt > 0 &&
-             (!('id' in data) || (data.id is string && data.id.size() <= 40)) &&
+             isValidTimestamp(data.updatedAt) &&
+             (!('id' in data) || (data.id is string && data.id == lockerId)) &&
              (!('code' in data) || (data.code is string && data.code.size() <= 300));
     }
 
@@ -127,6 +110,7 @@ service cloud.firestore {
       allow list: if false;
 
       // Allow creating or updating a room if the roomId and payload pass strict validation
+      // (Note: updateDoc with deleteField() on players.<id> is evaluated against the post-update request.resource.data)
       allow create, update: if isValidRoomId(roomId) && isValidRoom(request.resource.data);
 
       // Explicitly deny deleting rooms
@@ -141,7 +125,7 @@ service cloud.firestore {
       allow list: if false;
 
       // Allow creating or updating a locker if the lockerId and payload pass strict validation
-      allow create, update: if isValidLockerId(lockerId) && isValidLocker(request.resource.data);
+      allow create, update: if isValidLockerId(lockerId) && isValidLocker(request.resource.data, lockerId);
 
       // Explicitly deny deleting lockers
       allow delete: if false;

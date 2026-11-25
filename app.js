@@ -121,8 +121,26 @@
   const STORAGE_KEY = "fortnite_sprites_players_c7ms_v1";
   const LOCKER_CACHE_STORAGE_KEY = "fortnite_sprites_lockers_cache_v1";
 
+  function sanitizePlayerId(rawId, fallbackIndex = 1) {
+    const cleaned = String(rawId || "").replace(/[^a-zA-Z0-9_-]/g, "_").slice(0, 40);
+    return cleaned || ("p_" + fallbackIndex);
+  }
+
+  function hashStringBase36(str) {
+    let h1 = 0x811c9dc5;
+    let h2 = 5381;
+    const s = String(str || "");
+    for (let i = 0; i < s.length; i++) {
+      const c = s.charCodeAt(i);
+      h1 ^= c;
+      h1 = Math.imul(h1, 0x01000193);
+      h2 = ((h2 << 5) + h2) ^ c;
+    }
+    return ((h1 >>> 0).toString(36) + (h2 >>> 0).toString(36)).slice(0, 12);
+  }
+
   function isValidLockerId(id) {
-    return typeof id === "string" && /^[a-zA-Z0-9_-]{4,40}$/.test(id);
+    return typeof id === "string" && /^[a-zA-Z0-9_-]{4,40}$/.test(id) && id !== "k-p1default";
   }
 
   function generateLockerId() {
@@ -174,7 +192,7 @@
   const DEFAULT_PLAYERS = [
     {
       id: "p1",
-      lockerId: "k-p1default",
+      lockerId: null,
       name: "Jugador 1",
       avatar: "HALFPEELD",
       url: `${getOwnBaseUrl()}#c=5.AAAAAAAAAAAAAAAAAAAA`
@@ -185,9 +203,7 @@
   let state = {
     mode: "room", // 'room' | 'locker'
     players: [],
-    currentTab: "chain", // 'chain', 'matrix', 'versus', 'missing', 'vault'
-    filterRarity: "all",
-    filterVariant: "all",
+    currentTab: "chain", // 'chain', 'versus', 'missing', 'vault'
     versusA: null,
     versusB: null
   };
@@ -482,10 +498,16 @@
     if (player.lockerId && isValidLockerId(player.lockerId)) {
       return player.lockerId;
     }
-    const baseRoom = (roomIdHint || activeRoomId || "local").replace(/[^a-zA-Z0-9]/g, "").slice(0, 12);
+    const baseRoom = (roomIdHint || activeRoomId || "").replace(/[^a-zA-Z0-9]/g, "").slice(0, 12);
     const basePid = String(player.id || "p1").replace(/[^a-zA-Z0-9]/g, "").slice(0, 16);
-    const derived = `k-${baseRoom}-${basePid}`.slice(0, 38);
-    player.lockerId = isValidLockerId(derived) ? derived : generateLockerId();
+    if (baseRoom && basePid !== "p1") {
+      const derived = `k-${baseRoom}-${basePid}`.slice(0, 38);
+      if (isValidLockerId(derived)) {
+        player.lockerId = derived;
+        return player.lockerId;
+      }
+    }
+    player.lockerId = generateLockerId();
     return player.lockerId;
   }
 
@@ -520,7 +542,7 @@
         if (!json.data) throw new Error("Colección en vivo no encontrada");
         codeToDecode = json.data;
         if (json.name && (!player.name || player.name.startsWith("Jugador") || player.name.startsWith("Amigo"))) {
-          player.name = json.name;
+          player.name = String(json.name).trim().slice(0, 60) || player.name;
         }
       } else {
         player.isLive = false;
@@ -611,7 +633,10 @@
   let activeRoomId = null;
   let unsubscribeRoom = null;
   let cloudRoomReady = false;
+  let roomConnectSeq = 0;
+  let personalConnectSeq = 0;
   const roomLockerUnsubscribes = new Map(); // lockerId -> unsubscribeFn
+  const roomLockerSubscribing = new Set(); // lockerIds currently subscribing
 
   async function ensureFirebase() {
     if (fb) return fb;
@@ -670,10 +695,12 @@
       let params = new URLSearchParams(hash.slice(1));
       let codeVal = params.get("c") || params.get("vs");
       if (codeVal) {
-        // Buscar si algún jugador local ya tiene este código o usar un lockerId derivado
+        // Buscar si algún jugador local ya tiene este código o usar un lockerId derivado por hash completo del código
         const existingPlayer = state.players.find(p => p.data && p.data.rawCode === codeVal);
-        const cleanSuffix = codeVal.replace(/[^a-zA-Z0-9]/g, "").slice(-10) || "custom";
-        const derivedId = existingPlayer?.lockerId || `k-c-${cleanSuffix}`;
+        const codeHash = hashStringBase36(codeVal) || "custom";
+        const derivedId = (existingPlayer?.lockerId && isValidLockerId(existingPlayer.lockerId))
+          ? existingPlayer.lockerId
+          : `k-c-${codeHash}`;
         return { lockerId: derivedId, fallbackCode: codeVal };
       }
     }
@@ -917,6 +944,7 @@
       try { unsub(); } catch (_) {}
     }
     roomLockerUnsubscribes.clear();
+    roomLockerSubscribing.clear();
   }
 
   async function syncRoomLockerSubscriptions() {
@@ -925,7 +953,10 @@
       return;
     }
     const client = await ensureFirebase();
-    if (!client) return;
+    if (!client || state.mode !== "room") {
+      if (state.mode !== "room") clearRoomLockerSubscriptions();
+      return;
+    }
 
     const neededLockerIds = new Set(
       state.players
@@ -943,7 +974,8 @@
 
     // Suscribirse en tiempo real a cada casillero personal presente en la sala abierta
     for (const lockerId of neededLockerIds) {
-      if (roomLockerUnsubscribes.has(lockerId)) continue;
+      if (roomLockerUnsubscribes.has(lockerId) || roomLockerSubscribing.has(lockerId)) continue;
+      roomLockerSubscribing.add(lockerId);
 
       const lockerRef = client.doc(client.db, "lockers", lockerId);
       let isInitialLockerSnap = true;
@@ -972,7 +1004,6 @@
           const targetTotalCells = DB.totalCells || 59;
 
           let anyChanged = false;
-          const changedPlayers = [];
 
           for (const player of matchingPlayers) {
             const localCells = player.data && !player.data.isVaultedLink ? (player.data.layoutCells || 0) : 0;
@@ -996,9 +1027,11 @@
 
             saveLocalLocker(lockerId, remote);
 
+            const remoteName = typeof remote.name === "string" && remote.name.trim() ? remote.name.trim().slice(0, 60) : player.name;
+            const remoteAvatar = typeof remote.avatar === "string" && remote.avatar.trim() ? remote.avatar.trim().slice(0, 40) : "HALFPEELD";
             const urlChanged = player.url !== remote.url;
-            const nameChanged = player.name !== (remote.name || player.name);
-            const avatarChanged = (player.avatar || "HALFPEELD") !== (remote.avatar || "HALFPEELD");
+            const nameChanged = player.name !== remoteName;
+            const avatarChanged = (player.avatar || "HALFPEELD") !== remoteAvatar;
 
             if (!urlChanged && !nameChanged && !avatarChanged) {
               player.updatedAt = remote.updatedAt || player.updatedAt;
@@ -1006,10 +1039,10 @@
             }
 
             const prevCount = player.data ? player.data.ownedCount : null;
-            player.name = remote.name || player.name;
-            player.avatar = remote.avatar || player.avatar || "HALFPEELD";
-            player.url = remote.url;
-            player.updatedAt = remote.updatedAt || Date.now();
+            player.name = remoteName;
+            player.avatar = remoteAvatar;
+            player.url = String(remote.url || "");
+            player.updatedAt = Number(remote.updatedAt) || Date.now();
 
             if (urlChanged || !player.data) {
               await updatePlayer(player, false);
@@ -1036,18 +1069,11 @@
               setTimeout(() => card.classList.remove("is-updated"), 1200);
             }
             anyChanged = true;
-            changedPlayers.push(player);
           }
 
           if (anyChanged) {
             saveLocalOnly();
             renderActiveTab();
-            // Reflejar únicamente el jugador actualizado dentro del documento de la sala activa
-            if (cloudRoomReady && activeRoomId && !isInitialLockerSnap) {
-              for (const p of changedPlayers) {
-                syncPlayerToCloud(p);
-              }
-            }
           }
           isInitialLockerSnap = false;
         },
@@ -1056,7 +1082,12 @@
         }
       );
 
-      roomLockerUnsubscribes.set(lockerId, unsub);
+      roomLockerSubscribing.delete(lockerId);
+      if (state.mode !== "room" || !state.players.some(p => p.lockerId === lockerId)) {
+        try { unsub(); } catch (_) {}
+      } else {
+        roomLockerUnsubscribes.set(lockerId, unsub);
+      }
     }
   }
 
@@ -1141,6 +1172,22 @@
     }
   }
 
+  async function removePlayerFromCloud(playerId) {
+    if (!fb || !activeRoomId || !cloudRoomReady || !playerId) return;
+    try {
+      const safeId = sanitizePlayerId(playerId);
+      const roomRef = fb.doc(fb.db, "rooms", activeRoomId);
+      await fb.updateDoc(roomRef, {
+        [`players.${safeId}`]: fb.deleteField(),
+        updatedAt: Date.now()
+      });
+      updateSyncStatusUI("live", activeRoomId);
+    } catch (err) {
+      console.warn("Error eliminando jugador de sala en Firestore:", err);
+      await syncFullRoomToCloud();
+    }
+  }
+
   function saveState(options = {}) {
     if (options.player && !options.skipLockerCloud) {
       options.player.updatedAt = Date.now();
@@ -1148,7 +1195,9 @@
     }
     saveLocalOnly();
     if (options.skipCloud) return;
-    if (options.player) {
+    if (options.removedPlayerId) {
+      removePlayerFromCloud(options.removedPlayerId);
+    } else if (options.player) {
       syncPlayerToCloud(options.player);
     } else {
       syncFullRoomToCloud();
@@ -1175,9 +1224,16 @@
   }
 
   async function applyRemotePlayersSnapshot(playersMap) {
-    const entries = Object.values(playersMap || {})
-      .filter(item => item && typeof item === "object" && item.id)
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    const entries = Object.entries(playersMap || {})
+      .filter(([, item]) => item && typeof item === "object" && (item.id || true))
+      .map(([mapKey, item], idx) => ({
+        ...item,
+        id: sanitizePlayerId(item.id || mapKey, idx + 1),
+        name: typeof item.name === "string" && item.name.trim() ? item.name.trim().slice(0, 60) : "Jugador",
+        avatar: typeof item.avatar === "string" && item.avatar.trim() ? item.avatar.trim().slice(0, 40) : "HALFPEELD",
+        url: typeof item.url === "string" ? item.url.slice(0, 500) : ""
+      }))
+      .sort((a, b) => (Number(a.order) || 0) - (Number(b.order) || 0));
 
     if (entries.length === 0) return;
 
@@ -1294,8 +1350,9 @@
       if (!state.versusA || !state.players.some(p => p.id === state.versusA)) {
         state.versusA = state.players[0].id;
       }
-      if (!state.versusB || !state.players.some(p => p.id === state.versusB)) {
-        state.versusB = state.players[1].id;
+      if (!state.versusB || state.versusB === state.versusA || !state.players.some(p => p.id === state.versusB)) {
+        const alt = state.players.find(p => p.id !== state.versusA);
+        state.versusB = alt ? alt.id : state.players[1].id;
       }
     }
 
@@ -1307,6 +1364,7 @@
 
   async function connectToRoom(roomId, forceUploadLocal = false) {
     if (!isValidRoomId(roomId)) return;
+    const myConnectSeq = ++roomConnectSeq;
     activeRoomId = roomId;
     cloudRoomReady = false;
     try {
@@ -1321,9 +1379,17 @@
     }
 
     const client = await ensureFirebase();
+    if (myConnectSeq !== roomConnectSeq || state.mode !== "room" || activeRoomId !== roomId) {
+      return;
+    }
     if (!client) {
       updateSyncStatusUI("offline", roomId);
       return;
+    }
+
+    if (unsubscribeRoom) {
+      try { unsubscribeRoom(); } catch (_) {}
+      unsubscribeRoom = null;
     }
 
     const roomRef = client.doc(client.db, "rooms", roomId);
@@ -1536,7 +1602,7 @@
     `;
   }
 
-  function renderPersonalLockerView() {
+  function updatePersonalStatsAndHeaderUI(updateAvatar = false) {
     const nameInput = document.getElementById("personalPlayerNameInput");
     if (nameInput && document.activeElement !== nameInput) {
       nameInput.value = personalViewState.name || "Jugador";
@@ -1547,13 +1613,15 @@
       linkInput.value = getPersonalLockerUrl(personalViewState.lockerId);
     }
 
-    const avatarBtn = document.getElementById("btnPersonalAvatar");
-    const avatarInfo = getAvatarInfo(personalViewState.avatar);
-    if (avatarBtn) {
-      avatarBtn.innerHTML = `
-        ${avatarInfo?.img ? `<img src="${escapeHtml(avatarInfo.img)}" alt="${escapeHtml(avatarInfo.name)}" class="player-avatar-img" referrerpolicy="no-referrer">` : `<span class="player-avatar-fallback">👻</span>`}
-        <span class="player-avatar-edit-badge" aria-hidden="true">✏️</span>
-      `;
+    if (updateAvatar) {
+      const avatarBtn = document.getElementById("btnPersonalAvatar");
+      const avatarInfo = getAvatarInfo(personalViewState.avatar);
+      if (avatarBtn) {
+        avatarBtn.innerHTML = `
+          ${avatarInfo?.img ? `<img src="${escapeHtml(avatarInfo.img)}" alt="${escapeHtml(avatarInfo.name)}" class="player-avatar-img" referrerpolicy="no-referrer">` : `<span class="player-avatar-fallback">👻</span>`}
+          <span class="player-avatar-edit-badge" aria-hidden="true">✏️</span>
+        `;
+      }
     }
 
     const totalCells = DB.totalCells || DB.cells.length || 59;
@@ -1569,6 +1637,10 @@
     if (fillEl) {
       fillEl.style.width = `${pct}%`;
     }
+  }
+
+  function renderPersonalLockerView(updateAvatar = true) {
+    updatePersonalStatsAndHeaderUI(updateAvatar);
 
     const gridEl = document.getElementById("personalSpritesGrid");
     if (!gridEl) return;
@@ -1580,25 +1652,33 @@
     }
 
     gridEl.innerHTML = filtered.map(cell => renderSpriteToggleCard(cell, !!personalViewState.owned[cell.key], 58)).join("");
+  }
 
-    const togglePersonalCell = (key) => {
-      if (!key) return;
-      if (personalViewState.owned[key]) {
-        delete personalViewState.owned[key];
-        delete personalViewState.mastered[key];
-        delete personalViewState.lost[key];
-      } else {
-        personalViewState.owned[key] = true;
-      }
-      renderPersonalLockerView();
-      schedulePersonalLockerSave();
-    };
+  function togglePersonalCell(key, cardEl = null) {
+    if (!key) return;
+    let isNowOwned = false;
+    if (personalViewState.owned[key]) {
+      delete personalViewState.owned[key];
+      delete personalViewState.mastered[key];
+      delete personalViewState.lost[key];
+      delete personalViewState.levels[key];
+      isNowOwned = false;
+    } else {
+      personalViewState.owned[key] = true;
+      isNowOwned = true;
+    }
 
-    gridEl.querySelectorAll(".locker-cell-card").forEach(cardEl => {
-      cardEl.addEventListener("click", () => {
-        togglePersonalCell(cardEl.getAttribute("data-key"));
-      });
-    });
+    const statusVal = document.getElementById("personalStatusFilter")?.value || "all";
+    if (cardEl && statusVal === "all") {
+      cardEl.classList.toggle("is-owned", isNowOwned);
+      cardEl.setAttribute("aria-pressed", isNowOwned ? "true" : "false");
+      const statusSpan = cardEl.querySelector(".locker-cell-status");
+      if (statusSpan) statusSpan.textContent = isNowOwned ? "✅ TIENE" : "❌ FALTA";
+      updatePersonalStatsAndHeaderUI(false);
+    } else {
+      renderPersonalLockerView(false);
+    }
+    schedulePersonalLockerSave();
   }
 
   function applyDecodedToPersonalView(name, avatar, urlOrCode, updatedAt = Date.now()) {
@@ -1628,6 +1708,18 @@
     if (!isValidLockerId(lockerId)) {
       lockerId = generateLockerId();
     }
+
+    // Si había cambios pendientes en otro casillero personal, guardarlos antes de cambiar de ID
+    if (personalViewState.dirty && personalViewState.lockerId && personalViewState.lockerId !== lockerId) {
+      await flushPersonalLockerSave();
+    } else if (personalViewState.debounceTimer) {
+      clearTimeout(personalViewState.debounceTimer);
+      personalViewState.debounceTimer = null;
+      personalViewState.dirty = false;
+    }
+
+    const myPersonalSeq = ++personalConnectSeq;
+    roomConnectSeq++;
 
     // Limpiar suscripciones de sala para no gastar lecturas mientras editamos en modo exclusivo
     if (unsubscribeRoom) {
@@ -1679,9 +1771,17 @@
     updatePersonalSyncBadgeUI("connecting", lockerId);
 
     const client = await ensureFirebase();
+    if (myPersonalSeq !== personalConnectSeq || state.mode !== "locker" || personalViewState.lockerId !== lockerId) {
+      return;
+    }
     if (!client) {
       updatePersonalSyncBadgeUI("offline", lockerId);
       return;
+    }
+
+    if (personalViewState.unsubscribe) {
+      try { personalViewState.unsubscribe(); } catch (_) {}
+      personalViewState.unsubscribe = null;
     }
 
     const lockerRef = client.doc(client.db, "lockers", lockerId);
@@ -1726,8 +1826,12 @@
   }
 
   async function enterRoomMode(roomId, forceUploadLocal = false) {
+    personalConnectSeq++;
     if (personalViewState.dirty) {
       await flushPersonalLockerSave();
+    } else if (personalViewState.debounceTimer) {
+      clearTimeout(personalViewState.debounceTimer);
+      personalViewState.debounceTimer = null;
     }
     if (personalViewState.unsubscribe) {
       try { personalViewState.unsubscribe(); } catch (_) {}
@@ -1755,13 +1859,13 @@
   async function initPlayers() {
     const hadLegacyRoomUrl = Boolean(window.location.hash && window.location.hash.includes("room="));
     let rawList = loadSavedState();
-    state.players = rawList.map(p => {
+    state.players = rawList.map((p, idx) => {
       const obj = {
-        id: p.id || "p_" + Math.random().toString(36).substr(2, 9),
+        id: sanitizePlayerId(p.id || ("p_" + Math.random().toString(36).substr(2, 9)), idx + 1),
         lockerId: p.lockerId && isValidLockerId(p.lockerId) ? p.lockerId : null,
-        name: p.name || "Jugador",
-        avatar: p.avatar || "HALFPEELD",
-        url: p.url || "",
+        name: typeof p.name === "string" && p.name.trim() ? p.name.trim().slice(0, 60) : "Jugador",
+        avatar: typeof p.avatar === "string" && p.avatar.trim() ? p.avatar.trim().slice(0, 40) : "HALFPEELD",
+        url: typeof p.url === "string" ? p.url : "",
         isManual: !!p.isManual,
         updatedAt: Number(p.updatedAt) || Date.now(),
         data: null,
@@ -1925,42 +2029,43 @@
         ? `⚠️ Enlace de Cap. 7 Temp. 4 (Bóveda: ${player.data.vaultedCount}/162). Actualiza el link para la Minitemporada.`
         : "";
 
-      const isDefaultPlaceholderName = /^Jugador\s*\d*$/i.test(player.name.trim());
+      const isDefaultPlaceholderName = /^Jugador\s*\d*$/i.test(String(player.name || "").trim());
       const avatarInfo = getAvatarInfo(player.avatar);
       const statusNote = player.error ? escapeHtml(player.error) : escapeHtml(vaultedNote);
+      const safePid = escapeHtml(player.id);
 
       card.innerHTML = `
         <div class="player-card-header">
           <div class="player-identity-group">
-            <button type="button" class="player-avatar-btn btn-change-avatar" data-id="${player.id}" title="Cambiar avatar de ${escapeHtml(player.name)}">
+            <button type="button" class="player-avatar-btn btn-change-avatar" data-id="${safePid}" title="Cambiar avatar de ${escapeHtml(player.name)}">
               ${avatarInfo?.img ? `<img src="${escapeHtml(avatarInfo.img)}" alt="${escapeHtml(avatarInfo.name)}" class="player-avatar-img" referrerpolicy="no-referrer">` : `<span class="player-avatar-fallback">👻</span>`}
               <span class="player-avatar-edit-badge" aria-hidden="true">✏️</span>
             </button>
             <div class="player-name-wrapper">
-              <label for="name_input_${player.id}" class="visually-hidden">Nombre del jugador</label>
-              <input type="text" id="name_input_${player.id}" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Escribe tu nombre" data-id="${player.id}" autocorrect="off" autocapitalize="off" spellcheck="false">
+              <label for="name_input_${safePid}" class="visually-hidden">Nombre del jugador</label>
+              <input type="text" id="name_input_${safePid}" class="player-name-input" value="${escapeHtml(player.name)}" placeholder="Escribe tu nombre" data-id="${safePid}" autocorrect="off" autocapitalize="off" spellcheck="false">
               ${isDefaultPlaceholderName ? `<div class="player-name-hint-ribbon">✍️ Haz clic para poner tu nombre</div>` : ''}
             </div>
           </div>
           <div class="player-header-badges">
-            ${player.changeBadge ? `<span class="badge-change">${player.changeBadge}</span>` : ''}
-            <span class="player-stats-badge stats-badge-${player.id}">${player.error ? '⚠️ Sin Link' : `${count}/${totalC} (${pct}%)`}</span>
+            ${player.changeBadge ? `<span class="badge-change">${escapeHtml(player.changeBadge)}</span>` : ''}
+            <span class="player-stats-badge stats-badge-${safePid}">${player.error ? '⚠️ Sin Link' : `${count}/${totalC} (${pct}%)`}</span>
           </div>
         </div>
         <div class="progress-container">
           <div class="progress-bar-bg">
-            <div class="progress-bar-fill progress-fill-${player.id}" style="width: ${pct}%;"></div>
+            <div class="progress-bar-fill progress-fill-${safePid}" style="width: ${pct}%;"></div>
           </div>
         </div>
         <div class="player-card-actions-row">
-          <button type="button" class="btn btn-edit-locker btn-open-locker" data-id="${player.id}" title="Abrir y editar el casillero de espíritus">
+          <button type="button" class="btn btn-edit-locker btn-open-locker" data-id="${safePid}" title="Abrir y editar el casillero de espíritus">
             <span>✏️ Editar Casillero</span>
           </button>
-          <button type="button" class="btn btn-secondary btn-sm btn-link-cta" data-id="${player.id}" title="Compartir o vincular link personal y opciones de jugador">
+          <button type="button" class="btn btn-secondary btn-sm btn-link-cta" data-id="${safePid}" title="Compartir o vincular link personal y opciones de jugador">
             🔗 Vincular
           </button>
         </div>
-        ${statusNote ? `<div class="player-meta-row"><span class="error-msg-${player.id}" style="color: ${player.error ? '#ff8585' : '#ffd070'};">${statusNote}</span></div>` : `<span class="error-msg-${player.id}" hidden></span>`}
+        <div class="player-meta-row" ${statusNote ? '' : 'hidden'}><span class="error-msg-${safePid}" style="color: ${player.error ? '#ff8585' : '#ffd070'};">${statusNote}</span></div>
       `;
 
       // Evento: Nombre
@@ -1996,7 +2101,6 @@
     if (!card) return;
 
     ensurePlayerLockerId(player);
-    const personalLink = getPersonalLockerUrl(player.lockerId);
     const count = player.data ? player.data.ownedCount : 0;
     const pct = player.data ? player.data.percentage : 0;
 
@@ -2009,35 +2113,47 @@
       `;
     }
 
-    const badge = card.querySelector(`.stats-badge-${player.id}`);
+    const badge = card.querySelector(".player-stats-badge");
     if (badge) {
       badge.textContent = player.error ? "⚠️ Sin Link" : `${count}/${player.data?.totalCells || DB.totalCells || 59} (${pct}%)`;
     }
 
-    const pillId = card.querySelector(`.pill-id-${player.id}`);
-    if (pillId) {
-      pillId.href = `#casillero=${player.lockerId}`;
-      pillId.textContent = `#${player.lockerId} ↗️`;
+    const badgesWrap = card.querySelector(".player-header-badges");
+    if (badgesWrap) {
+      let changeEl = badgesWrap.querySelector(".badge-change");
+      if (player.changeBadge) {
+        if (!changeEl) {
+          changeEl = document.createElement("span");
+          changeEl.className = "badge-change";
+          badgesWrap.insertBefore(changeEl, badgesWrap.firstChild);
+        }
+        changeEl.textContent = player.changeBadge;
+        const badgeRef = player.changeBadge;
+        setTimeout(() => {
+          if (player.changeBadge === badgeRef) {
+            player.changeBadge = null;
+            changeEl?.remove();
+          }
+        }, 4500);
+      } else if (changeEl) {
+        changeEl.remove();
+      }
     }
 
-    const linkInput = card.querySelector(".player-link-input");
-    if (linkInput && document.activeElement !== linkInput && linkInput.value !== personalLink) {
-      linkInput.value = personalLink;
-    }
-
-    const pctLabel = card.querySelector(`.progress-pct-${player.id}`);
-    if (pctLabel) pctLabel.textContent = `${pct}%`;
-
-    const fill = card.querySelector(`.progress-fill-${player.id}`);
+    const fill = card.querySelector(".progress-bar-fill");
     if (fill) fill.style.width = `${pct}%`;
 
-    const errMsg = card.querySelector(`.error-msg-${player.id}`);
+    const errMsg = card.querySelector(`[class^="error-msg-"]`);
     if (errMsg) {
       const vaultedNote = player.data?.isVaultedLink
         ? `⚠️ Enlace de Cap. 7 Temp. 4 (Bóveda: ${player.data.vaultedCount}/162). Actualiza el link para la Minitemporada.`
         : "";
+      const noteText = player.error ? player.error : vaultedNote;
       errMsg.style.color = player.error ? "#ff8585" : "#ffd070";
-      errMsg.textContent = player.error ? player.error : vaultedNote;
+      errMsg.textContent = noteText;
+      errMsg.hidden = !noteText;
+      const metaRow = errMsg.closest(".player-meta-row");
+      if (metaRow) metaRow.hidden = !noteText;
     }
 
     if (player.error) card.classList.add("has-error");
@@ -2177,11 +2293,16 @@
 
   // --- TAB 3: 1 VS 1 DETALLADO ---
   function renderVersusTab(players) {
-    if (!state.versusA || !players.find(p => p.id === state.versusA)) state.versusA = players[0].id;
-    if (!state.versusB || !players.find(p => p.id === state.versusB)) state.versusB = players[1].id;
+    if (!state.versusA || !players.find(p => p.id === state.versusA)) {
+      state.versusA = players[0].id;
+    }
+    if (!state.versusB || state.versusB === state.versusA || !players.find(p => p.id === state.versusB)) {
+      const other = players.find(p => p.id !== state.versusA);
+      state.versusB = other ? other.id : players[0].id;
+    }
 
     const pA = players.find(p => p.id === state.versusA) || players[0];
-    const pB = players.find(p => p.id === state.versusB) || players[1];
+    const pB = players.find(p => p.id === state.versusB) || players.find(p => p.id !== pA.id) || players[0];
 
     const aGivesB = getTransferable(pA, pB);
     const bGivesA = getTransferable(pB, pA);
@@ -2200,11 +2321,11 @@
 
         <div class="versus-selectors">
           <select id="selVersusA" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 59})</option>`).join("")}
+            ${players.map(p => `<option value="${escapeHtml(p.id)}" ${p.id === pA.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 59})</option>`).join("")}
           </select>
           <div class="versus-badge">VS</div>
           <select id="selVersusB" class="versus-select">
-            ${players.map(p => `<option value="${p.id}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 59})</option>`).join("")}
+            ${players.map(p => `<option value="${escapeHtml(p.id)}" ${p.id === pB.id ? 'selected' : ''}>${escapeHtml(p.name)} (${p.data.ownedCount}/${p.data.totalCells || DB.totalCells || 59})</option>`).join("")}
           </select>
         </div>
 
@@ -2239,11 +2360,19 @@
     elMainContent.innerHTML = html;
 
     document.getElementById("selVersusA")?.addEventListener("change", (e) => {
-      state.versusA = e.target.value;
+      const nextA = e.target.value;
+      if (nextA === state.versusB) {
+        state.versusB = state.versusA;
+      }
+      state.versusA = nextA;
       renderVersusTab(players);
     });
     document.getElementById("selVersusB")?.addEventListener("change", (e) => {
-      state.versusB = e.target.value;
+      const nextB = e.target.value;
+      if (nextB === state.versusA) {
+        state.versusA = state.versusB;
+      }
+      state.versusB = nextB;
       renderVersusTab(players);
     });
   }
@@ -2328,7 +2457,7 @@
     elMainContent.innerHTML = html;
 
     const updateVaultGrid = () => {
-      const q = (document.getElementById("vaultSearchInput")?.value || "").trim().toLowerCase();
+      const q = normalizeSearchText((document.getElementById("vaultSearchInput")?.value || "").trim());
       const vFilter = document.getElementById("vaultVariantFilter")?.value || "all";
       const grid = document.getElementById("vaultSpritesGrid");
       if (!grid) return;
@@ -2336,11 +2465,16 @@
       const filtered = vaultCells.filter(c => {
         if (vFilter !== "all" && c.variantKey !== vFilter) return false;
         if (q) {
-          const hay = `${c.spriteNameEs} ${c.spriteNameEn} ${c.variantNameEs} ${c.rarityEs}`.toLowerCase();
+          const hay = normalizeSearchText(`${c.spriteNameEs} ${c.spriteNameEn} ${c.variantNameEs} ${c.variantNameEn} ${c.rarityEs}`);
           if (!hay.includes(q)) return false;
         }
         return true;
       });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 2rem; color: var(--text-muted);">No se encontraron espíritus en la bóveda con ese filtro.</div>`;
+        return;
+      }
 
       grid.innerHTML = filtered.map(c => renderSpiritItem(c, null)).join("");
     };
@@ -2365,12 +2499,10 @@
     if (context && context.recipient) {
       const recId = escapeHtml(context.recipient.id);
       const recName = escapeHtml(context.recipient.name);
-      const donorId = context.donor ? escapeHtml(context.donor.id) : "";
-      const isModal = context.inModal ? "true" : "false";
       const safeKey = escapeHtml(cell.key);
       actionsHtml = `
         <div class="spirit-quick-actions">
-          <button type="button" class="btn-spirit-action" onclick="window.markSpiritDelivered('${recId}', '${safeKey}', '${donorId}', ${isModal})" title="Marca que ${recName} ya recibió o ya tenía este espíritu">
+          <button type="button" class="btn-spirit-action" data-deliver-recipient="${recId}" data-deliver-key="${safeKey}" title="Marca que ${recName} ya recibió o ya tenía este espíritu">
             ✅ Ya lo tiene ${recName}
           </button>
         </div>
@@ -2380,7 +2512,7 @@
       const safeKey = escapeHtml(cell.key);
       actionsHtml = `
         <div class="spirit-quick-actions">
-          <button type="button" class="btn-spirit-action secondary" onclick="window.markSpiritDelivered('${escapeHtml(firstPlayer.id)}', '${safeKey}', '', false)" title="Añadir este espíritu a ${escapeHtml(firstPlayer.name)}">
+          <button type="button" class="btn-spirit-action secondary" data-deliver-recipient="${escapeHtml(firstPlayer.id)}" data-deliver-key="${safeKey}" title="Añadir este espíritu a ${escapeHtml(firstPlayer.name)}">
             ➕ Lo consiguió ${escapeHtml(firstPlayer.name)}
           </button>
         </div>
@@ -2390,7 +2522,8 @@
     return `
       <div class="spirit-item" style="border-left: 3px solid ${rarityColor};">
         <div class="spirit-img-wrap">
-          <img src="${imgSrc}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.style.display='none'">
+          <img src="${imgSrc}" alt="${escapeHtml(cell.spriteNameEs)}" class="spirit-img" loading="lazy" referrerpolicy="no-referrer" onerror="this.hidden=true; if (this.nextElementSibling) this.nextElementSibling.hidden=false;">
+          <span class="spirit-img-fallback" aria-hidden="true" hidden>👻</span>
         </div>
         <div class="spirit-name" title="${escapeHtml(cell.spriteNameEs)}">${escapeHtml(cell.spriteNameEs)}</div>
         <div class="spirit-tags">
@@ -2463,18 +2596,20 @@
 
   let lockerEditorDirty = false;
 
-  function renderLockerGrid() {
-    const gridEl = document.getElementById("lockerSpritesGrid");
+  function updateLockerModalBadgeUI() {
     const badgeEl = document.getElementById("lockerCountBadge");
-    if (!gridEl) return;
-
+    if (!badgeEl) return;
     const totalCells = DB.totalCells || DB.cells.length || 59;
     const ownedCount = Object.keys(lockerEditorState.owned).filter(k => lockerEditorState.owned[k]).length;
     const pct = Math.round((ownedCount / totalCells) * 1000) / 10;
+    badgeEl.textContent = `${ownedCount}/${totalCells} (${pct}%)`;
+  }
 
-    if (badgeEl) {
-      badgeEl.textContent = `${ownedCount}/${totalCells} (${pct}%)`;
-    }
+  function renderLockerGrid() {
+    const gridEl = document.getElementById("lockerSpritesGrid");
+    if (!gridEl) return;
+
+    updateLockerModalBadgeUI();
 
     const filtered = getFilteredLockerCells();
     if (filtered.length === 0) {
@@ -2483,22 +2618,33 @@
     }
 
     gridEl.innerHTML = filtered.map(cell => renderSpriteToggleCard(cell, !!lockerEditorState.owned[cell.key], 54)).join("");
+  }
 
-    gridEl.querySelectorAll(".locker-cell-card").forEach(cardEl => {
-      cardEl.addEventListener("click", () => {
-        const key = cardEl.getAttribute("data-key");
-        if (!key) return;
-        if (lockerEditorState.owned[key]) {
-          delete lockerEditorState.owned[key];
-          delete lockerEditorState.mastered[key];
-          delete lockerEditorState.lost[key];
-        } else {
-          lockerEditorState.owned[key] = true;
-        }
-        lockerEditorDirty = true;
-        renderLockerGrid();
-      });
-    });
+  function toggleLockerModalCell(key, cardEl = null) {
+    if (!key) return;
+    let isNowOwned = false;
+    if (lockerEditorState.owned[key]) {
+      delete lockerEditorState.owned[key];
+      delete lockerEditorState.mastered[key];
+      delete lockerEditorState.lost[key];
+      delete lockerEditorState.levels[key];
+      isNowOwned = false;
+    } else {
+      lockerEditorState.owned[key] = true;
+      isNowOwned = true;
+    }
+    lockerEditorDirty = true;
+
+    const statusVal = document.getElementById("lockerStatusFilter")?.value || "all";
+    if (cardEl && statusVal === "all") {
+      cardEl.classList.toggle("is-owned", isNowOwned);
+      cardEl.setAttribute("aria-pressed", isNowOwned ? "true" : "false");
+      const statusSpan = cardEl.querySelector(".locker-cell-status");
+      if (statusSpan) statusSpan.textContent = isNowOwned ? "✅ TIENE" : "❌ FALTA";
+      updateLockerModalBadgeUI();
+    } else {
+      renderLockerGrid();
+    }
   }
 
   function openLockerModal(playerId) {
@@ -2648,13 +2794,13 @@
       ? (personalViewState.avatar || "HALFPEELD")
       : (player?.avatar || "HALFPEELD");
 
-    const q = (document.getElementById("avatarSearchInput")?.value || "").trim().toLowerCase();
+    const q = normalizeSearchText((document.getElementById("avatarSearchInput")?.value || "").trim());
     const seasonFilter = document.getElementById("avatarSeasonFilter")?.value || "all";
 
     const catalog = getAvatarCatalog();
     const filtered = catalog.filter(item => {
       if (seasonFilter !== "all" && item.seasonKey !== seasonFilter) return false;
-      if (q && !item.name.toLowerCase().includes(q)) return false;
+      if (q && !normalizeSearchText(item.name).includes(q)) return false;
       return true;
     });
 
@@ -2879,6 +3025,11 @@
 
     document.getElementById("btnPersonalReload")?.addEventListener("click", async () => {
       if (!personalViewState.lockerId) return;
+      if (personalViewState.debounceTimer) {
+        clearTimeout(personalViewState.debounceTimer);
+        personalViewState.debounceTimer = null;
+      }
+      personalViewState.dirty = false;
       const client = await ensureFirebase();
       if (client) {
         try {
@@ -2892,7 +3043,11 @@
           }
         } catch (_) {}
       }
-      showToast("✔️ Tu casillero ya muestra la versión más reciente.");
+      const cached = getLocalLocker(personalViewState.lockerId);
+      if (cached && cached.url) {
+        applyDecodedToPersonalView(cached.name, cached.avatar, cached.url, cached.updatedAt);
+      }
+      showToast("✔️ Tu casillero ya muestra la versión local más reciente.");
     });
 
     document.getElementById("btnBackToRoom")?.addEventListener("click", async () => {
@@ -2901,22 +3056,55 @@
       window.location.hash = `#sala=${targetRoomId}`;
     });
 
-    document.getElementById("personalSearchInput")?.addEventListener("input", renderPersonalLockerView);
-    document.getElementById("personalVariantFilter")?.addEventListener("change", renderPersonalLockerView);
-    document.getElementById("personalStatusFilter")?.addEventListener("change", renderPersonalLockerView);
+    document.getElementById("personalSearchInput")?.addEventListener("input", () => renderPersonalLockerView(false));
+    document.getElementById("personalVariantFilter")?.addEventListener("change", () => renderPersonalLockerView(false));
+    document.getElementById("personalStatusFilter")?.addEventListener("change", () => renderPersonalLockerView(false));
+
+    document.getElementById("personalSpritesGrid")?.addEventListener("click", (e) => {
+      const cardEl = e.target.closest(".locker-cell-card");
+      if (!cardEl) return;
+      togglePersonalCell(cardEl.getAttribute("data-key"), cardEl);
+    });
+
+    document.getElementById("lockerSpritesGrid")?.addEventListener("click", (e) => {
+      const cardEl = e.target.closest(".locker-cell-card");
+      if (!cardEl) return;
+      toggleLockerModalCell(cardEl.getAttribute("data-key"), cardEl);
+    });
+
+    elMainContent?.addEventListener("click", (e) => {
+      const deliverBtn = e.target.closest("[data-deliver-recipient]");
+      if (!deliverBtn) return;
+      const recId = deliverBtn.getAttribute("data-deliver-recipient");
+      const cellKey = deliverBtn.getAttribute("data-deliver-key");
+      if (recId && cellKey) {
+        window.markSpiritDelivered(recId, cellKey);
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      document.querySelectorAll("details.toolbar-more-menu[open]").forEach((detailsEl) => {
+        if (!detailsEl.contains(e.target) || e.target.closest(".toolbar-more-dropdown button")) {
+          detailsEl.removeAttribute("open");
+        }
+      });
+    });
 
     document.getElementById("btnPersonalMarkFiltered")?.addEventListener("click", () => {
       for (const cell of getFilteredPersonalCells()) {
         personalViewState.owned[cell.key] = true;
       }
-      renderPersonalLockerView();
+      renderPersonalLockerView(false);
       schedulePersonalLockerSave();
     });
     document.getElementById("btnPersonalUnmarkFiltered")?.addEventListener("click", () => {
       for (const cell of getFilteredPersonalCells()) {
         delete personalViewState.owned[cell.key];
+        delete personalViewState.mastered[cell.key];
+        delete personalViewState.lost[cell.key];
+        delete personalViewState.levels[cell.key];
       }
-      renderPersonalLockerView();
+      renderPersonalLockerView(false);
       schedulePersonalLockerSave();
     });
     document.getElementById("btnPersonalClearAll")?.addEventListener("click", () => {
@@ -2964,21 +3152,46 @@
       }
     });
 
-    // Controles del Dialog Selector de Avatar
-    const avatarDialog = document.getElementById("avatarDialog");
-    if (avatarDialog && !("closedBy" in HTMLDialogElement.prototype)) {
-      avatarDialog.addEventListener("click", (event) => {
-        if (event.target !== avatarDialog) return;
-        const rect = avatarDialog.getBoundingClientRect();
-        const isDialogContent = (
+    // Controles de cierre por backdrop en todos los <dialog> (evitando cierre accidental al arrastrar selección de texto)
+    const bindDialogBackdropClose = (dlg, onCloseFn) => {
+      if (!dlg) return;
+      let pointerDownOnBackdrop = false;
+      dlg.addEventListener("pointerdown", (event) => {
+        if (event.target !== dlg) {
+          pointerDownOnBackdrop = false;
+          return;
+        }
+        const rect = dlg.getBoundingClientRect();
+        const insideBox = (
           rect.top <= event.clientY &&
           event.clientY <= rect.top + rect.height &&
           rect.left <= event.clientX &&
           event.clientX <= rect.left + rect.width
         );
-        if (isDialogContent) return;
-        avatarDialog.close();
+        pointerDownOnBackdrop = !insideBox;
       });
+      dlg.addEventListener("click", (event) => {
+        if (!pointerDownOnBackdrop || event.target !== dlg) {
+          pointerDownOnBackdrop = false;
+          return;
+        }
+        pointerDownOnBackdrop = false;
+        const rect = dlg.getBoundingClientRect();
+        const insideBox = (
+          rect.top <= event.clientY &&
+          event.clientY <= rect.top + rect.height &&
+          rect.left <= event.clientX &&
+          event.clientX <= rect.left + rect.width
+        );
+        if (!insideBox) {
+          onCloseFn();
+        }
+      });
+    };
+
+    const avatarDialog = document.getElementById("avatarDialog");
+    if (avatarDialog && !("closedBy" in HTMLDialogElement.prototype)) {
+      bindDialogBackdropClose(avatarDialog, () => avatarDialog.close());
     }
 
     document.getElementById("avatarDialogClose")?.addEventListener("click", () => {
@@ -3016,18 +3229,7 @@
       }
     });
 
-    lockerDialog?.addEventListener("click", (event) => {
-      if (event.target !== lockerDialog) return;
-      const rect = lockerDialog.getBoundingClientRect();
-      const isDialogContent = (
-        rect.top <= event.clientY &&
-        event.clientY <= rect.top + rect.height &&
-        rect.left <= event.clientX &&
-        event.clientX <= rect.left + rect.width
-      );
-      if (isDialogContent) return;
-      requestCloseLockerDialog();
-    });
+    bindDialogBackdropClose(lockerDialog, requestCloseLockerDialog);
 
     document.getElementById("lockerDialogClose")?.addEventListener("click", requestCloseLockerDialog);
     document.getElementById("lockerPlayerNameInput")?.addEventListener("input", () => {
@@ -3047,6 +3249,9 @@
     document.getElementById("btnUnmarkFiltered")?.addEventListener("click", () => {
       for (let cell of getFilteredLockerCells()) {
         delete lockerEditorState.owned[cell.key];
+        delete lockerEditorState.mastered[cell.key];
+        delete lockerEditorState.lost[cell.key];
+        delete lockerEditorState.levels[cell.key];
       }
       lockerEditorDirty = true;
       renderLockerGrid();
@@ -3081,6 +3286,12 @@
 
     // Controles del Dialog de Confirmación
     const confirmDialog = document.getElementById("confirmDialog");
+    if (confirmDialog && !("closedBy" in HTMLDialogElement.prototype)) {
+      bindDialogBackdropClose(confirmDialog, () => {
+        activeConfirmAction = null;
+        confirmDialog.close();
+      });
+    }
     document.getElementById("confirmDialogClose")?.addEventListener("click", () => {
       activeConfirmAction = null;
       confirmDialog?.close();
@@ -3098,6 +3309,9 @@
 
     // Controles del Dialog Compartir / Vincular Jugador
     const playerLinkDialog = document.getElementById("playerLinkDialog");
+    if (playerLinkDialog && !("closedBy" in HTMLDialogElement.prototype)) {
+      bindDialogBackdropClose(playerLinkDialog, () => playerLinkDialog.close());
+    }
     document.getElementById("playerLinkClose")?.addEventListener("click", () => playerLinkDialog?.close());
     document.getElementById("playerLinkModalInput")?.addEventListener("focus", (e) => e.target.select());
     document.getElementById("playerLinkModalInput")?.addEventListener("change", async (e) => {
@@ -3167,9 +3381,10 @@
         message: `¿Quitar a ${player.name} de esta sala? (Su casillero personal no se borra).`,
         confirmLabel: "Quitar de la sala",
         onConfirm: () => {
-          state.players = state.players.filter(p => p.id !== player.id);
+          const removedId = player.id;
+          state.players = state.players.filter(p => p.id !== removedId);
           syncRoomLockerSubscriptions();
-          saveState();
+          saveState({ removedPlayerId: removedId });
           renderLobby();
           renderActiveTab();
           showToast(`👋 ${player.name} salió de la sala.`);
@@ -3179,6 +3394,9 @@
 
     // Cambiar o crear Sala en Vivo (Modal sin window.prompt)
     const roomSwitchDialog = document.getElementById("roomSwitchDialog");
+    if (roomSwitchDialog && !("closedBy" in HTMLDialogElement.prototype)) {
+      bindDialogBackdropClose(roomSwitchDialog, () => roomSwitchDialog.close());
+    }
     const roomSwitchInput = document.getElementById("roomSwitchInput");
     document.getElementById("roomSwitchClose")?.addEventListener("click", () => roomSwitchDialog?.close());
     document.getElementById("btnRoomSyncStatus")?.addEventListener("click", () => {
@@ -3238,9 +3456,6 @@
 
     // Compartir Sala por URL (en vivo con Firebase)
     document.getElementById("btnShareRoom")?.addEventListener("click", () => {
-      if (cloudRoomReady) {
-        syncFullRoomToCloud();
-      }
       let shareUrl = getShareableRoomUrl();
       navigator.clipboard.writeText(shareUrl).then(() => {
         showToast("🟢 ¡Link de Sala en Vivo copiado! Lo que edite cualquiera se reflejará al instante.");

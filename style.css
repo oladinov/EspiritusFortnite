@@ -1887,8 +1887,13 @@ body {
   }
 
   .versus-selectors {
-    flex-direction: column;
-    align-items: stretch;
+    grid-template-columns: 1fr;
+    justify-items: stretch;
+    gap: 0.65rem;
+  }
+
+  .versus-badge {
+    text-align: center;
   }
 
   .personal-hero {
