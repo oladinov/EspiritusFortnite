@@ -529,7 +529,11 @@
 
       player.data = decodeCollection(codeToDecode);
       if (!player.data.isVaultedLink) {
-        player.url = encodeCollection(player.data);
+        if ((player.data.layoutCells || 0) >= (DB.totalCells || 59)) {
+          player.url = encodeCollection(player.data);
+        } else {
+          player.url = `${getOwnBaseUrl()}#c=${player.data.rawCode}`;
+        }
       } else {
         player.url = `${getOwnBaseUrl()}#c=${player.data.rawCode}`;
       }
@@ -898,6 +902,16 @@
     }
   }
 
+  function tryDecodeUrlLayout(urlOrCode) {
+    try {
+      const target = extractCodeOrToken(urlOrCode);
+      if (!target || target.type !== "code" || !target.value) return null;
+      return decodeCollection(target.value);
+    } catch (_) {
+      return null;
+    }
+  }
+
   function clearRoomLockerSubscriptions() {
     for (const unsub of roomLockerUnsubscribes.values()) {
       try { unsub(); } catch (_) {}
@@ -953,15 +967,34 @@
             return;
           }
 
-          saveLocalLocker(lockerId, remote);
+          const remoteDecoded = tryDecodeUrlLayout(remote.url);
+          const remoteCells = remoteDecoded && !remoteDecoded.isVaultedLink ? (remoteDecoded.layoutCells || 0) : 0;
+          const targetTotalCells = DB.totalCells || 59;
+
           let anyChanged = false;
+          const changedPlayers = [];
 
           for (const player of matchingPlayers) {
-            // Si el jugador local tiene un cambio más reciente aún no propagado, empujarlo al casillero
-            if (player.updatedAt && remote.updatedAt && remote.updatedAt < player.updatedAt) {
+            const localCells = player.data && !player.data.isVaultedLink ? (player.data.layoutCells || 0) : 0;
+
+            // Si el casillero remoto viene de un cliente viejo (<59 celdas) y el local ya tiene 59 celdas, reparar el casillero remoto
+            if (localCells >= targetTotalCells && remoteCells > 0 && remoteCells < targetTotalCells) {
               await syncPlayerPersonalLocker(player);
               continue;
             }
+
+            // Si el jugador local tiene un cambio más reciente aún no propagado (y no es un layout viejo), empujarlo al casillero
+            if (
+              player.updatedAt &&
+              remote.updatedAt &&
+              remote.updatedAt < player.updatedAt &&
+              (localCells >= remoteCells || remoteCells === 0)
+            ) {
+              await syncPlayerPersonalLocker(player);
+              continue;
+            }
+
+            saveLocalLocker(lockerId, remote);
 
             const urlChanged = player.url !== remote.url;
             const nameChanged = player.name !== (remote.name || player.name);
@@ -1003,14 +1036,17 @@
               setTimeout(() => card.classList.remove("is-updated"), 1200);
             }
             anyChanged = true;
+            changedPlayers.push(player);
           }
 
           if (anyChanged) {
             saveLocalOnly();
             renderActiveTab();
-            // Reflejar también la última foto dentro del documento de la sala activa
-            if (cloudRoomReady && activeRoomId) {
-              syncFullRoomToCloud();
+            // Reflejar únicamente el jugador actualizado dentro del documento de la sala activa
+            if (cloudRoomReady && activeRoomId && !isInitialLockerSnap) {
+              for (const p of changedPlayers) {
+                syncPlayerToCloud(p);
+              }
             }
           }
           isInitialLockerSnap = false;
@@ -1166,19 +1202,36 @@
 
     if (sameStructure) {
       // Actualización suave en sitio sin destruir inputs activos
+      const targetTotalCells = DB.totalCells || 59;
       for (let i = 0; i < entries.length; i++) {
         const remote = entries[i];
         const local = state.players[i];
-        const urlChanged = local.url !== (remote.url || "");
+        const remoteDecoded = tryDecodeUrlLayout(remote.url);
+        const remoteCells = remoteDecoded && !remoteDecoded.isVaultedLink ? (remoteDecoded.layoutCells || 0) : 0;
+        const localCells = local.data && !local.data.isVaultedLink ? (local.data.layoutCells || 0) : 0;
+
+        // Ignorar URL degradada (<59 celdas) escrita en la sala por alguna pestaña antigua sin recargar
+        const isDowngradedUrl =
+          localCells >= targetTotalCells &&
+          remoteCells > 0 &&
+          remoteCells < targetTotalCells;
+        const isStaleTimestamp =
+          Boolean(local.updatedAt && remote.updatedAt && Number(remote.updatedAt) < Number(local.updatedAt)) &&
+          localCells >= remoteCells;
+
+        const acceptRemoteUrl = !isDowngradedUrl && !isStaleTimestamp;
+        const urlChanged = acceptRemoteUrl && local.url !== (remote.url || "");
         const nameChanged = local.name !== (remote.name || "Jugador");
         const avatarChanged = (local.avatar || "HALFPEELD") !== (remote.avatar || "HALFPEELD");
         const lockerIdChanged = remote.lockerId && isValidLockerId(remote.lockerId) && local.lockerId !== remote.lockerId;
 
         local.name = remote.name || "Jugador";
         local.avatar = remote.avatar || "HALFPEELD";
-        local.url = remote.url || "";
+        if (acceptRemoteUrl) {
+          local.url = remote.url || "";
+          local.updatedAt = Number(remote.updatedAt) || local.updatedAt || Date.now();
+        }
         local.isManual = Boolean(remote.isManual);
-        local.updatedAt = Number(remote.updatedAt) || local.updatedAt || Date.now();
         if (lockerIdChanged) {
           local.lockerId = remote.lockerId;
         } else {
@@ -1206,17 +1259,24 @@
     // Si se agregaron o eliminaron jugadores en la sala remota
     const prevById = {};
     state.players.forEach(p => { prevById[p.id] = p; });
+    const targetTotalCells = DB.totalCells || 59;
 
     state.players = entries.map(item => {
+      const prev = prevById[item.id];
+      const prevCells = prev?.data && !prev.data.isVaultedLink ? (prev.data.layoutCells || 0) : 0;
+      const remoteDecoded = tryDecodeUrlLayout(item.url);
+      const remoteCells = remoteDecoded && !remoteDecoded.isVaultedLink ? (remoteDecoded.layoutCells || 0) : 0;
+      const keepPrevUrl = prev && prevCells >= targetTotalCells && remoteCells > 0 && remoteCells < targetTotalCells;
+
       const pObj = {
         id: item.id,
-        lockerId: item.lockerId && isValidLockerId(item.lockerId) ? item.lockerId : prevById[item.id]?.lockerId || null,
+        lockerId: item.lockerId && isValidLockerId(item.lockerId) ? item.lockerId : prev?.lockerId || null,
         name: item.name || "Jugador",
         avatar: item.avatar || "HALFPEELD",
-        url: item.url || "",
+        url: keepPrevUrl ? prev.url : (item.url || ""),
         isManual: Boolean(item.isManual),
-        updatedAt: Number(item.updatedAt) || Date.now(),
-        data: prevById[item.id]?.data || null,
+        updatedAt: keepPrevUrl ? (prev.updatedAt || Date.now()) : (Number(item.updatedAt) || Date.now()),
+        data: prev?.data || null,
         error: null,
         lastUpdated: new Date()
       };

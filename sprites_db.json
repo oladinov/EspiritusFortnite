@@ -315,6 +315,34 @@
       "ability_es": "Genera un efecto de Chug Splash al restaurar escudos. ¡Menos tiempo de recarga con cada subida de nivel!"
     },
     {
+      "key": "SIR OSCAR THE SECOND",
+      "slug": "siroscarthesecond",
+      "name_en": "Sir Oscar the Second",
+      "name_es": "Sir Oscar II",
+      "rarity": "Legendary",
+      "rarity_es": "Legendario",
+      "variants": [
+        "NORMAL",
+        "CURSED",
+        "JEWELED",
+        "LIQUIDGOLD"
+      ],
+      "allVariants": [
+        "NORMAL",
+        "CURSED",
+        "JEWELED",
+        "LIQUIDGOLD"
+      ],
+      "trade": "always",
+      "maxLevel": 5,
+      "dust": {
+        "base": 1750,
+        "variant": 2100
+      },
+      "ability_en": "Grants increased Pickaxe damage, also gives a temporary speed boost.",
+      "ability_es": "Otorga mayor daño de pico y un impulso temporal de velocidad."
+    },
+    {
       "key": "PLUNDARRGH",
       "slug": "plundarrgh",
       "name_en": "Plundarrgh",
@@ -435,34 +463,6 @@
       },
       "ability_en": "Grants a random item at each level, exploding with Mythic loot at Max Level. Loot value increases at each Level Up!",
       "ability_es": "Otorga un objeto aleatorio en cada nivel y explota con botín mítico al nivel máximo. ¡El valor del botín aumenta con cada subida de nivel!"
-    },
-    {
-      "key": "SIR OSCAR THE SECOND",
-      "slug": "siroscarthesecond",
-      "name_en": "Sir Oscar the Second",
-      "name_es": "Sir Oscar II",
-      "rarity": "Legendary",
-      "rarity_es": "Legendario",
-      "variants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED",
-        "LIQUIDGOLD"
-      ],
-      "allVariants": [
-        "NORMAL",
-        "CURSED",
-        "JEWELED",
-        "LIQUIDGOLD"
-      ],
-      "trade": "always",
-      "maxLevel": 5,
-      "dust": {
-        "base": 1750,
-        "variant": 2100
-      },
-      "ability_en": "Grants increased Pickaxe damage, also gives a temporary speed boost.",
-      "ability_es": "Otorga mayor daño de pico y un impulso temporal de velocidad."
     }
   ],
   "variants": [
